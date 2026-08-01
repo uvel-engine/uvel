@@ -91,7 +91,10 @@ namespace Uvel
                 WriteAlways(Path.Combine(dir, "backend.xml"), "<UvelLibrary Name=\"uvel.backend\" Version=\"1.0\"><Logic><Var Name=\"uvel.backend.ready\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.backend.ping\"><Set Target=\"status\" Property=\"Text\" Value=\"Backend ready\" /></Handler><Handler Name=\"uvel.backend.time\"><Plugin Name=\"DatePlugin\" Method=\"now\" ToState=\"uvel.backend.now\" /><Set Target=\"status\" Property=\"Text\" Value=\"{uvel.backend.now}\" /></Handler></Logic></UvelLibrary>");
                 WriteAlways(Path.Combine(dir, "net.xml"), "<UvelLibrary Name=\"uvel.net\" Version=\"1.0\"><Logic><Handler Name=\"uvel.net.online\"><Set Target=\"status\" Property=\"Text\" Value=\"Network module loaded\" /></Handler></Logic></UvelLibrary>");
                 WriteAlways(Path.Combine(dir, "data.xml"), "<UvelLibrary Name=\"uvel.data\" Version=\"1.0\"><Logic><Var Name=\"uvel.data.loaded\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.data.ready\"><Set Target=\"status\" Property=\"Text\" Value=\"Data module loaded\" /></Handler></Logic></UvelLibrary>");
-                WriteAlways(Path.Combine(dir, "all.xml"), "<UvelLibrary Name=\"uvel.all\" Version=\"1.0\"><Import Package=\"uvel.ui\" /><Import Package=\"uvel.backend\" /><Import Package=\"uvel.net\" /><Import Package=\"uvel.data\" /></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "icons.xml"), "<UvelLibrary Name=\"uvel.icons\" Version=\"1.0\"><Logic><Var Name=\"uvel.icons.source\" Value=\"offline: uvel/icons/uflow-icons.js\" Type=\"string\" /><Handler Name=\"uvel.icons.ready\"><Set Target=\"status\" Property=\"Text\" Value=\"Uvel Icons loaded offline\" /></Handler></Logic></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "all.xml"), "<UvelLibrary Name=\"uvel.all\" Version=\"1.0\"><Import Package=\"uvel.ui\" /><Import Package=\"uvel.backend\" /><Import Package=\"uvel.net\" /><Import Package=\"uvel.data\" /><Import Package=\"uvel.icons\" /></UvelLibrary>");
+                Directory.CreateDirectory(Path.Combine(dir, "icons"));
+                WriteIfMissing(Path.Combine(dir, "icons", "README.txt"), "Offline Uvel Icons cache. Full package ships in engine/bin/uvel/icons after build.");
             }
             catch (Exception ex)
             {
@@ -306,6 +309,7 @@ namespace Uvel
             return "<App Name=\"Uvel Workspace App\" Width=\"860\" Height=\"540\" Theme=\"Dark\">\n" +
                    "  <Import Package=\"uvel.ui\" />\n" +
                    "  <Import Package=\"uvel.backend\" />\n" +
+                   "  <Import Package=\"uvel.icons\" />\n" +
                    "  <UI>\n" +
                    "    <Grid Background=\"#0B0F19\">\n" +
                    "      <StackPanel VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" Width=\"520\">\n" +

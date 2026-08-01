@@ -1,0 +1,1123 @@
+{
+  "name": "UFlow Icons",
+  "version": "1.1.0",
+  "license": "MIT",
+  "homepage": "https://uflow.uz/icons",
+  "cdn": "https://uflow.uz/icons.js",
+  "count": 98,
+  "styles": [
+    "bulk",
+    "stroke",
+    "solid",
+    "duotone",
+    "twotone"
+  ],
+  "corners": [
+    "rounded",
+    "standard",
+    "sharp"
+  ],
+  "gradients": [
+    "uflow",
+    "ocean",
+    "sunset",
+    "forest",
+    "candy",
+    "gold",
+    "green",
+    "neon",
+    "fire",
+    "mono"
+  ],
+  "icons": [
+    {
+      "name": "bell",
+      "label": "Bildirishnoma",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "notification",
+        "alert",
+        "xabar"
+      ]
+    },
+    {
+      "name": "search",
+      "label": "Qidiruv",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "find",
+        "qidir",
+        "lupa"
+      ]
+    },
+    {
+      "name": "menu",
+      "label": "Menyu",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "hamburger",
+        "nav"
+      ]
+    },
+    {
+      "name": "arrow-right",
+      "label": "O'ng strelka",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "next",
+        "keyingi"
+      ]
+    },
+    {
+      "name": "settings",
+      "label": "Sozlamalar",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "gear",
+        "config"
+      ]
+    },
+    {
+      "name": "sparkle",
+      "label": "Uchqun",
+      "category": "brand",
+      "animated": true,
+      "keywords": [
+        "ai",
+        "magic",
+        "sehr"
+      ]
+    },
+    {
+      "name": "chart",
+      "label": "Diagramma",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "stats",
+        "analytics",
+        "statistika"
+      ]
+    },
+    {
+      "name": "database",
+      "label": "Ma'lumotlar bazasi",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "db",
+        "storage",
+        "baza"
+      ]
+    },
+    {
+      "name": "cpu",
+      "label": "Protsessor",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "chip",
+        "processor",
+        "ai"
+      ]
+    },
+    {
+      "name": "layers",
+      "label": "Qatlamlar",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "stack",
+        "catalog",
+        "katalog"
+      ]
+    },
+    {
+      "name": "code",
+      "label": "Kod",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "dev",
+        "programming",
+        "dasturlash"
+      ]
+    },
+    {
+      "name": "shield",
+      "label": "Himoya",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "security",
+        "xavfsizlik"
+      ]
+    },
+    {
+      "name": "check",
+      "label": "Tasdiq",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "done",
+        "success",
+        "tayyor"
+      ]
+    },
+    {
+      "name": "zap",
+      "label": "Tezlik",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "fast",
+        "performance",
+        "tezlik"
+      ]
+    },
+    {
+      "name": "heart",
+      "label": "Yurak",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "like",
+        "love",
+        "sevimli"
+      ]
+    },
+    {
+      "name": "clock",
+      "label": "Vaqt",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "time",
+        "vaqt",
+        "soat"
+      ]
+    },
+    {
+      "name": "image",
+      "label": "Rasm",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "photo",
+        "picture",
+        "rasm"
+      ]
+    },
+    {
+      "name": "send",
+      "label": "Yuborish",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "telegram",
+        "message",
+        "xabar"
+      ]
+    },
+    {
+      "name": "globe",
+      "label": "Til",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "language",
+        "world",
+        "til"
+      ]
+    },
+    {
+      "name": "rocket",
+      "label": "Ishga tushirish",
+      "category": "brand",
+      "animated": true,
+      "keywords": [
+        "launch",
+        "startup",
+        "start"
+      ]
+    },
+    {
+      "name": "mail",
+      "label": "Pochta",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "email",
+        "contact",
+        "aloqa"
+      ]
+    },
+    {
+      "name": "users",
+      "label": "Jamoa",
+      "category": "brand",
+      "animated": true,
+      "keywords": [
+        "team",
+        "people",
+        "jamoa"
+      ]
+    },
+    {
+      "name": "server",
+      "label": "Server",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "cloud",
+        "hosting",
+        "bulut"
+      ]
+    },
+    {
+      "name": "file-text",
+      "label": "Maqola",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "blog",
+        "document",
+        "hujjat"
+      ]
+    },
+    {
+      "name": "arrow-left",
+      "label": "Chap strelka",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "back",
+        "orqaga",
+        "previous"
+      ]
+    },
+    {
+      "name": "arrow-up",
+      "label": "Yuqoriga",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "up",
+        "yuqori",
+        "top"
+      ]
+    },
+    {
+      "name": "arrow-down",
+      "label": "Pastga",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "down",
+        "past",
+        "bottom"
+      ]
+    },
+    {
+      "name": "refresh",
+      "label": "Yangilash",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "reload",
+        "sync",
+        "yangila"
+      ]
+    },
+    {
+      "name": "external-link",
+      "label": "Tashqi havola",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "open",
+        "link",
+        "havola"
+      ]
+    },
+    {
+      "name": "chevron-right",
+      "label": "Chevron",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "next",
+        "more",
+        "keyingi"
+      ]
+    },
+    {
+      "name": "download",
+      "label": "Yuklab olish",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "save",
+        "yuklab",
+        "export"
+      ]
+    },
+    {
+      "name": "upload",
+      "label": "Yuklash",
+      "category": "arrows",
+      "animated": true,
+      "keywords": [
+        "import",
+        "yukla",
+        "send"
+      ]
+    },
+    {
+      "name": "plus",
+      "label": "Qo'shish",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "add",
+        "new",
+        "qosh"
+      ]
+    },
+    {
+      "name": "close",
+      "label": "Yopish",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "x",
+        "cancel",
+        "yop"
+      ]
+    },
+    {
+      "name": "filter",
+      "label": "Filtr",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "sort",
+        "saralash",
+        "filtr"
+      ]
+    },
+    {
+      "name": "grid",
+      "label": "Panjara",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "layout",
+        "dashboard",
+        "panel"
+      ]
+    },
+    {
+      "name": "star",
+      "label": "Yulduz",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "favorite",
+        "rating",
+        "sevimli"
+      ]
+    },
+    {
+      "name": "bookmark",
+      "label": "Xatcho'p",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "save",
+        "saqlash",
+        "belgi"
+      ]
+    },
+    {
+      "name": "eye",
+      "label": "Ko'rish",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "view",
+        "preview",
+        "kor"
+      ]
+    },
+    {
+      "name": "moon",
+      "label": "Tungi rejim",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "dark",
+        "night",
+        "tun"
+      ]
+    },
+    {
+      "name": "sun",
+      "label": "Kunduzgi rejim",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "light",
+        "day",
+        "kun"
+      ]
+    },
+    {
+      "name": "message",
+      "label": "Xabar",
+      "category": "communication",
+      "animated": true,
+      "keywords": [
+        "chat",
+        "comment",
+        "suhbat"
+      ]
+    },
+    {
+      "name": "phone",
+      "label": "Telefon",
+      "category": "communication",
+      "animated": true,
+      "keywords": [
+        "call",
+        "qongiroq",
+        "aloqa"
+      ]
+    },
+    {
+      "name": "share",
+      "label": "Ulashish",
+      "category": "communication",
+      "animated": true,
+      "keywords": [
+        "share",
+        "ulash",
+        "social"
+      ]
+    },
+    {
+      "name": "at-sign",
+      "label": "Email manzil",
+      "category": "communication",
+      "animated": true,
+      "keywords": [
+        "email",
+        "mention",
+        "manzil"
+      ]
+    },
+    {
+      "name": "cart",
+      "label": "Savat",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "shop",
+        "buy",
+        "savat"
+      ]
+    },
+    {
+      "name": "wallet",
+      "label": "Hamyon",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "money",
+        "pul",
+        "payment"
+      ]
+    },
+    {
+      "name": "credit-card",
+      "label": "Karta",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "payment",
+        "tolov",
+        "bank"
+      ]
+    },
+    {
+      "name": "gift",
+      "label": "Sovg'a",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "present",
+        "sovga",
+        "bonus"
+      ]
+    },
+    {
+      "name": "tag",
+      "label": "Yorliq",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "price",
+        "label",
+        "narx"
+      ]
+    },
+    {
+      "name": "folder",
+      "label": "Papka",
+      "category": "files",
+      "animated": true,
+      "keywords": [
+        "directory",
+        "papka",
+        "files"
+      ]
+    },
+    {
+      "name": "trash",
+      "label": "O'chirish",
+      "category": "files",
+      "animated": true,
+      "keywords": [
+        "delete",
+        "remove",
+        "ochir"
+      ]
+    },
+    {
+      "name": "copy",
+      "label": "Nusxalash",
+      "category": "files",
+      "animated": true,
+      "keywords": [
+        "duplicate",
+        "nusxa",
+        "clipboard"
+      ]
+    },
+    {
+      "name": "edit",
+      "label": "Tahrirlash",
+      "category": "files",
+      "animated": true,
+      "keywords": [
+        "pencil",
+        "write",
+        "tahrir"
+      ]
+    },
+    {
+      "name": "smartphone",
+      "label": "Telefon qurilma",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "mobile",
+        "phone",
+        "qurilma"
+      ]
+    },
+    {
+      "name": "monitor",
+      "label": "Monitor",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "desktop",
+        "screen",
+        "ekran"
+      ]
+    },
+    {
+      "name": "wifi",
+      "label": "Wi-Fi",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "network",
+        "signal",
+        "internet"
+      ]
+    },
+    {
+      "name": "battery",
+      "label": "Batareya",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "power",
+        "energy",
+        "quvvat"
+      ]
+    },
+    {
+      "name": "cloud",
+      "label": "Bulut",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "cloud",
+        "storage",
+        "bulut"
+      ]
+    },
+    {
+      "name": "cloud-rain",
+      "label": "Yomg'ir",
+      "category": "weather",
+      "animated": true,
+      "keywords": [
+        "rain",
+        "weather",
+        "yomgir"
+      ]
+    },
+    {
+      "name": "flame",
+      "label": "Olov",
+      "category": "weather",
+      "animated": true,
+      "keywords": [
+        "fire",
+        "hot",
+        "olov",
+        "trend"
+      ]
+    },
+    {
+      "name": "droplet",
+      "label": "Tomchi",
+      "category": "weather",
+      "animated": true,
+      "keywords": [
+        "water",
+        "suv",
+        "liquid"
+      ]
+    },
+    {
+      "name": "user",
+      "label": "Foydalanuvchi",
+      "category": "people",
+      "animated": true,
+      "keywords": [
+        "person",
+        "profile",
+        "profil"
+      ]
+    },
+    {
+      "name": "award",
+      "label": "Mukofot",
+      "category": "people",
+      "animated": true,
+      "keywords": [
+        "prize",
+        "medal",
+        "mukofot"
+      ]
+    },
+    {
+      "name": "briefcase",
+      "label": "Ish",
+      "category": "people",
+      "animated": true,
+      "keywords": [
+        "work",
+        "job",
+        "biznes"
+      ]
+    },
+    {
+      "name": "graduation",
+      "label": "Ta'lim",
+      "category": "people",
+      "animated": true,
+      "keywords": [
+        "education",
+        "school",
+        "talim"
+      ]
+    },
+    {
+      "name": "terminal",
+      "label": "Terminal",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "console",
+        "cli",
+        "buyruq"
+      ]
+    },
+    {
+      "name": "git-branch",
+      "label": "Git tarmoq",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "git",
+        "branch",
+        "version"
+      ]
+    },
+    {
+      "name": "bug",
+      "label": "Xato",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "debug",
+        "error",
+        "xato"
+      ]
+    },
+    {
+      "name": "package",
+      "label": "Paket",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "box",
+        "npm",
+        "paket"
+      ]
+    },
+    {
+      "name": "key",
+      "label": "Kalit",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "api",
+        "auth",
+        "kalit",
+        "token"
+      ]
+    },
+    {
+      "name": "link",
+      "label": "Havola",
+      "category": "dev",
+      "animated": true,
+      "keywords": [
+        "chain",
+        "url",
+        "havola"
+      ]
+    },
+    {
+      "name": "alert",
+      "label": "Ogohlantirish",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "warning",
+        "ogoh",
+        "danger"
+      ]
+    },
+    {
+      "name": "info",
+      "label": "Ma'lumot",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "help",
+        "about",
+        "malumot"
+      ]
+    },
+    {
+      "name": "trending-up",
+      "label": "O'sish",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "growth",
+        "osish",
+        "analytics"
+      ]
+    },
+    {
+      "name": "pie-chart",
+      "label": "Doiraviy diagramma",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "stats",
+        "chart",
+        "ulush"
+      ]
+    },
+    {
+      "name": "activity",
+      "label": "Faollik",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "pulse",
+        "monitor",
+        "faollik"
+      ]
+    },
+    {
+      "name": "lock",
+      "label": "Qulf",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "secure",
+        "private",
+        "qulf"
+      ]
+    },
+    {
+      "name": "target",
+      "label": "Nishon",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "goal",
+        "aim",
+        "maqsad"
+      ]
+    },
+    {
+      "name": "play",
+      "label": "O'ynatish",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "video",
+        "start",
+        "oynat"
+      ]
+    },
+    {
+      "name": "camera",
+      "label": "Kamera",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "photo",
+        "surat",
+        "camera"
+      ]
+    },
+    {
+      "name": "mic",
+      "label": "Mikrofon",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "audio",
+        "voice",
+        "ovoz"
+      ]
+    },
+    {
+      "name": "volume",
+      "label": "Ovoz",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "sound",
+        "speaker",
+        "ovoz"
+      ]
+    },
+    {
+      "name": "map-pin",
+      "label": "Joylashuv",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "location",
+        "map",
+        "manzil"
+      ]
+    },
+    {
+      "name": "calendar",
+      "label": "Kalendar",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "date",
+        "sana",
+        "schedule"
+      ]
+    },
+    {
+      "name": "utensils",
+      "label": "Ovqat",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "food",
+        "eat",
+        "ovqat",
+        "restaurant",
+        "taom"
+      ]
+    },
+    {
+      "name": "apple",
+      "label": "Meva",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "fruit",
+        "health",
+        "meva",
+        "kaloriya",
+        "nutrition"
+      ]
+    },
+    {
+      "name": "dumbbell",
+      "label": "Sport",
+      "category": "people",
+      "animated": true,
+      "keywords": [
+        "gym",
+        "fitness",
+        "sport",
+        "mashq",
+        "workout"
+      ]
+    },
+    {
+      "name": "coins",
+      "label": "Tanga",
+      "category": "commerce",
+      "animated": true,
+      "keywords": [
+        "money",
+        "pul",
+        "coin",
+        "reward",
+        "ball"
+      ]
+    },
+    {
+      "name": "scale",
+      "label": "Tarozi",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "weight",
+        "ogirlik",
+        "tarozi",
+        "measure"
+      ]
+    },
+    {
+      "name": "log-in",
+      "label": "Kirish",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "login",
+        "signin",
+        "kirish"
+      ]
+    },
+    {
+      "name": "log-out",
+      "label": "Chiqish",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "logout",
+        "signout",
+        "chiqish"
+      ]
+    },
+    {
+      "name": "palette",
+      "label": "Palitra",
+      "category": "media",
+      "animated": true,
+      "keywords": [
+        "color",
+        "design",
+        "rang",
+        "dizayn"
+      ]
+    },
+    {
+      "name": "sliders",
+      "label": "Sozlagichlar",
+      "category": "interface",
+      "animated": true,
+      "keywords": [
+        "controls",
+        "adjust",
+        "sozlash",
+        "tuning"
+      ]
+    },
+    {
+      "name": "trending-down",
+      "label": "Pasayish",
+      "category": "data",
+      "animated": true,
+      "keywords": [
+        "decrease",
+        "pasayish",
+        "loss"
+      ]
+    },
+    {
+      "name": "bot",
+      "label": "AI yordamchi",
+      "category": "brand",
+      "animated": true,
+      "keywords": [
+        "ai",
+        "robot",
+        "assistant",
+        "yordamchi"
+      ]
+    },
+    {
+      "name": "wifi-off",
+      "label": "Oflayn",
+      "category": "devices",
+      "animated": true,
+      "keywords": [
+        "offline",
+        "oflayn",
+        "no-connection"
+      ]
+    },
+    {
+      "name": "badge-check",
+      "label": "Tasdiqlangan",
+      "category": "status",
+      "animated": true,
+      "keywords": [
+        "verified",
+        "premium",
+        "tasdiq",
+        "pro"
+      ]
+    }
+  ]
+}

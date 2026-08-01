@@ -1,0 +1,8 @@
+<UvelLibrary Name="uvel.icons" Version="1.0">
+  <Logic>
+    <Var Name="uvel.icons.source" Value="offline: uvel/icons/uflow-icons.js" Type="string" />
+    <Handler Name="uvel.icons.ready">
+      <Set Target="status" Property="Text" Value="Uvel Icons loaded offline" />
+    </Handler>
+  </Logic>
+</UvelLibrary>

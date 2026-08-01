@@ -1683,6 +1683,7 @@ public void CompileManualCCode(string moduleId, string code)
             if (p == "uvel.backend") return "uvel/backend.xml";
             if (p == "uvel.net") return "uvel/net.xml";
             if (p == "uvel.data") return "uvel/data.xml";
+            if (p == "uvel.icons") return "uvel/icons.xml";
             return p.Replace('.', Path.DirectorySeparatorChar) + ".xml";
         }
 

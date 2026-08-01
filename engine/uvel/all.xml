@@ -3,4 +3,5 @@
   <Import Package="uvel.backend" />
   <Import Package="uvel.net" />
   <Import Package="uvel.data" />
+  <Import Package="uvel.icons" />
 </UvelLibrary>

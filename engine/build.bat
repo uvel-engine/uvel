@@ -41,6 +41,14 @@ if exist "plugins\*.cs" (
 :: Enable delayed expansion for plugin files
 setlocal EnableDelayedExpansion
 
+set UVEL_LIB_FILES=
+if exist "uvel" (
+    for /R "uvel" %%f in (*.cs) do (
+        set UVEL_LIB_FILES=!UVEL_LIB_FILES! "%%f"
+    )
+    echo Found Uvel library sources: !UVEL_LIB_FILES!
+)
+
 set PLUGIN_LIST=
 if exist "plugins" (
     for %%f in (plugins\*.cs) do (
@@ -77,6 +85,7 @@ DevToolsServer.cs ^
 UvelBridgeServer.cs ^
 Program.cs ^
 ComponentSystem.cs ^
+!UVEL_LIB_FILES! ^
 !PLUGIN_LIST!
 
 endlocal

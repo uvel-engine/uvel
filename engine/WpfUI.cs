@@ -258,7 +258,7 @@ private void ConvertElement(XmlNode node, StringBuilder xaml, int indent)
     if (node.Name.StartsWith("#")) return;
 
     string indentStr = new string(' ', indent * 4);
-    string originalName = node.Name;
+    string originalName = NormalizeUvelElementName(node.Name, node);
 
     // Custom component check
     if (IsCustomComponent(originalName))
@@ -276,7 +276,8 @@ private void ConvertElement(XmlNode node, StringBuilder xaml, int indent)
         elementName == "Bindings" || elementName == "Bind" || elementName == "Timer" ||
         elementName == "Include" || elementName == "ManualC" || elementName == "CSharp" ||
         elementName == "Code" || elementName == "Plugin" || elementName == "UsePlugin" ||
-        elementName == "Components" || elementName == "Colors" || elementName == "Resources")
+        elementName == "Components" || elementName == "Colors" || elementName == "Resources" ||
+        elementName == "Import" || elementName == "Imports" || elementName == "UvelLibrary")
         return;
 
     // Grid definitions
@@ -720,10 +721,10 @@ private void GenerateGlassCard(StringBuilder xaml, Dictionary<string, string> p,
 {
     string ind = new string(' ', indent * 4);
     
-    string bg = GetParam(p, "Background", "#2D2D2D");
-    string cornerRadius = GetParam(p, "CornerRadius", "8");
-    string borderColor = GetParam(p, "BorderColor", "#3D3D3D");
-    string padding = GetParam(p, "Padding", "16");
+    string bg = GetParam(p, "Background", "#FFFFFF14");
+    string cornerRadius = GetParam(p, "CornerRadius", "24");
+    string borderColor = GetParam(p, "BorderColor", "#FFFFFF24");
+    string padding = GetParam(p, "Padding", "20");
     string margin = GetParam(p, "Margin", "0");
     string name = GetParam(p, "Name", "");
 
@@ -761,7 +762,7 @@ private void GenerateGlassButton(StringBuilder xaml, Dictionary<string, string> 
     string text = GetParam(p, "Text", "");
     string accentColor = GetParam(p, "AccentColor", "#0078D4");
     string size = GetParam(p, "Size", "36");
-    string cornerRadius = GetParam(p, "CornerRadius", "8");
+    string cornerRadius = GetParam(p, "CornerRadius", "24");
     string name = GetParam(p, "Name", "");
 
     double sizeVal = 36;
@@ -1223,14 +1224,14 @@ private void ConvertNativeElement(XmlNode node, StringBuilder xaml, int indent)
 private void ConvertCustomButton(XmlNode node, StringBuilder xaml, string indentStr)
 {
     // Default ranglar — FAQAT 6 xonali HEX!
-    string bg = GetAttribute(node, "Background", "");
+    string bg = GetAttribute(node, "Background", "#34C759");
     string fg = GetAttribute(node, "Foreground", "#FFFFFF");
-    string radius = GetAttribute(node, "CornerRadius", "6");
-    string hover = GetAttribute(node, "HoverColor", "");
-    string pressed = GetAttribute(node, "PressedColor", "");
-    string border = GetAttribute(node, "BorderBrush", "");
+    string radius = GetAttribute(node, "CornerRadius", "18");
+    string hover = GetAttribute(node, "HoverColor", "#2DBA51");
+    string pressed = GetAttribute(node, "PressedColor", "#249A43");
+    string border = GetAttribute(node, "BorderBrush", "#34C759");
     string thick = GetAttribute(node, "BorderThickness", "1");
-    string padding = GetAttribute(node, "Padding", "16,8");
+    string padding = GetAttribute(node, "Padding", "18,10");
     string content = GetAttribute(node, "Content", node.InnerText.Trim());
     string name = GetAttribute(node, "Name", "");
     string width = GetAttribute(node, "Width", "Auto");

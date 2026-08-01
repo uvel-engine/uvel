@@ -152,3 +152,47 @@ Supported forms:
 ```
 
 Imported XML may contain `Styles`, `Logic`, `Bindings`, and `Components`; Uvel merges those sections into the running app before parsing. In dev mode, changes to imported XML files are watched too, so reusable XML libraries hot reload with the app.
+
+## Uvel UI Component Library
+
+Uvel ships with a built-in XML library and a C# component source tree under `engine/uvel/`.
+
+### Import styles
+
+Namespaced mode:
+
+```xml
+<Import Package="uvel" />
+<UvelInput Name="email" Placeholder="Email" />
+<UvelButton Content="Continue" onClick="submit" />
+<UvelCard>...</UvelCard>
+```
+
+Global mode:
+
+```xml
+<Import Package="uvel" As="global" />
+<Input Name="email" Placeholder="Email" />
+<Button Content="Continue" onClick="submit" />
+<Card>...</Card>
+```
+
+Built-in packages:
+
+- `uvel.ui` — smooth UFlow-like UI primitives and handlers.
+- `uvel.backend` — backend workflow handlers and state helpers.
+- `uvel.net` — network helpers.
+- `uvel.data` — data/state helpers.
+- `uvel.icons` — offline UFlow icon package cache.
+- `uvel.all` — imports everything.
+
+The C# side is split by component folder:
+
+```text
+engine/uvel/components/Button/{animation,frontend,logging,protocol,backend,plugin}.cs
+engine/uvel/components/Input/{animation,frontend,logging,protocol,backend,plugin}.cs
+engine/uvel/components/Card/{animation,frontend,logging,protocol,backend,plugin}.cs
+...
+```
+
+This gives Uvel a real built-in library layer rather than only a few aliases.
