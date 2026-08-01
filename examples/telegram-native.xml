@@ -3,13 +3,12 @@
 
   <UI>
     <View Background="#0B0F19">
-      <!-- Left sidebar -->
-      <Card Name="sidebar" X="20" Y="20" Width="320" Height="720" Background="#FFFFFF10" BorderColor="#FFFFFF22" CornerRadius="30" Padding="18" Gap="12">
-        <Text Text="Uvelgram" FontSize="30" Foreground="#FFFFFF" Align="left" />
-        <Text Text="Native custom Uvel UI demo" FontSize="13" Foreground="#94A3B8" Align="left" />
-        <Input Name="search" Text="Search chats" Placeholder="Search chats" />
-        <Divider />
-        <List Name="chats" Gap="8">
+      <Card Name="sidebar" X="18" Y="20" Width="320" Height="720" Background="#FFFFFF10" BorderColor="#FFFFFF22" CornerRadius="30" Padding="18">
+        <Text X="18" Y="18" Width="250" Height="42" Text="Uvelgram" FontSize="30" Foreground="#FFFFFF" Align="left" />
+        <Text X="18" Y="60" Width="260" Height="24" Text="Telegram-like native Uvel UI" FontSize="13" Foreground="#94A3B8" Align="left" />
+        <Input Name="search" X="18" Y="98" Width="284" Height="44" Text="Search chats" Placeholder="Search chats" />
+        <Divider X="18" Y="158" Width="284" Height="10" />
+        <List Name="chats" X="18" Y="178" Width="284" Height="520" Background="#00000000" BorderColor="#00000000" Padding="0" Gap="8">
           <ListItem Text="Diyorbek  ·  Online" />
           <ListItem Text="UFlow Team  ·  Design update" />
           <ListItem Text="Uvel Engine  ·  Native runtime" />
@@ -18,24 +17,25 @@
         </List>
       </Card>
 
-      <!-- Chat body -->
-      <Card Name="chatPanel" X="360" Y="20" Width="800" Height="720" Background="#FFFFFF0D" BorderColor="#FFFFFF20" CornerRadius="30" Padding="20" Gap="12">
-        <Card Name="topbar" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="16" Gap="4">
-          <Text Text="Diyorbek" FontSize="22" Foreground="#FFFFFF" Align="left" />
-          <Text Name="status" Text="Online · Uvel native UI is ready" FontSize="13" Foreground="#34C759" Align="left" />
+      <Card Name="chatPanel" X="358" Y="20" Width="802" Height="720" Background="#FFFFFF0D" BorderColor="#FFFFFF20" CornerRadius="30" Padding="0">
+        <Card Name="topbar" X="20" Y="20" Width="762" Height="76" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="14">
+          <Text X="18" Y="10" Width="360" Height="32" Text="Diyorbek" FontSize="22" Foreground="#FFFFFF" Align="left" />
+          <Text Name="status" X="18" Y="42" Width="520" Height="22" Text="Online · Uvel native UI is ready" FontSize="13" Foreground="#34C759" Align="left" />
+          <Badge X="650" Y="22" Width="86" Height="28" Text="native" />
         </Card>
 
-        <Scroll Name="messages" Background="#00000000" BorderColor="#00000000" CornerRadius="18" Padding="8" Gap="10">
-          <ListItem Text="Hello! This is a Telegram-like Uvel native UI demo." />
-          <ListItem Text="It is drawn by Uvel custom native renderer, not XAML." />
-          <ListItem Text="Use the input below and press Send." />
+        <Scroll Name="messages" X="20" Y="112" Width="762" Height="420" Background="#00000000" BorderColor="#00000000" CornerRadius="18" Padding="8" Gap="10">
+          <ListItem Text="Hello! This is a Telegram-like Uvel native UI demo." Align="left" Background="#FFFFFF18" />
+          <ListItem Text="It is drawn by Uvel custom native renderer, not XAML." Align="left" Background="#FFFFFF18" />
+          <ListItem Text="Use the input below and press Send." Align="right" Background="#34C759" />
         </Scroll>
 
-        <Card Name="composer" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="12" Gap="10">
-          <Input Name="messageInput" Text="Assalomu alaykum, Uvel!" Placeholder="Write a message..." />
-          <Button Content="Send message" onClick="SendMessage" />
-          <Button Content="Save DB" onClick="uvel.database.save" />
-          <Button Content="Load DB" onClick="uvel.database.load" />
+        <Card Name="composer" X="20" Y="552" Width="762" Height="146" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="0">
+          <Input Name="messageInput" X="18" Y="18" Width="520" Height="46" Text="Assalomu alaykum, Uvel!" Placeholder="Write a message..." />
+          <Button X="552" Y="18" Width="192" Height="46" Content="Send message" onClick="SendMessage" />
+          <Button X="18" Y="82" Width="160" Height="42" Content="Save DB" onClick="uvel.database.save" />
+          <Button X="190" Y="82" Width="160" Height="42" Content="Load DB" onClick="uvel.database.load" />
+          <Button X="362" Y="82" Width="180" Height="42" Content="Backend ping" onClick="uvel.backend.ping" />
         </Card>
       </Card>
     </View>

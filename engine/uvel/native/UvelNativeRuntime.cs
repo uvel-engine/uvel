@@ -324,7 +324,14 @@ namespace Uvel.Native2D
                 DrawText(g, string.IsNullOrEmpty(el.Text) ? el.Placeholder : el.Text, _font, Color.FromArgb(190,255,255,255), el.Bounds, "left");
             }
             else if (el.Type == "Text" || el.Type == "TextBlock") DrawText(g, el.Text, el.FontSize >= 22 ? _fontTitle : _font, el.Foreground, el.Bounds, el.Align);
-            else if (el.Type == "ListItem") { using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g,b,el.Bounds,16); DrawText(g,el.Text,_font,el.Foreground,el.Bounds,el.Align); }
+            else if (el.Type == "ListItem")
+            {
+                Rectangle bubble = el.Bounds;
+                if (el.Align == "right") { bubble.Width = Math.Min(el.Bounds.Width - 18, Math.Max(160, TextRenderer.MeasureText(el.Text ?? "", _font).Width + 34)); bubble.X = el.Bounds.Right - bubble.Width; }
+                else if (el.Align == "left") { bubble.Width = Math.Min(el.Bounds.Width - 18, Math.Max(160, TextRenderer.MeasureText(el.Text ?? "", _font).Width + 34)); }
+                using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g,b,bubble,16);
+                DrawText(g,el.Text,_font,el.Foreground,bubble,el.Align == "right" ? "right" : "left");
+            }
             else if (el.Type == "Icon") DrawText(g, UvelIconRegistry.IconText(el.Icon), _fontBold, el.Foreground, el.Bounds, "center");
             else if (el.Type == "Badge") { using (SolidBrush b = new SolidBrush(Color.FromArgb(34,52,199,89))) FillRound(g,b,el.Bounds,13); DrawText(g,el.Text,_fontSmall,Color.FromArgb(52,199,89),el.Bounds,"center"); }
             else if (el.Type == "Divider") { using (Pen p = new Pen(Color.FromArgb(32,255,255,255))) g.DrawLine(p, el.Bounds.Left, el.Bounds.Top + el.Bounds.Height/2, el.Bounds.Right, el.Bounds.Top + el.Bounds.Height/2); }

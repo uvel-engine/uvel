@@ -409,7 +409,9 @@ namespace Uvel
                 string exe = Process.GetCurrentProcess().MainModule.FileName;
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = exe;
-                psi.Arguments = "native \"" + _currentXmlPath + "\"";
+                psi.Arguments = ShouldUseNativeRuntime(_currentXmlPath)
+                    ? "native \"" + _currentXmlPath + "\""
+                    : "dev \"" + _currentXmlPath + "\" --port " + _devtoolsPort + " --no-debug";
                 psi.WorkingDirectory = _workspaceDir;
                 psi.UseShellExecute = false;
                 psi.RedirectStandardOutput = true;
