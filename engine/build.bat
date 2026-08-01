@@ -89,6 +89,9 @@ if %ERRORLEVEL% EQU 0 (
     echo ========================================
     echo.
     echo   Builtin plugins: 10
+    echo   Copying Uvel XML libraries...
+    if exist "bin\uvel" rmdir /s /q "bin\uvel"
+    if exist "uvel" xcopy "uvel" "bin\uvel" /E /I /Y >nul
     if exist "plugins\*.cs" (
         echo   External plugins: compiled into binary
     )

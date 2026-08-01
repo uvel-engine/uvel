@@ -120,3 +120,35 @@ Supported realtime actions:
 - **Realtime logs** — bridge logs and app stdout/stderr stream back to the browser.
 
 The bridge listens only on localhost and runs only after the user explicitly starts it.
+
+
+## XML Libraries and Imports
+
+Uvel apps can import reusable XML libraries and call namespaced handlers such as `uvel.ui.*` and `uvel.backend.*`.
+
+```xml
+<App Name="Library Demo" Width="720" Height="420" Theme="Dark">
+  <Import Package="uvel.ui" />
+  <Import Package="uvel.backend" />
+
+  <UI>
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+      <TextBlock Name="status" Text="Ready" />
+      <Button Content="Ping backend" onClick="uvel.backend.ping" />
+    </StackPanel>
+  </UI>
+</App>
+```
+
+Supported forms:
+
+```xml
+<Import Package="uvel.ui" />
+<Import Package="uvel.backend" />
+<Import Package="uvel.net" />
+<Import Package="uvel.data" />
+<Import Package="uvel.all" />
+<Import Source="components/shared.xml" />
+```
+
+Imported XML may contain `Styles`, `Logic`, `Bindings`, and `Components`; Uvel merges those sections into the running app before parsing. In dev mode, changes to imported XML files are watched too, so reusable XML libraries hot reload with the app.

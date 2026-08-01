@@ -89,7 +89,7 @@ namespace Uvel
             string xmlPath = GetXmlPath(args, 1);
             if (string.IsNullOrEmpty(xmlPath)) return;
 
-            Console.Clear();
+            SafeConsoleClear();
             PrintMiniHeader();
             Console.WriteLine("  Running: " + Path.GetFileName(xmlPath));
             Console.WriteLine();
@@ -118,7 +118,7 @@ namespace Uvel
                 }
             }
 
-            Console.Clear();
+            SafeConsoleClear();
             PrintDevBanner(xmlPath, port);
 
             // Create engine
@@ -200,7 +200,7 @@ namespace Uvel
                 }
             }
 
-            Console.Clear();
+            SafeConsoleClear();
             PrintMiniHeader();
             PrintInfo("Starting Uvel Bridge...");
             PrintInfo("Local WebSocket: ws://127.0.0.1:" + port + "/workspace");
@@ -425,7 +425,7 @@ namespace Uvel
 
             case "clear":
             case "cls":
-                Console.Clear();
+                SafeConsoleClear();
                 PrintMiniHeader();
                 break;
 
@@ -1236,6 +1236,13 @@ namespace Uvel
             Console.WriteLine("    POST /set         - Set variable (name=value)");
             Console.WriteLine("    POST /cmd         - Run shell command");
             Console.ResetColor();
+        }
+
+        private static void SafeConsoleClear()
+        {
+            try { Console.Clear(); }
+            catch (IOException) { }
+            catch (InvalidOperationException) { }
         }
 
         private static void ShowHelp()

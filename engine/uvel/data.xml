@@ -1,0 +1,8 @@
+<UvelLibrary Name="uvel.data" Version="1.0">
+  <Logic>
+    <Var Name="uvel.data.loaded" Value="true" Type="string" />
+    <Handler Name="uvel.data.ready">
+      <Set Target="status" Property="Text" Value="Data module loaded" />
+    </Handler>
+  </Logic>
+</UvelLibrary>

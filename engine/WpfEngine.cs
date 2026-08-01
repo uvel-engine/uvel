@@ -1600,6 +1600,135 @@ public void CompileManualCCode(string moduleId, string code)
 
         #endregion
 
+
+        #region XML Imports
+
+        private void ResolveImports()
+        {
+            try
+            {
+                if (_appDoc == null || _appDoc.DocumentElement == null) return;
+                XmlElement root = _appDoc.DocumentElement;
+                List<XmlNode> imports = new List<XmlNode>();
+
+                foreach (XmlNode child in root.ChildNodes)
+                {
+                    if (child.NodeType != XmlNodeType.Element) continue;
+                    if (child.Name == "Import") imports.Add(child);
+                    else if (child.Name == "Imports")
+                    {
+                        foreach (XmlNode item in child.ChildNodes)
+                        {
+                            if (item.NodeType == XmlNodeType.Element && item.Name == "Import") imports.Add(item);
+                        }
+                    }
+                }
+
+                foreach (XmlNode import in imports)
+                {
+                    ImportXmlLibrary(import);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("ERROR", "Import resolver failed: " + ex.Message);
+            }
+        }
+
+        private void ImportXmlLibrary(XmlNode importNode)
+        {
+            string source = _xmlParser.GetAttribute(importNode, "Source", "");
+            string package = _xmlParser.GetAttribute(importNode, "Package", "");
+            string ns = _xmlParser.GetAttribute(importNode, "As", package);
+
+            if (string.IsNullOrEmpty(source) && !string.IsNullOrEmpty(package))
+            {
+                source = PackageToSource(package);
+            }
+            if (string.IsNullOrEmpty(source)) return;
+
+            string path = ResolveImportPath(source);
+            if (!File.Exists(path))
+            {
+                Log("WARN", "Import not found: " + source + " -> " + path);
+                return;
+            }
+
+            XmlDocument lib = new XmlDocument();
+            lib.Load(path);
+            XmlElement libRoot = lib.DocumentElement;
+            if (libRoot == null) return;
+
+            foreach (XmlNode child in libRoot.ChildNodes)
+            {
+                if (child.NodeType == XmlNodeType.Element && child.Name == "Import")
+                {
+                    ImportXmlLibrary(child);
+                }
+            }
+
+            MergeSection(libRoot, "Styles");
+            MergeSection(libRoot, "Logic");
+            MergeSection(libRoot, "Bindings");
+            MergeSection(libRoot, "Components");
+
+            Log("IMPORT", "Loaded " + source + (string.IsNullOrEmpty(ns) ? "" : " as " + ns));
+        }
+
+        private string PackageToSource(string package)
+        {
+            string p = package.ToLower().Trim();
+            if (p == "uvel" || p == "uvel.all") return "uvel/all.xml";
+            if (p == "uvel.ui") return "uvel/ui.xml";
+            if (p == "uvel.backend") return "uvel/backend.xml";
+            if (p == "uvel.net") return "uvel/net.xml";
+            if (p == "uvel.data") return "uvel/data.xml";
+            return p.Replace('.', Path.DirectorySeparatorChar) + ".xml";
+        }
+
+        private string ResolveImportPath(string source)
+        {
+            string normalized = source.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+            if (Path.IsPathRooted(normalized)) return normalized;
+
+            if (!string.IsNullOrEmpty(CurrentXmlPath))
+            {
+                string baseDir = Path.GetDirectoryName(CurrentXmlPath);
+                string candidate = Path.Combine(baseDir, normalized);
+                if (File.Exists(candidate)) return candidate;
+            }
+
+            string exeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string builtIn = Path.Combine(exeDir, normalized);
+            if (File.Exists(builtIn)) return builtIn;
+
+            return !string.IsNullOrEmpty(CurrentXmlPath)
+                ? Path.Combine(Path.GetDirectoryName(CurrentXmlPath), normalized)
+                : builtIn;
+        }
+
+        private void MergeSection(XmlElement libRoot, string sectionName)
+        {
+            XmlNode libSection = libRoot.Name == sectionName ? libRoot : libRoot.SelectSingleNode(sectionName);
+            if (libSection == null) return;
+
+            XmlElement appRoot = _appDoc.DocumentElement;
+            XmlNode appSection = appRoot.SelectSingleNode(sectionName);
+            if (appSection == null)
+            {
+                appSection = _appDoc.CreateElement(sectionName);
+                appRoot.AppendChild(appSection);
+            }
+
+            foreach (XmlNode child in libSection.ChildNodes)
+            {
+                XmlNode imported = _appDoc.ImportNode(child, true);
+                appSection.AppendChild(imported);
+            }
+        }
+
+        #endregion
+
         #region Run Application
 
         public void Run(string source, bool isContent)
@@ -1632,6 +1761,8 @@ public void CompileManualCCode(string moduleId, string code)
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            ResolveImports();
 
             XmlNode root = _appDoc.DocumentElement;
             if (root == null)
@@ -2614,12 +2745,13 @@ public CSharpCompiler GetCompiler()
 
                 _fileWatcher = new FileSystemWatcher();
                 _fileWatcher.Path = directory;
-                _fileWatcher.Filter = fileName;
+                _fileWatcher.Filter = "*.xml";
+                _fileWatcher.IncludeSubdirectories = true;
                 _fileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.Size;
                 _fileWatcher.Changed += OnFileChanged;
                 _fileWatcher.EnableRaisingEvents = true;
 
-                Log("WATCH", "Monitoring: " + fileName);
+                Log("WATCH", "Monitoring XML workspace: " + directory);
             }
             catch (Exception ex)
             {
@@ -2675,6 +2807,7 @@ public CSharpCompiler GetCompiler()
                 // Reload XML
                 _appDoc = new XmlDocument();
                 _appDoc.Load(CurrentXmlPath);
+                ResolveImports();
 
                 XmlNode root = _appDoc.DocumentElement;
 

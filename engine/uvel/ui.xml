@@ -1,0 +1,16 @@
+<UvelLibrary Name="uvel.ui" Version="1.0">
+  <Logic>
+    <Handler Name="uvel.ui.toast.success">
+      <Toast Message="{message}" Type="success" />
+    </Handler>
+    <Handler Name="uvel.ui.toast.info">
+      <Toast Message="{message}" Type="info" />
+    </Handler>
+    <Handler Name="uvel.ui.toast.error">
+      <Toast Message="{message}" Type="error" />
+    </Handler>
+    <Handler Name="uvel.ui.clear.status">
+      <Set Target="status" Property="Text" Value="" />
+    </Handler>
+  </Logic>
+</UvelLibrary>

@@ -1,0 +1,7 @@
+<UvelLibrary Name="uvel.net" Version="1.0">
+  <Logic>
+    <Handler Name="uvel.net.online">
+      <Set Target="status" Property="Text" Value="Network module loaded" />
+    </Handler>
+  </Logic>
+</UvelLibrary>

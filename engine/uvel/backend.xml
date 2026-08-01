@@ -1,0 +1,12 @@
+<UvelLibrary Name="uvel.backend" Version="1.0">
+  <Logic>
+    <Var Name="uvel.backend.ready" Value="true" Type="string" />
+    <Handler Name="uvel.backend.ping">
+      <Set Target="status" Property="Text" Value="Backend ready" />
+    </Handler>
+    <Handler Name="uvel.backend.time">
+      <Plugin Name="DatePlugin" Method="now" ToState="uvel.backend.now" />
+      <Set Target="status" Property="Text" Value="{uvel.backend.now}" />
+    </Handler>
+  </Logic>
+</UvelLibrary>
