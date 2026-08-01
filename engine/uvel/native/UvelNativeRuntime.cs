@@ -39,7 +39,7 @@ namespace Uvel.Native2D
         private DateTime _lastReload = DateTime.MinValue;
         private readonly UvelBackendRegistry _backend;
         private readonly Dictionary<string, Rectangle> _lastBounds = new Dictionary<string, Rectangle>();
-        private readonly Timer _animationTimer;
+        private readonly System.Windows.Forms.Timer _animationTimer;
         private float _pulse;
 
         private readonly Font _font = new Font("Segoe UI", 10f, FontStyle.Regular, GraphicsUnit.Point);
@@ -61,7 +61,7 @@ namespace Uvel.Native2D
             NativeApi.EnableImmersiveDarkMode(this.Handle);
             NativeApi.EnableDwmComposition(this.Handle);
 
-            _animationTimer = new Timer();
+            _animationTimer = new System.Windows.Forms.Timer();
             _animationTimer.Interval = 16;
             _animationTimer.Tick += delegate { _pulse += 0.04f; Invalidate(); };
             _animationTimer.Start();
