@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace Nimbus.UI.Core
+namespace Uvel.UI.Core
 {
     /// <summary>
     /// Base class for all UI elements

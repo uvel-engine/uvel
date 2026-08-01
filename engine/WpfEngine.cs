@@ -21,10 +21,10 @@ using System.Globalization;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.Security.Cryptography;
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// WPF Engine v3.0 - Core Engine for Nimbus Framework
+    /// WPF Engine v3.0 - Core Engine for Uvel Framework
     /// Plugin-based, Data Binding, Caching, Process Management
     /// One-time write - extend via plugins folder
     /// </summary>
@@ -39,7 +39,7 @@ namespace Nimbus.WPF
         private const int IPC_POLL_INTERVAL_MS = 100;
         private const int CLOCK_INTERVAL_MS = 1000;
         private const string ENGINE_VERSION = "3.0.0";
-        private const string ENGINE_NAME = "Nimbus Engine";
+        private const string ENGINE_NAME = "Uvel Engine";
         private const string PLUGIN_FOLDER = "plugins";
 
         #endregion
@@ -72,16 +72,16 @@ namespace Nimbus.WPF
         private Dictionary<string, List<BindingInfo>> _bindings;
         private Dictionary<string, DispatcherTimer> _timers;
         private Dictionary<string, Process> _processes;
-        private Dictionary<string, INimbusPlugin> _plugins;
+        private Dictionary<string, IUvelPlugin> _plugins;
         private Dictionary<string, Func<XmlNode, object, bool>> _customCommands;
         private Dictionary<string, Func<string, string>> _customFunctions;
         private List<DevLogEntry> _devLogs;
         private List<ClickEvent> _clickHistory;
         private Dictionary<string, bool> _debugSwitches;
         private Dictionary<string, Window> _windows;
-        // YANGI: ManualC va Nimbus-based plugins
-private Dictionary<string, Type> _nimbusBuiltinPlugins;
-private Dictionary<string, bool> _nimbusPluginLoaded;
+        // YANGI: ManualC va Uvel-based plugins
+private Dictionary<string, Type> _uvelBuiltinPlugins;
+private Dictionary<string, bool> _uvelPluginLoaded;
 private CSharpCompiler _csharpCompiler;
 private bool _pluginsInitialized;
         #endregion
@@ -223,7 +223,7 @@ private bool _ipcRunning;
     _bindings = new Dictionary<string, List<BindingInfo>>();
     _timers = new Dictionary<string, DispatcherTimer>();
     _processes = new Dictionary<string, Process>();
-    _plugins = new Dictionary<string, INimbusPlugin>();
+    _plugins = new Dictionary<string, IUvelPlugin>();
     _customCommands = new Dictionary<string, Func<XmlNode, object, bool>>();
     _customFunctions = new Dictionary<string, Func<string, string>>();
     _devLogs = new List<DevLogEntry>();
@@ -245,12 +245,12 @@ private bool _ipcRunning;
     SystemInfo = new OSInfo();
     IsDevMode = false;
     
-    _nimbusBuiltinPlugins = new Dictionary<string, Type>();
-    _nimbusPluginLoaded = new Dictionary<string, bool>();
+    _uvelBuiltinPlugins = new Dictionary<string, Type>();
+    _uvelPluginLoaded = new Dictionary<string, bool>();
     _csharpCompiler = new CSharpCompiler(this);
     _pluginsInitialized = false;
 
-    // YANGI: Nimbus-based pluginlarni ro'yxatdan o'tkazish
+    // YANGI: Uvel-based pluginlarni ro'yxatdan o'tkazish
     RegisterBuiltinPlugins();
     
     // Debug switches
@@ -267,7 +267,7 @@ private bool _ipcRunning;
     InitializeSystemState();
 
     // IPC setup
-    string tempDir = Path.Combine(Path.GetTempPath(), "nimbus_ipc");
+    string tempDir = Path.Combine(Path.GetTempPath(), "uvel_ipc");
     if (!Directory.Exists(tempDir))
     {
         try { Directory.CreateDirectory(tempDir); } catch { }
@@ -303,8 +303,8 @@ private bool _ipcRunning;
                 _state["_handlerCount"] = 0;
                 _state["_uptime"] = "0";
                 // YANGI
-        _state["_engineType"] = "Nimbus";
-        _state["_renderEngine"] = "Nimbus Render Engine";
+        _state["_engineType"] = "Uvel";
+        _state["_renderEngine"] = "Uvel Render Engine";
         _state["_builtinPluginCount"] = 0;
         _state["_externalPluginCount"] = 0;
         _state["_manualCCount"] = 0;
@@ -321,27 +321,27 @@ private bool _ipcRunning;
         /// </summary>
         private void RegisterBuiltinPlugins()
 {
-    // Nimbus-based pluginlar (framework bilan birga keladi)
+    // Uvel-based pluginlar (framework bilan birga keladi)
     // Faqat ishlatilganda yuklanadi (lazy loading)
-    _nimbusBuiltinPlugins["MathPlugin"] = typeof(NimbusMathPlugin);
-    _nimbusBuiltinPlugins["StringPlugin"] = typeof(NimbusStringPlugin);
-    _nimbusBuiltinPlugins["FilePlugin"] = typeof(NimbusFilePlugin);
-    _nimbusBuiltinPlugins["DatePlugin"] = typeof(NimbusDatePlugin);
-    _nimbusBuiltinPlugins["JsonPlugin"] = typeof(NimbusJsonPlugin);
-    _nimbusBuiltinPlugins["UIPlugin"] = typeof(NimbusUIPlugin);
-    _nimbusBuiltinPlugins["NetPlugin"] = typeof(NimbusNetPlugin);
-    _nimbusBuiltinPlugins["CryptoPlugin"] = typeof(NimbusCryptoPlugin);
-    _nimbusBuiltinPlugins["ClipboardPlugin"] = typeof(NimbusClipboardPlugin);
-    _nimbusBuiltinPlugins["DialogPlugin"] = typeof(NimbusDialogPlugin);
+    _uvelBuiltinPlugins["MathPlugin"] = typeof(UvelMathPlugin);
+    _uvelBuiltinPlugins["StringPlugin"] = typeof(UvelStringPlugin);
+    _uvelBuiltinPlugins["FilePlugin"] = typeof(UvelFilePlugin);
+    _uvelBuiltinPlugins["DatePlugin"] = typeof(UvelDatePlugin);
+    _uvelBuiltinPlugins["JsonPlugin"] = typeof(UvelJsonPlugin);
+    _uvelBuiltinPlugins["UIPlugin"] = typeof(UvelUIPlugin);
+    _uvelBuiltinPlugins["NetPlugin"] = typeof(UvelNetPlugin);
+    _uvelBuiltinPlugins["CryptoPlugin"] = typeof(UvelCryptoPlugin);
+    _uvelBuiltinPlugins["ClipboardPlugin"] = typeof(UvelClipboardPlugin);
+    _uvelBuiltinPlugins["DialogPlugin"] = typeof(UvelDialogPlugin);
 
-    foreach (string name in _nimbusBuiltinPlugins.Keys)
+    foreach (string name in _uvelBuiltinPlugins.Keys)
     {
-        _nimbusPluginLoaded[name] = false;
+        _uvelPluginLoaded[name] = false;
     }
 
-    Log("ENGINE", "Registered " + _nimbusBuiltinPlugins.Count + " builtin plugins (lazy)");
+    Log("ENGINE", "Registered " + _uvelBuiltinPlugins.Count + " builtin plugins (lazy)");
 }
-public bool EnsureNimbusPlugin(string pluginName)
+public bool EnsureUvelPlugin(string pluginName)
 {
     lock (_pluginLock)
     {
@@ -350,17 +350,17 @@ public bool EnsureNimbusPlugin(string pluginName)
             return true;
 
         // Builtin plugin bormi
-        if (_nimbusBuiltinPlugins.ContainsKey(pluginName))
+        if (_uvelBuiltinPlugins.ContainsKey(pluginName))
         {
-            if (!_nimbusPluginLoaded[pluginName])
+            if (!_uvelPluginLoaded[pluginName])
             {
                 try
                 {
-                    Type pluginType = _nimbusBuiltinPlugins[pluginName];
-                    INimbusPlugin instance = (INimbusPlugin)Activator.CreateInstance(pluginType);
+                    Type pluginType = _uvelBuiltinPlugins[pluginName];
+                    IUvelPlugin instance = (IUvelPlugin)Activator.CreateInstance(pluginType);
                     _plugins[pluginName] = instance;
                     instance.OnLoad(this);
-                    _nimbusPluginLoaded[pluginName] = true;
+                    _uvelPluginLoaded[pluginName] = true;
                     Log("PLUGIN", "Lazy loaded builtin: " + pluginName);
                     return true;
                 }
@@ -445,9 +445,9 @@ public bool EnsureNimbusPlugin(string pluginName)
     int externalCount = 0;
     lock (_pluginLock)
     {
-        foreach (KeyValuePair<string, INimbusPlugin> kvp in _plugins)
+        foreach (KeyValuePair<string, IUvelPlugin> kvp in _plugins)
         {
-            if (!_nimbusBuiltinPlugins.ContainsKey(kvp.Key))
+            if (!_uvelBuiltinPlugins.ContainsKey(kvp.Key))
                 externalCount++;
         }
     }
@@ -455,11 +455,11 @@ public bool EnsureNimbusPlugin(string pluginName)
     lock (_stateLock)
     {
         _state["_pluginCount"] = _plugins.Count;
-        _state["_builtinPluginCount"] = _nimbusBuiltinPlugins.Count;
+        _state["_builtinPluginCount"] = _uvelBuiltinPlugins.Count;
         _state["_externalPluginCount"] = externalCount;
     }
 
-    Log("PLUGIN", "External: " + externalCount + ", Builtin: " + _nimbusBuiltinPlugins.Count + " (lazy)");
+    Log("PLUGIN", "External: " + externalCount + ", Builtin: " + _uvelBuiltinPlugins.Count + " (lazy)");
 }
 private void LoadPluginFromXml(string xmlFilePath)
 {
@@ -470,7 +470,7 @@ private void LoadPluginFromXml(string xmlFilePath)
     doc.Load(xmlFilePath);
 
     XmlNode root = doc.DocumentElement;
-    if (root == null || root.Name != "NimbusPlugin") return;
+    if (root == null || root.Name != "UvelPlugin") return;
 
     string pluginName = _xmlParser.GetAttribute(root, "Name", fileName);
     string pluginVersion = _xmlParser.GetAttribute(root, "Version", "1.0");
@@ -614,8 +614,8 @@ public void CompileManualCCode(string moduleId, string code)
     string xamlPath = Path.Combine(runtimeDir, "System.Xaml.dll");
     if (File.Exists(xamlPath)) parameters.ReferencedAssemblies.Add(xamlPath);
 
-    // CRITICAL FIX: Reference the running assembly (Nimbus.exe itself)
-    // This allows plugins to use "using Nimbus.WPF;"
+    // CRITICAL FIX: Reference the running assembly (Uvel.exe itself)
+    // This allows plugins to use "using Uvel.WPF;"
     string selfPath = Assembly.GetExecutingAssembly().Location;
     if (!string.IsNullOrEmpty(selfPath) && File.Exists(selfPath))
     {
@@ -655,11 +655,11 @@ public void CompileManualCCode(string moduleId, string code)
         }
 
         /// <summary>
-        /// Find and register all INimbusPlugin implementations in assembly
+        /// Find and register all IUvelPlugin implementations in assembly
         /// </summary>
         private void RegisterPluginsFromAssembly(Assembly assembly, string sourceName)
         {
-            Type pluginInterface = typeof(INimbusPlugin);
+            Type pluginInterface = typeof(IUvelPlugin);
             int registered = 0;
 
             foreach (Type type in assembly.GetTypes())
@@ -668,7 +668,7 @@ public void CompileManualCCode(string moduleId, string code)
                 {
                     try
                     {
-                        INimbusPlugin plugin = (INimbusPlugin)Activator.CreateInstance(type);
+                        IUvelPlugin plugin = (IUvelPlugin)Activator.CreateInstance(type);
                         RegisterPlugin(plugin);
                         registered++;
                     }
@@ -713,7 +713,7 @@ public void CompileManualCCode(string moduleId, string code)
         /// <summary>
         /// Register a single plugin instance
         /// </summary>
-        public void RegisterPlugin(INimbusPlugin plugin)
+        public void RegisterPlugin(IUvelPlugin plugin)
         {
             lock (_pluginLock)
             {
@@ -849,7 +849,7 @@ public void CompileManualCCode(string moduleId, string code)
             List<PluginInfo> list = new List<PluginInfo>();
             lock (_pluginLock)
             {
-                foreach (KeyValuePair<string, INimbusPlugin> kvp in _plugins)
+                foreach (KeyValuePair<string, IUvelPlugin> kvp in _plugins)
                 {
                     PluginInfo info = new PluginInfo();
                     info.Name = kvp.Value.Name;
@@ -868,7 +868,7 @@ public void CompileManualCCode(string moduleId, string code)
         {
             lock (_pluginLock)
             {
-                foreach (KeyValuePair<string, INimbusPlugin> kvp in _plugins)
+                foreach (KeyValuePair<string, IUvelPlugin> kvp in _plugins)
                 {
                     try
                     {
@@ -1628,7 +1628,7 @@ public void CompileManualCCode(string moduleId, string code)
             catch (Exception ex)
             {
                 Log("ERROR", "XML load error: " + ex.Message);
-                MessageBox.Show("XML yuklashda xato:\n" + ex.Message, "Nimbus Error",
+                MessageBox.Show("XML yuklashda xato:\n" + ex.Message, "Uvel Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -1637,7 +1637,7 @@ public void CompileManualCCode(string moduleId, string code)
             if (root == null)
             {
                 Log("ERROR", "XML root element not found");
-                MessageBox.Show("XML root element topilmadi!", "Nimbus Error",
+                MessageBox.Show("XML root element topilmadi!", "Uvel Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -1699,7 +1699,7 @@ public void CompileManualCCode(string moduleId, string code)
             if (uiNode == null)
             {
                 Log("ERROR", "UI section not found");
-                MessageBox.Show("XML da <UI> bo'limi topilmadi!", "Nimbus Error",
+                MessageBox.Show("XML da <UI> bo'limi topilmadi!", "Uvel Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -1713,14 +1713,14 @@ public void CompileManualCCode(string moduleId, string code)
             {
                 Log("ERROR", "Window creation error: " + ex.Message);
                 MessageBox.Show("Window yaratishda xato:\n" + ex.Message + "\n\n" + ex.StackTrace,
-                    "Nimbus Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    "Uvel Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (_mainWindow == null)
             {
                 Log("ERROR", "Window is null");
-                MessageBox.Show("Window yaratilmadi!", "Nimbus Error",
+                MessageBox.Show("Window yaratilmadi!", "Uvel Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -1830,7 +1830,7 @@ public void CompileManualCCode(string moduleId, string code)
             {
                 Log("ERROR", "Application run error: " + ex.Message);
                 MessageBox.Show("Application ishga tushishda xato:\n" + ex.Message,
-                    "Nimbus Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    "Uvel Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             // Cleanup
@@ -1873,7 +1873,7 @@ public void CompileManualCCode(string moduleId, string code)
             // Unload plugins
             lock (_pluginLock)
             {
-                foreach (KeyValuePair<string, INimbusPlugin> kvp in _plugins)
+                foreach (KeyValuePair<string, IUvelPlugin> kvp in _plugins)
                 {
                     try { kvp.Value.OnUnload(this); } catch { }
                 }
@@ -1917,7 +1917,7 @@ public void CompileManualCCode(string moduleId, string code)
         {
             lock (_stateLock)
             {
-                _state["_appName"] = _xmlParser.GetAttribute(root, "Name", "Nimbus App");
+                _state["_appName"] = _xmlParser.GetAttribute(root, "Name", "Uvel App");
                 _state["_theme"] = _xmlParser.GetAttribute(root, "Theme", "Dark");
                 _state["_version"] = _xmlParser.GetAttribute(root, "Version", "1.0.0");
                 _state["_author"] = _xmlParser.GetAttribute(root, "Author", "");
@@ -1955,7 +1955,7 @@ public void CompileManualCCode(string moduleId, string code)
                             ParseLogic(doc.DocumentElement); // Rekursiv yuklash
                         }
                         // Agar ildiz <App> bo'lsa, uning ichidagi Logic ni qidiramiz
-                        else if (doc.DocumentElement.Name == "App" || doc.DocumentElement.Name == "NimbusApp")
+                        else if (doc.DocumentElement.Name == "App" || doc.DocumentElement.Name == "UvelApp")
                         {
                             XmlNode subLogic = doc.DocumentElement.SelectSingleNode("Logic");
                             if (subLogic != null)
@@ -2073,7 +2073,7 @@ public void CompileManualCCode(string moduleId, string code)
             string pName = _xmlParser.GetAttribute(child, "Name", "");
             if (!string.IsNullOrEmpty(pName))
             {
-                EnsureNimbusPlugin(pName);
+                EnsureUvelPlugin(pName);
             }
         }
     }
@@ -3445,10 +3445,10 @@ public CSharpCompiler GetCompiler()
     #region Plugin Interface
 
     /// <summary>
-    /// Interface for Nimbus plugins
+    /// Interface for Uvel plugins
     /// Implement this in your plugin .cs files in the plugins/ folder
     /// </summary>
-    public interface INimbusPlugin
+    public interface IUvelPlugin
     {
         string Name { get; }
         string Version { get; }
@@ -3738,7 +3738,7 @@ public enum DrawerSide
         public string Version { get; set; }
         public string Description { get; set; }
     }
-    public class NimbusMathPlugin : INimbusPlugin
+    public class UvelMathPlugin : IUvelPlugin
 {
     public string Name { get { return "MathPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -3844,7 +3844,7 @@ public enum DrawerSide
             return Math.PI.ToString(System.Globalization.CultureInfo.InvariantCulture);
         });
 
-        // NimbusMathPlugin.OnLoad ichiga qo'shing (mavjud bo'lmasa):
+        // UvelMathPlugin.OnLoad ichiga qo'shing (mavjud bo'lmasa):
 
 engine.RegisterFunction("math.add", delegate(string args)
 {
@@ -3899,7 +3899,7 @@ engine.RegisterFunction("math.divide", delegate(string args)
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusStringPlugin : INimbusPlugin
+public class UvelStringPlugin : IUvelPlugin
 {
     public string Name { get { return "StringPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -3996,7 +3996,7 @@ public class NimbusStringPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusDatePlugin : INimbusPlugin
+public class UvelDatePlugin : IUvelPlugin
 {
     public string Name { get { return "DatePlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4079,7 +4079,7 @@ public class NimbusDatePlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusFilePlugin : INimbusPlugin
+public class UvelFilePlugin : IUvelPlugin
 {
     public string Name { get { return "FilePlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4199,7 +4199,7 @@ public class NimbusFilePlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusJsonPlugin : INimbusPlugin
+public class UvelJsonPlugin : IUvelPlugin
 {
     public string Name { get { return "JsonPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4309,7 +4309,7 @@ public class NimbusJsonPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusUIPlugin : INimbusPlugin
+public class UvelUIPlugin : IUvelPlugin
 {
     public string Name { get { return "UIPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4432,7 +4432,7 @@ public class NimbusUIPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusNetPlugin : INimbusPlugin
+public class UvelNetPlugin : IUvelPlugin
 {
     public string Name { get { return "NetPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4500,7 +4500,7 @@ public class NimbusNetPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusCryptoPlugin : INimbusPlugin
+public class UvelCryptoPlugin : IUvelPlugin
 {
     public string Name { get { return "CryptoPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4552,7 +4552,7 @@ public class NimbusCryptoPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusClipboardPlugin : INimbusPlugin
+public class UvelClipboardPlugin : IUvelPlugin
 {
     public string Name { get { return "ClipboardPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4581,7 +4581,7 @@ public class NimbusClipboardPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class NimbusDialogPlugin : INimbusPlugin
+public class UvelDialogPlugin : IUvelPlugin
 {
     public string Name { get { return "DialogPlugin"; } }
     public string Version { get { return "1.0"; } }
@@ -4684,7 +4684,7 @@ public class NimbusDialogPlugin : INimbusPlugin
     public void OnUnload(WpfEngine engine) { }
     public void OnEvent(WpfEngine engine, string eventName, object data) { }
 }
-public class XmlPluginAdapter : INimbusPlugin
+public class XmlPluginAdapter : IUvelPlugin
 {
     public string PluginName { get; set; }
     public string PluginVersion { get; set; }

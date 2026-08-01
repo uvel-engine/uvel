@@ -2,7 +2,7 @@
 
 @echo off
 echo ========================================
-echo   Nimbus Engine v3.0 - Build Script
+echo   Uvel Engine v3.0 - Build Script
 echo ========================================
 echo.
 
@@ -27,7 +27,7 @@ if not exist "%WPF%\PresentationCore.dll" (
 
 if not exist "bin" mkdir bin
 
-echo Compiling Nimbus Engine...
+echo Compiling Uvel Engine...
 echo.
 
 :: Collect all plugin .cs files
@@ -51,7 +51,7 @@ if exist "plugins" (
 
 "%CSC%" ^
 /target:exe ^
-/out:bin\nimbus.exe ^
+/out:bin\uvel.exe ^
 /optimize+ ^
 /warn:0 ^
 /platform:anycpu ^
@@ -84,7 +84,7 @@ if %ERRORLEVEL% EQU 0 (
     echo.
     echo ========================================
     echo   BUILD SUCCESS!
-    echo   Output: bin\nimbus.exe
+    echo   Output: bin\uvel.exe
     echo ========================================
     echo.
     echo   Builtin plugins: 10

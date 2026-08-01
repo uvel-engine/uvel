@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Collections.Generic;
 
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
     /// Form Renderer - Creates WinForms from XML definitions
@@ -14,7 +14,7 @@ namespace Nimbus
     /// </summary>
     public class FormRenderer
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         private XmlParser _parser;
         
         // Theme colors - iOS/macOS style
@@ -26,7 +26,7 @@ namespace Nimbus
         private static readonly Color TextWhite = Color.FromArgb(255, 255, 255);
         private static readonly Color TextGray = Color.FromArgb(142, 142, 147);
         
-        public FormRenderer(NimbusEngine engine)
+        public FormRenderer(UvelEngine engine)
         {
             _engine = engine;
             _parser = new XmlParser(engine);
@@ -37,7 +37,7 @@ namespace Nimbus
             Form form = new Form();
             SetupForm(form);
             
-            form.Text = _parser.GetAttribute(windowNode, "title", "Nimbus Window");
+            form.Text = _parser.GetAttribute(windowNode, "title", "Uvel Window");
             form.Width = _parser.GetIntAttribute(windowNode, "width", 400);
             form.Height = _parser.GetIntAttribute(windowNode, "height", 300);
             
@@ -85,7 +85,7 @@ namespace Nimbus
             Form form = new Form();
             SetupForm(form);
             
-            form.Text = _parser.GetAttribute(root, "name", "Nimbus App");
+            form.Text = _parser.GetAttribute(root, "name", "Uvel App");
             form.Width = _parser.GetIntAttribute(root, "width", 400);
             form.Height = _parser.GetIntAttribute(root, "height", 300);
             

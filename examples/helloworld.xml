@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<NimbusApp Name="Nimbus-App (Hello world)" Theme="Dark" Width="400" Height="700">
+<UvelApp Name="Uvel-App (Hello world)" Theme="Dark" Width="400" Height="700">
     
     <UI>
         
@@ -8,7 +8,7 @@
         <StackPanel Name="Body" Background="white" >
 
             <TextBlock Name="myHead"
-                Text="Hi, Nimbus Dev" 
+                Text="Hi, Uvel Dev" 
                        FontSize="50" 
                        Foreground="#888888" 
                        HorizontalAlignment="Center"
@@ -17,7 +17,7 @@
                        />
             
             <TextBlock Name="myText1"
-                       Text="This is Hello world app from Nimbus Engine" 
+                       Text="This is Hello world app from Uvel Engine" 
                        FontSize="16" 
                        Foreground="#888888" 
                        HorizontalAlignment="Center"
@@ -97,14 +97,14 @@
     
     <Logic>
         <Handler Name="SayHello">
-            <Alert Message="Nimbus is working very well!" Title="Congratulations bro!"/>
+            <Alert Message="Uvel is working very well!" Title="Congratulations bro!"/>
             
         </Handler>
         <Handler Name="SetText">
             <Set Control="myHead" Property="Text" Value="Salom!"/>
         </Handler>
         <Handler Name="ReText">
-            <Set Control="myHead" Property="Text" Value="Hi, Nimbus Dev"/>
+            <Set Control="myHead" Property="Text" Value="Hi, Uvel Dev"/>
         </Handler>
         <Handler Name="SwitchToDark">
             <Set Control="Body" Property="Background" Value="Black"/>
@@ -114,4 +114,4 @@
         </Handler>
     </Logic>
     
-</NimbusApp>
+</UvelApp>

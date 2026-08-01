@@ -7,10 +7,10 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Xml;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// Nimbus Component System v1.0
+    /// Uvel Component System v1.0
     /// Supports: Styles, Resources, Components, Templates
     /// </summary>
     public class ComponentSystem

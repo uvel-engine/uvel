@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<NimbusApp Name="Counter App" Theme="Dark" Width="400" Height="500">
+<UvelApp Name="Counter App" Theme="Dark" Width="400" Height="500">
     
     <UI>
         <Grid Background="#1A1A2E">
@@ -13,7 +13,7 @@
                                FontWeight="Bold"
                                Foreground="#E94560" 
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="Nimbus Engine Counter" 
+                    <TextBlock Text="Uvel Engine Counter" 
                                FontSize="12" 
                                Foreground="#888888" 
                                HorizontalAlignment="Center"
@@ -160,4 +160,4 @@
         </Handler>
     </Logic>
     
-</NimbusApp>
+</UvelApp>

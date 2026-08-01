@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using Nimbus.WPF;
+using Uvel.WPF;
 
 /// <summary>
-/// JSON Parser Plugin for Nimbus Engine
+/// JSON Parser Plugin for Uvel Engine
 /// Parses JSON responses and extracts fields
 /// </summary>
-public class JsonPlugin : INimbusPlugin
+public class JsonPlugin : IUvelPlugin
 {
     public string Name { get { return "JsonPlugin"; } }
     public string Version { get { return "1.0"; } }

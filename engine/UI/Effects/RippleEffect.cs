@@ -2,10 +2,10 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using Nimbus.UI.Styles;
-using Nimbus.UI.Animation;
+using Uvel.UI.Styles;
+using Uvel.UI.Animation;
 
-namespace Nimbus.UI.Effects
+namespace Uvel.UI.Effects
 {
     /// <summary>
     /// Ripple effect for Material Design touch feedback

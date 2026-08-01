@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Notes"
+<App Name="Uvel Notes"
      Width="420"
      Height="780"
      Theme="Light"
@@ -376,7 +376,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Input;
 
-namespace Nimbus.Notes
+namespace Uvel.Notes
 {
     public class NoteItem
     {
@@ -399,7 +399,7 @@ namespace Nimbus.Notes
         public static string Init()
         {
             notes.Clear();
-            Add("Welcome to Nimbus Notes", "Your personal note-taking app.\n\n• Clean Windows 11 design\n• Categories and colors\n• Pin important notes\n• Quick search", "Personal", "#C8E6C9", true);
+            Add("Welcome to Uvel Notes", "Your personal note-taking app.\n\n• Clean Windows 11 design\n• Categories and colors\n• Pin important notes\n• Quick search", "Personal", "#C8E6C9", true);
             Add("Shopping List", "Groceries:\n- Milk\n- Eggs\n- Bread\n- Fruits\n- Vegetables", "Personal", "#FFF9C4", false);
             Add("Meeting Notes", "Monday 10 AM\n\nAgenda:\n1. Q4 Review\n2. Budget\n3. Team updates", "Work", "#BBDEFB", false);
             Add("App Ideas", "1. Habit tracker\n2. Recipe manager\n3. Workout log\n4. Budget app", "Ideas", "#F8BBD9", false);

@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace Nimbus.UI.Styles
+namespace Uvel.UI.Styles
 {
     /// <summary>
     /// Theme manager - colors, fonts, sizes

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Animation Studio"
+<App Name="Uvel Animation Studio"
      Width="900"
      Height="650"
      Theme="Dark"
@@ -307,7 +307,7 @@
                                         <TextBlock Name="animEmoji" Text="✨" 
                                                    FontSize="48"
                                                    HorizontalAlignment="Center"/>
-                                        <TextBlock Name="animLabel" Text="Nimbus"
+                                        <TextBlock Name="animLabel" Text="Uvel"
                                                    FontSize="16" FontWeight="Bold"
                                                    Foreground="White"
                                                    TextAlignment="Center"
@@ -769,7 +769,7 @@
             <Set Target="animBox" Property="Rotation" Value="0"/>
             
             <Set Target="animEmoji" Property="Text" Value="✨"/>
-            <Set Target="animLabel" Property="Text" Value="Nimbus"/>
+            <Set Target="animLabel" Property="Text" Value="Uvel"/>
             
             <Set Target="lblStatus" Property="Text" Value="Reset"/>
             <Set Target="statusDot" Property="Background" Value="#10B981"/>

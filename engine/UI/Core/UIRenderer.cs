@@ -4,22 +4,22 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Xml;
-using Nimbus.UI.Styles;
-using Nimbus.UI.Layout;
-using Nimbus.UI.Components;
-using Nimbus.UI.Effects;
+using Uvel.UI.Styles;
+using Uvel.UI.Layout;
+using Uvel.UI.Components;
+using Uvel.UI.Effects;
 
-namespace Nimbus.UI.Core
+namespace Uvel.UI.Core
 {
     /// <summary>
     /// Main UI Renderer - creates controls from XML definitions
     /// </summary>
     public class UIRenderer
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         private Dictionary<string, Control> _controls;
         
-        public UIRenderer(NimbusEngine engine)
+        public UIRenderer(UvelEngine engine)
         {
             _engine = engine;
             _controls = new Dictionary<string, Control>();
@@ -37,7 +37,7 @@ namespace Nimbus.UI.Core
             UIWindow window = new UIWindow();
             
             // Get attributes
-            string title = GetAttr(windowNode, "title", GetAttr(rootNode, "name", "Nimbus App"));
+            string title = GetAttr(windowNode, "title", GetAttr(rootNode, "name", "Uvel App"));
             int width = GetIntAttr(windowNode, "width", GetIntAttr(rootNode, "width", 400));
             int height = GetIntAttr(windowNode, "height", GetIntAttr(rootNode, "height", 300));
             bool borderless = GetBoolAttr(windowNode, "borderless", GetBoolAttr(rootNode, "borderless", false));
@@ -79,7 +79,7 @@ namespace Nimbus.UI.Core
         {
             UIWindow window = new UIWindow();
             
-            string title = GetAttr(rootNode, "name", "Nimbus App");
+            string title = GetAttr(rootNode, "name", "Uvel App");
             int width = GetIntAttr(rootNode, "width", 400);
             int height = GetIntAttr(rootNode, "height", 300);
             bool borderless = GetBoolAttr(rootNode, "borderless", false);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Secure System"
+<App Name="Uvel Secure System"
      Width="1000" Height="680"
      Theme="Dark"
      DarkMode="true"
@@ -116,7 +116,7 @@
                                     <TextBlock Text="N" Foreground="White" FontSize="18" FontWeight="Bold" 
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="Nimbus" FontSize="22" FontWeight="Bold" Foreground="White" 
+                                <TextBlock Text="Uvel" FontSize="22" FontWeight="Bold" Foreground="White" 
                                            Margin="12,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
@@ -304,17 +304,17 @@
         <Var Name="currentRole" Value="" Type="string"/>
 
         <!-- 3 Users Database -->
-        <Var Name="u1_email" Value="admin@nimbus.io" Type="string"/>
+        <Var Name="u1_email" Value="admin@uvel.io" Type="string"/>
         <Var Name="u1_hash" Value="{crypto.sha256:admin123}" Type="string"/>
         <Var Name="u1_name" Value="System Admin" Type="string"/>
         <Var Name="u1_role" Value="Administrator" Type="string"/>
 
-        <Var Name="u2_email" Value="manager@nimbus.io" Type="string"/>
+        <Var Name="u2_email" Value="manager@uvel.io" Type="string"/>
         <Var Name="u2_hash" Value="{crypto.sha256:manager123}" Type="string"/>
         <Var Name="u2_name" Value="Project Manager" Type="string"/>
         <Var Name="u2_role" Value="Manager" Type="string"/>
 
-        <Var Name="u3_email" Value="user@nimbus.io" Type="string"/>
+        <Var Name="u3_email" Value="user@uvel.io" Type="string"/>
         <Var Name="u3_hash" Value="{crypto.sha256:user123}" Type="string"/>
         <Var Name="u3_name" Value="John Doe" Type="string"/>
         <Var Name="u3_role" Value="Standard User" Type="string"/>

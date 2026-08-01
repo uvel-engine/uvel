@@ -54,7 +54,7 @@
 
                             <!-- Title -->
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                <TextBlock Name="appTitle" Text="Nimbus Studio" FontSize="18"
+                                <TextBlock Name="appTitle" Text="Uvel Studio" FontSize="18"
                                            FontWeight="Bold" Foreground="#F8FAFC"/>
                                 <TextBlock Name="appSubtitle" Text="✨ Glass Edition" FontSize="11"
                                            Foreground="#94A3B8" Margin="0,2,0,0"/>
@@ -489,7 +489,7 @@
                                     </Grid>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                        <TextBlock Text="Nimbus Notepad" FontSize="14" FontWeight="SemiBold"
+                                        <TextBlock Text="Uvel Notepad" FontSize="14" FontWeight="SemiBold"
                                                    Foreground="#F1F5F9"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <Border CornerRadius="4" Background="#8B5CF625" Padding="6,3">
@@ -578,7 +578,7 @@
                                             <TextBlock Text="Engine" FontSize="11" Foreground="#64748B"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                                 <TextBlock Text="⚡" FontSize="12"/>
-                                                <TextBlock Text=" Nimbus v3.0" FontSize="14" Foreground="#F1F5F9"
+                                                <TextBlock Text=" Uvel v3.0" FontSize="14" Foreground="#F1F5F9"
                                                            FontWeight="SemiBold"/>
                                             </StackPanel>
                                         </StackPanel>

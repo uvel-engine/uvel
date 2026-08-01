@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Nimbus.UI.Animation
+namespace Uvel.UI.Animation
 {
     /// <summary>
     /// Animation types

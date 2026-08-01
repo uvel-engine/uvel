@@ -17,7 +17,7 @@
         <Border Grid.Row="0" Background="#16213E" Padding="20">
             <StackPanel>
                 <TextBlock Text="🔢 COUNTER" FontSize="28" FontWeight="Bold" Foreground="#E94560" HorizontalAlignment="Center" />
-                <TextBlock Text="Nimbus Engine Demo" FontSize="12" Foreground="#888888" HorizontalAlignment="Center" Margin="0,5,0,0" />
+                <TextBlock Text="Uvel Engine Demo" FontSize="12" Foreground="#888888" HorizontalAlignment="Center" Margin="0,5,0,0" />
             </StackPanel>
         </Border>
         <Border Grid.Row="1" Background="#0F3460" Margin="30,20" CornerRadius="20" Padding="30">

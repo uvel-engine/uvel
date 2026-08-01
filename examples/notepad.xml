@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Notepad Pro"
+<App Name="Uvel Notepad Pro"
      Width="1200"
      Height="800"
      Theme="Dark"
@@ -52,7 +52,7 @@
                         <Border Background="#21262D" CornerRadius="6" Padding="8,6" Margin="0,6">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📝" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Nimbus Notepad" 
+                                <TextBlock Text="Uvel Notepad" 
                                            FontSize="13" 
                                            FontWeight="SemiBold"
                                            Foreground="#E6EDF3" 
@@ -1083,7 +1083,7 @@
                     </Border>
 
                     <!-- Title -->
-                    <TextBlock Text="Nimbus Notepad Pro" 
+                    <TextBlock Text="Uvel Notepad Pro" 
                                FontSize="24" 
                                FontWeight="Bold" 
                                Foreground="#E6EDF3"
@@ -1160,7 +1160,7 @@
                     <!-- Info -->
                     <Border Background="#21262D" CornerRadius="8" Padding="16" Margin="0,0,0,20">
                         <StackPanel>
-                            <TextBlock Text="Powered by Nimbus Engine v3.0" 
+                            <TextBlock Text="Powered by Uvel Engine v3.0" 
                                        FontSize="12" 
                                        Foreground="#E6EDF3"
                                        TextAlignment="Center"/>
@@ -1211,13 +1211,13 @@
                 <!-- Logo -->
                 <TextBlock Text="📝" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 
-                <TextBlock Text="Nimbus Notepad Pro" 
+                <TextBlock Text="Uvel Notepad Pro" 
                            FontSize="32" 
                            FontWeight="Bold" 
                            Foreground="#E6EDF3"
                            TextAlignment="Center"/>
                            
-                <TextBlock Text="A modern text editor powered by Nimbus Engine" 
+                <TextBlock Text="A modern text editor powered by Uvel Engine" 
                            FontSize="14" 
                            Foreground="#8B949E"
                            TextAlignment="Center"
@@ -1397,8 +1397,8 @@ public static string GetMinimapText(string text, int maxLines)
             <Set Target="lblPosition" Property="Text" Value="Ln 1, Col 1"/>
             <Set Target="lblCharCount" Property="Text" Value="0 chars"/>
             <Set Target="welcomeScreen" Property="Visibility" Value="Visible"/>
-            <Log Message="Nimbus Notepad Pro initialized" Level="INFO"/>
-            <Toast Message="Welcome to Nimbus Notepad Pro!" Type="Info" Position="BottomRight" Duration="3000"/>
+            <Log Message="Uvel Notepad Pro initialized" Level="INFO"/>
+            <Toast Message="Welcome to Uvel Notepad Pro!" Type="Info" Position="BottomRight" Duration="3000"/>
         </Handler>
 
         <!-- ========== TEXT CHANGED ========== -->

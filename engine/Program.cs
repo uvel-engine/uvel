@@ -6,12 +6,12 @@ using System.Threading;
 using System.Windows;
 using System.Collections.Generic;
 using System.Net;
-using Nimbus.WPF;
+using Uvel.WPF;
 using System.Xml;
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
-    /// Nimbus CLI v3.0 - Command Line Interface with DevTools
+    /// Uvel CLI v3.0 - Command Line Interface with DevTools
     /// Compatible with .NET Framework 4.0+ (no $ strings, no async/await)
     /// </summary>
     public class Program
@@ -27,7 +27,7 @@ namespace Nimbus
         public static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Console.Title = "Nimbus Framework v3.0";
+            Console.Title = "Uvel Framework v3.0";
 
             if (args.Length == 0)
             {
@@ -58,7 +58,7 @@ namespace Nimbus
                     break;
                 case "--version":
                 case "-v":
-                    Console.WriteLine("Nimbus Framework v3.0.0");
+                    Console.WriteLine("Uvel Framework v3.0.0");
                     break;
                 default:
                     if (command.EndsWith(".xml") && File.Exists(command))
@@ -208,7 +208,7 @@ namespace Nimbus
                     compress = true;
             }
 
-            NimbusBuildSystem builder = new NimbusBuildSystem();
+            UvelBuildSystem builder = new UvelBuildSystem();
             builder.XmlPath = xmlPath;
             builder.OutputDirectory = outputDir;
             builder.AppName = appName;
@@ -221,7 +221,7 @@ namespace Nimbus
 
         private static void NewCommand(string[] args)
         {
-            string projectName = "MyNimbusApp";
+            string projectName = "MyUvelApp";
             string template = "default";
 
             if (args.Length > 1) projectName = args[1];
@@ -229,7 +229,7 @@ namespace Nimbus
 
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  Creating New Nimbus Project");
+            Console.WriteLine("  Creating New Uvel Project");
             Console.ResetColor();
 
             string projectDir = Path.Combine(Environment.CurrentDirectory, projectName);
@@ -255,7 +255,7 @@ namespace Nimbus
             string appXml = CreateTemplateApp(projectName, template);
             File.WriteAllText(Path.Combine(projectDir, "App.xml"), appXml, Encoding.UTF8);
 
-            // Create nimbus.json config
+            // Create uvel.json config
             StringBuilder config = new StringBuilder();
             config.AppendLine("{");
             config.AppendLine("  \"name\": \"" + projectName + "\",");
@@ -267,20 +267,20 @@ namespace Nimbus
             config.AppendLine("    \"console\": false");
             config.AppendLine("  }");
             config.AppendLine("}");
-            File.WriteAllText(Path.Combine(projectDir, "nimbus.json"), config.ToString(), Encoding.UTF8);
+            File.WriteAllText(Path.Combine(projectDir, "uvel.json"), config.ToString(), Encoding.UTF8);
 
             // Create sample plugin
             StringBuilder pluginCode = new StringBuilder();
             pluginCode.AppendLine("using System;");
             pluginCode.AppendLine("using System.Xml;");
-            pluginCode.AppendLine("using Nimbus.WPF;");
+            pluginCode.AppendLine("using Uvel.WPF;");
             pluginCode.AppendLine("");
             pluginCode.AppendLine("/// <summary>");
-            pluginCode.AppendLine("/// Sample Nimbus Plugin");
+            pluginCode.AppendLine("/// Sample Uvel Plugin");
             pluginCode.AppendLine("/// Place .cs files in the plugins/ folder");
             pluginCode.AppendLine("/// They will be compiled and loaded automatically");
             pluginCode.AppendLine("/// </summary>");
-            pluginCode.AppendLine("public class SamplePlugin : INimbusPlugin");
+            pluginCode.AppendLine("public class SamplePlugin : IUvelPlugin");
             pluginCode.AppendLine("{");
             pluginCode.AppendLine("    public string Name { get { return \"SamplePlugin\"; } }");
             pluginCode.AppendLine("    public string Version { get { return \"1.0\"; } }");
@@ -305,7 +305,7 @@ namespace Nimbus
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("    " + projectName + "/");
             Console.WriteLine("      App.xml");
-            Console.WriteLine("      nimbus.json");
+            Console.WriteLine("      uvel.json");
             Console.WriteLine("      plugins/");
             Console.WriteLine("        SamplePlugin.cs");
             Console.ResetColor();
@@ -313,7 +313,7 @@ namespace Nimbus
             Console.WriteLine("  Next steps:");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("    cd " + projectName);
-            Console.WriteLine("    nimbus dev App.xml");
+            Console.WriteLine("    uvel dev App.xml");
             Console.ResetColor();
             Console.WriteLine();
         }
@@ -336,7 +336,7 @@ namespace Nimbus
         }
 
         Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.Write("  nimbus> ");
+        Console.Write("  uvel> ");
         Console.ResetColor();
 
         string input = "";
@@ -1079,7 +1079,7 @@ namespace Nimbus
                 if (xmlFiles.Length > 0)
                     return Path.GetFullPath(xmlFiles[0]);
 
-                string configPath = Path.Combine(Environment.CurrentDirectory, "nimbus.json");
+                string configPath = Path.Combine(Environment.CurrentDirectory, "uvel.json");
                 if (File.Exists(configPath))
                 {
                     string configContent = File.ReadAllText(configPath);
@@ -1132,7 +1132,7 @@ namespace Nimbus
         private static void PrintMiniHeader()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  NIMBUS FRAMEWORK v3.0");
+            Console.WriteLine("  UVEL FRAMEWORK v3.0");
             Console.ResetColor();
         }
 
@@ -1140,7 +1140,7 @@ namespace Nimbus
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine();
-            Console.WriteLine("  NIMBUS DEV SERVER v3.0");
+            Console.WriteLine("  UVEL DEV SERVER v3.0");
             Console.WriteLine("  =====================");
             Console.ResetColor();
             Console.WriteLine("  File:     " + Path.GetFileName(xmlPath));
@@ -1181,12 +1181,12 @@ namespace Nimbus
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  NIMBUS FRAMEWORK v3.0");
+            Console.WriteLine("  UVEL FRAMEWORK v3.0");
             Console.WriteLine("  XML-based WPF Application Framework");
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine("  USAGE:");
-            Console.WriteLine("    nimbus <command> [options]");
+            Console.WriteLine("    uvel <command> [options]");
             Console.WriteLine();
             Console.WriteLine("  COMMANDS:");
             Console.WriteLine("    run   <file.xml>      Run application");
@@ -1206,10 +1206,10 @@ namespace Nimbus
             Console.WriteLine();
             Console.WriteLine("  EXAMPLES:");
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("    nimbus dev App.xml");
-            Console.WriteLine("    nimbus dev App.xml --port 8080");
-            Console.WriteLine("    nimbus build App.xml -o ./dist -n MyApp");
-            Console.WriteLine("    nimbus new MyProject");
+            Console.WriteLine("    uvel dev App.xml");
+            Console.WriteLine("    uvel dev App.xml --port 8080");
+            Console.WriteLine("    uvel build App.xml -o ./dist -n MyApp");
+            Console.WriteLine("    uvel new MyProject");
             Console.ResetColor();
             Console.WriteLine();
         }
@@ -1259,7 +1259,7 @@ namespace Nimbus
             t.AppendLine("                           FontSize=\"48\" FontWeight=\"Bold\"");
             t.AppendLine("                           Foreground=\"White\" HorizontalAlignment=\"Center\"/>");
             t.AppendLine("");
-            t.AppendLine("                <TextBlock Text=\"Welcome to Nimbus Framework\"");
+            t.AppendLine("                <TextBlock Text=\"Welcome to Uvel Framework\"");
             t.AppendLine("                           FontSize=\"16\" Foreground=\"#888888\"");
             t.AppendLine("                           HorizontalAlignment=\"Center\" Margin=\"0,10,0,30\"/>");
             t.AppendLine("");
@@ -1339,9 +1339,9 @@ namespace Nimbus
     }
 
     /// <summary>
-    /// Nimbus Build System v3.0
+    /// Uvel Build System v3.0
     /// </summary>
-    public class NimbusBuildSystem
+    public class UvelBuildSystem
     {
         public string XmlPath { get; set; }
         public string OutputDirectory { get; set; }
@@ -1356,7 +1356,7 @@ namespace Nimbus
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  NIMBUS BUILD SYSTEM v3.0");
+            Console.WriteLine("  UVEL BUILD SYSTEM v3.0");
             Console.ResetColor();
             Console.WriteLine();
 
@@ -1428,7 +1428,7 @@ _tempDir = Path.Combine(Environment.CurrentDirectory, "build", "temp_" + Guid.Ne
         throw new Exception("Invalid XML: no root element");
 
     if (doc.DocumentElement.Name != "App")
-        throw new Exception("Invalid Nimbus XML: root must be <App>");
+        throw new Exception("Invalid Uvel XML: root must be <App>");
 }
 
         private void CreateDirectories()
@@ -1446,10 +1446,10 @@ _tempDir = Path.Combine(Environment.CurrentDirectory, "build", "temp_" + Guid.Ne
             string escapedXml = xmlContent.Replace("\"", "\"\"");
 
             StringBuilder code = new StringBuilder();
-            code.AppendLine("// Auto-generated by Nimbus Build System v3.0");
+            code.AppendLine("// Auto-generated by Uvel Build System v3.0");
             code.AppendLine("using System;");
             code.AppendLine("using System.Windows;");
-            code.AppendLine("using Nimbus.WPF;");
+            code.AppendLine("using Uvel.WPF;");
             code.AppendLine("");
             code.AppendLine("namespace " + SanitizeName(AppName));
             code.AppendLine("{");

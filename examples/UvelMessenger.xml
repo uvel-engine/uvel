@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Messenger"
+<App Name="Uvel Messenger"
      Width="1200" Height="800"
      Theme="Dark"
      DarkMode="true"
@@ -102,7 +102,7 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>Auto,*</Grid.ColumnDefinitions>
                                         <Border Width="32" Height="32" CornerRadius="16" Background="#5865F2"/>
-                                        <TextBlock Grid.Column="1" Text="Nimbus Support" Foreground="#8E9297" 
+                                        <TextBlock Grid.Column="1" Text="Uvel Support" Foreground="#8E9297" 
                                                    VerticalAlignment="Center" Margin="12,0,0,0"/>
                                     </Grid>
                                 </Border>
@@ -186,7 +186,7 @@
                                         <TextBlock Text="Alex" Foreground="#ED4245" FontWeight="Bold"/>
                                         <TextBlock Text="Today at 12:30 PM" Foreground="#72767D" FontSize="11" Margin="8,2,0,0"/>
                                     </StackPanel>
-                                    <TextBlock Text="Hey guys! Check out the new Nimbus Engine update. It's insane! 🚀" 
+                                    <TextBlock Text="Hey guys! Check out the new Uvel Engine update. It's insane! 🚀" 
                                                Foreground="#DCDDDE" TextWrapping="Wrap" LineHeight="20"/>
                                 </StackPanel>
                             </Grid>

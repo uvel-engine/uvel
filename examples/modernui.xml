@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Studio" Theme="Dark" Width="520" Height="820" OnLoad="OnAppLoad" DarkMode="true">
+<App Name="Uvel Studio" Theme="Dark" Width="520" Height="820" OnLoad="OnAppLoad" DarkMode="true">
 
     <UI>
         <Grid>
@@ -41,7 +41,7 @@
 
                             <!-- Title -->
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                <TextBlock Name="appTitle" Text="Nimbus Studio" FontSize="17"
+                                <TextBlock Name="appTitle" Text="Uvel Studio" FontSize="17"
                                            FontWeight="Bold" Foreground="#F1F5F9"/>
                                 <TextBlock Name="appSubtitle" Text="v3.0 • Dashboard" FontSize="11"
                                            Foreground="#64748B" Margin="0,1,0,0"/>
@@ -319,7 +319,7 @@
                                     </Border>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                        <TextBlock Text="Nimbus Notepad" FontSize="14" FontWeight="SemiBold"
+                                        <TextBlock Text="Uvel Notepad" FontSize="14" FontWeight="SemiBold"
                                                    Foreground="#E2E8F0"/>
                                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                             <Border CornerRadius="4" Background="#8B5CF620" Padding="6,2">
@@ -378,7 +378,7 @@
                                         <Grid.ColumnDefinitions>*, *</Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="Engine" FontSize="11" Foreground="#64748B"/>
-                                            <TextBlock Text="Nimbus v3.0" FontSize="13" Foreground="#E2E8F0"
+                                            <TextBlock Text="Uvel v3.0" FontSize="13" Foreground="#E2E8F0"
                                                        FontWeight="SemiBold" Margin="0,2,0,0"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
@@ -594,7 +594,7 @@
 
         <!-- DevTools -->
         <Handler Name="OnDevTools">
-            <Alert Message="DevTools ishga tushirilmoqda...\n\nKonsolda 'nimbus dev App.xml' buyrug'ini ishga tushiring"
+            <Alert Message="DevTools ishga tushirilmoqda...\n\nKonsolda 'uvel dev App.xml' buyrug'ini ishga tushiring"
                    Title="🛠 DevTools" Icon="Information"/>
         </Handler>
 
@@ -602,7 +602,7 @@
         <Handler Name="OnBuild">
             <Confirm Title="📦 Build" Message="Loyihani EXE ga build qilmoqchimisiz?">
                 <Yes>
-                    <Alert Message="Build jarayoni boshlandi!\n\nKonsolda 'nimbus build App.xml' buyrug'ini ishga tushiring"
+                    <Alert Message="Build jarayoni boshlandi!\n\nKonsolda 'uvel build App.xml' buyrug'ini ishga tushiring"
                            Title="Build" Icon="Information"/>
                 </Yes>
             </Confirm>
@@ -614,7 +614,7 @@
         </Handler>
 
         <Handler Name="OnProject2">
-            <Alert Message="Nimbus Notepad loyihasi ochildi" Title="📝 Nimbus Notepad"/>
+            <Alert Message="Uvel Notepad loyihasi ochildi" Title="📝 Uvel Notepad"/>
         </Handler>
 
         <Handler Name="OnProject3">

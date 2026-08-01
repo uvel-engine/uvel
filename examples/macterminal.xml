@@ -163,7 +163,7 @@ public static string RunCommand(string command) {
 
         <Handler Name="InitTerminal">
             <CallManualC id="TerminalCore" Method="InitPath" ToState="currentDir"/>
-            <Set Target="historyText" Property="Text" Value="Last login: {currentDate} on ttys000&#x0a;Welcome to Nimbus Terminal v3.0&#x0a;&#x0a;"/>
+            <Set Target="historyText" Property="Text" Value="Last login: {currentDate} on ttys000&#x0a;Welcome to Uvel Terminal v3.0&#x0a;&#x0a;"/>
             <Call Handler="UpdatePrompt"/>
             <Focus Control="cmdInput"/>
         </Handler>

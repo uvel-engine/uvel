@@ -12,10 +12,10 @@ using System.Text;
 using System.Windows.Input;       // Cursors, MouseEventArgs uchun
 using System.Windows.Threading;   // DispatcherTimer uchun
 using System.Windows.Shapes;      // Rectangle, Path uchun (agar kerak bo'lsa)
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// Logic Runner - Complete implementation for Nimbus Framework
+    /// Logic Runner - Complete implementation for Uvel Framework
     /// </summary>
     public partial class LogicRunner
     {
@@ -805,7 +805,7 @@ private void ExecutePlugin(XmlNode node, object sender)
     }
 
     // Lazy load
-    bool loaded = _engine.EnsureNimbusPlugin(pluginName);
+    bool loaded = _engine.EnsureUvelPlugin(pluginName);
     if (!loaded)
     {
         _engine.Log("ERROR", "Plugin not found: " + pluginName);
@@ -4437,7 +4437,7 @@ private int FindOperatorIndex(string expr, char op)
         request.Method = method;
         request.ContentType = "application/json";
         request.Timeout = 30000;
-        request.UserAgent = "NimbusEngine/3.0";
+        request.UserAgent = "UvelEngine/3.0";
 
         if ((method == "POST" || method == "PUT") && !string.IsNullOrEmpty(body))
         {

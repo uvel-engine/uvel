@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Popup Demo"
+<App Name="Uvel Popup Demo"
      Width="1000" Height="700"
      Theme="Dark"
      DarkMode="true"
@@ -13,7 +13,7 @@
             <Border Grid.Column="0" Background="#1E1E1E" 
                     BorderBrush="#333333" BorderThickness="0,0,1,0">
                 <StackPanel Margin="20">
-                    <TextBlock Text="⚡ Nimbus" FontSize="24" FontWeight="Bold" 
+                    <TextBlock Text="⚡ Uvel" FontSize="24" FontWeight="Bold" 
                                Foreground="#FFFFFF" Margin="0,0,0,30"/>
 
                     <TextBlock Text="COMPONENTS" FontSize="12" FontWeight="Bold" 
@@ -152,7 +152,7 @@
                 <TextBlock Text="Edit Profile" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
                 
                 <TextBlock Text="Username" Foreground="#888888" Margin="0,0,0,5"/>
-                <TextBox Text="nimbus_user" Background="#111111" Foreground="White" 
+                <TextBox Text="uvel_user" Background="#111111" Foreground="White" 
                          Padding="10" BorderThickness="0" Margin="0,0,0,15"/>
                 
                 <TextBlock Text="Email" Foreground="#888888" Margin="0,0,0,5"/>

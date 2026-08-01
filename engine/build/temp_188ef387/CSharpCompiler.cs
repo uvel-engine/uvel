@@ -7,10 +7,10 @@ using System.Text;
 using System.Xml;
 using Microsoft.CSharp;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// Advanced, highly robust, and .NET 4.0 native C# Compiler for Nimbus Engine.
+    /// Advanced, highly robust, and .NET 4.0 native C# Compiler for Uvel Engine.
     /// Fully compatible with Windows 8 and older C# compilers.
     /// Does not use modern C# 6.0+ features like string interpolation ($) or expression bodies (=>).
     /// </summary>
@@ -239,7 +239,7 @@ namespace Nimbus.WPF
             }
 
             sb.AppendLine();
-            sb.AppendLine("namespace Nimbus.ManualC.Generated");
+            sb.AppendLine("namespace Uvel.ManualC.Generated");
             sb.AppendLine("{");
             sb.AppendLine(string.Format("    public static class {0}", safeId));
             sb.AppendLine("    {");

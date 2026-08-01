@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Dashboard v7 Version"
+<App Name="Uvel Dashboard v7 Version"
      Width="1200" Height="750"
      Theme="Dark"
      DarkMode="true"
@@ -513,7 +513,7 @@
                                                        Foreground="#64748B"
                                                        Width="90"/>
                                             <TextBlock Name="lblEngine"
-                                                       Text="Nimbus v3.0.0"
+                                                       Text="Uvel v3.0.0"
                                                        FontSize="12"
                                                        Foreground="#E2E8F0"/>
                                         </StackPanel>
@@ -632,7 +632,7 @@
             
             <!-- System info -->
             <Set Target="lblEngine" Property="Text"
-                 Value="Nimbus v{_engineVersion}"/>
+                 Value="Uvel v{_engineVersion}"/>
             <Set Target="lblOS" Property="Text"
                  Value="{_osName} (Build {_osBuild})"/>
             <Set Target="lblUser" Property="Text"

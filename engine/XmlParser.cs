@@ -1,10 +1,10 @@
 using System;
 using System.Xml;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// XML Parser - Simple XML parsing utilities for Nimbus Framework
+    /// XML Parser - Simple XML parsing utilities for Uvel Framework
     /// </summary>
     public class XmlParser
     {

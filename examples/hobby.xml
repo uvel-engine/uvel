@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus UI Hub" 
+<App Name="Uvel UI Hub" 
      Width="1200" Height="850" 
      Theme="Dark" 
      DarkMode="true" 
@@ -38,7 +38,7 @@
                     <Grid.ColumnDefinitions>Auto, *, Auto</Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="🎨" FontSize="24" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="NIMBUS UI HUB" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="UVEL UI HUB" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                         <Border Background="#2A2A35" CornerRadius="6" Padding="10,5" Margin="0,0,10,0">

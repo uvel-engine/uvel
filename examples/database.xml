@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Database" 
+<App Name="Uvel Database" 
      Width="1000" Height="700" 
      Theme="Dark" 
      DarkMode="true" 
@@ -17,7 +17,7 @@
                     <Grid.ColumnDefinitions>Auto, *, Auto</Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="📊" FontSize="24" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="NIMBUS DB" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="UVEL DB" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                         <TextBlock Text="Records: " Foreground="#888899" VerticalAlignment="Center"/>

@@ -1,6 +1,6 @@
 using System;
 
-namespace Nimbus.UI.Animation
+namespace Uvel.UI.Animation
 {
     /// <summary>
     /// Easing functions for smooth animations

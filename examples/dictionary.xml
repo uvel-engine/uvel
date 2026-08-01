@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Nimbus Dictionary" 
+<App Name="Uvel Dictionary" 
      Width="900" Height="750" 
      Theme="Dark" 
      DarkMode="true" 
@@ -29,7 +29,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="📚" FontSize="32" VerticalAlignment="Center" Margin="0,0,15,0"/>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="NIMBUS DICTIONARY" FontSize="22" FontWeight="Bold" Foreground="#FFFFFF" FontFamily="Segoe UI"/>
+                            <TextBlock Text="UVEL DICTIONARY" FontSize="22" FontWeight="Bold" Foreground="#FFFFFF" FontFamily="Segoe UI"/>
                             <TextBlock Text="Powered by DictionaryAPI" FontSize="12" Foreground="#8888AA"/>
                         </StackPanel>
                     </StackPanel>
@@ -238,7 +238,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>Auto, *</Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Name="lblStatus" Text="Ready" FontSize="11" Foreground="#444455"/>
-                    <TextBlock Grid.Column="1" Text="Nimbus Engine v3.0" FontSize="11" Foreground="#333344" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="1" Text="Uvel Engine v3.0" FontSize="11" Foreground="#333344" HorizontalAlignment="Right"/>
                 </Grid>
             </Border>
         </Grid>

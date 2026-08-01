@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
     /// Base UI - Default styles and theme management

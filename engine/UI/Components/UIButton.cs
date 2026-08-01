@@ -2,12 +2,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using Nimbus.UI.Core;
-using Nimbus.UI.Styles;
-using Nimbus.UI.Effects;
-using Nimbus.UI.Animation;
+using Uvel.UI.Core;
+using Uvel.UI.Styles;
+using Uvel.UI.Effects;
+using Uvel.UI.Animation;
 
-namespace Nimbus.UI.Components
+namespace Uvel.UI.Components
 {
     /// <summary>
     /// Material Design Button with ripple, shadow, hover effects

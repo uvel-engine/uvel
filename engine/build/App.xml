@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                         NIMBUS FRAMEWORK DOCUMENTATION                       ║
+║                         UVEL FRAMEWORK DOCUMENTATION                       ║
 ║                              Version 2.0.0                                   ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
@@ -9,13 +9,13 @@
 ====================
 
 1. Create a new project:
-   > nimbus new myapp
+   > uvel new myapp
 
 2. Run in dev mode (auto-refresh):
-   > nimbus dev app.xml
+   > uvel dev app.xml
 
 3. Build executable:
-   > nimbus build app.xml -o ./dist -i icon.ico
+   > uvel build app.xml -o ./dist -i icon.ico
 
 -->
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<NimbusApp Name="Component Demo" Theme="Dark" Width="520" Height="860" OnLoad="OnAppLoad">
+<UvelApp Name="Component Demo" Theme="Dark" Width="520" Height="860" OnLoad="OnAppLoad">
 
     <Components>
         <Colors>
@@ -61,4 +61,4 @@
             <Print Text="Components loaded successfully!"/>
         </Handler>
     </Logic>
-</NimbusApp>
+</UvelApp>

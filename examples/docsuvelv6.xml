@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<NimbusApp Name="Glass AI" Theme="Dark" Width="450" Height="750" OnLoad="OnAppLoad">
+<UvelApp Name="Glass AI" Theme="Dark" Width="450" Height="750" OnLoad="OnAppLoad">
     
     <UI>
         <Grid>
@@ -33,7 +33,7 @@
                             </Border>
                             
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,0,0">
-                                <TextBlock Name="headername" Text="Nimbus AI" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Name="headername" Text="Uvel AI" FontSize="18" FontWeight="Bold" Foreground="White"/>
                                 <TextBlock Text="Online • Super Fast" FontSize="12" Foreground="#94A3B8"/>
                             </StackPanel>
                             <Border Name="btnTest" Grid.Column="2" Width="44" Height="44" CornerRadius="10" HorizontalAlignment="Right"  BorderThickness="1" BorderBrush="blue" onClick="test">
@@ -64,7 +64,7 @@
                             </Border>
                             <Border HorizontalAlignment="Left" Margin="0,10,50,10" CornerRadius="4,20,20,20" Padding="15" Background="#4F2F0F">
                                 <StackPanel>
-                                    <TextBlock Text="Yogee bu shisha emasku, hozircha menimcha nimbusda bu yoq" Foreground="White" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
+                                    <TextBlock Text="Yogee bu shisha emasku, hozircha menimcha uvelda bu yoq" Foreground="White" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
                                 </StackPanel>
                             </Border>
 
@@ -74,7 +74,7 @@
                             </Border>
                             <Border HorizontalAlignment="Left" Margin="0,10,50,10" CornerRadius="4,20,20,20" Padding="15" Background="#4F2F0F">
                                 <StackPanel>
-                                    <TextBlock Text="Xa, kundan kun yangilanishlar bo'layotgani tufayli nimbus juda kuchayib ketadi hali" Foreground="White" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
+                                    <TextBlock Text="Xa, kundan kun yangilanishlar bo'layotgani tufayli uvel juda kuchayib ketadi hali" Foreground="White" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
                                 </StackPanel>
                             </Border>
 
@@ -241,9 +241,9 @@ public static string GetFileInfo(string path)
             <!-- <Exit/> -->
             <!-- Close window -->
             <!-- <Close window="1"/> -->
-            <!-- This openwindow not working very well but can be fixed in latest versions of nimbus -->
+            <!-- This openwindow not working very well but can be fixed in latest versions of uvel -->
             <!-- <OpenWindow Source="notepad.xml"/> -->
-            <!-- Logging methods to Nimbus engine and console -->
+            <!-- Logging methods to Uvel engine and console -->
             <!-- <Log Message="This is log" Level="INFO"/> -->
             <!-- <Print Text="Printed text !"/> -->
             <!-- Log with debug time and info and status -->
@@ -353,19 +353,19 @@ public static string GetFileInfo(string path)
 
             <!-- Http request qilish -->
             <!-- <Fetch Method="Get"
-                Url="https://nimbus.modderboy.uz/"
+                Url="https://uvel.modderboy.uz/"
                 Body=""
                 ToState="Var1"
                 ToControl="txtInput"
                 ToProperty="Text"/>
             <HttpRequest Method="Get"
-                Url="https://nimbus.modderboy.uz/"
+                Url="https://uvel.modderboy.uz/"
                 Body=""
                 ToState="Var1"
                 ToControl="txtInput"
                 ToProperty="Text"/>
             <Http Method="Get"
-                Url="https://nimbus.modderboy.uz/"
+                Url="https://uvel.modderboy.uz/"
                 Body=""
                 ToState="Var1"
                 ToControl="txtInput"
@@ -425,4 +425,4 @@ public static string GetFileInfo(string path)
         </While> -->
     </Logic>
 
-</NimbusApp>
+</UvelApp>

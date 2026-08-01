@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<NimbusApp Name="Nimbus Docs v1.0.0" Theme="Dark" Width="1400" Height="900">
+<UvelApp Name="Uvel Docs v1.0.0" Theme="Dark" Width="1400" Height="900">
     
     <UI>
         <Grid Background="#0D1117">
@@ -15,7 +15,7 @@
                     <!-- Logo -->
                     <Border Grid.Row="0" Padding="20,25,20,15">
                         <StackPanel>
-                            <TextBlock Text="⚡ NIMBUS" FontSize="28" FontWeight="Bold" Foreground="#58A6FF"/>
+                            <TextBlock Text="⚡ UVEL" FontSize="28" FontWeight="Bold" Foreground="#58A6FF"/>
                             <TextBlock Text="Engine Documentation" FontSize="12" Foreground="#8B949E" Margin="0,5,0,0"/>
                             <Border Background="#238636" CornerRadius="12" Padding="8,3" Margin="0,10,0,0" HorizontalAlignment="Left">
                                 <TextBlock Text="v1.0.0" FontSize="11" Foreground="White" FontWeight="Bold"/>
@@ -96,7 +96,7 @@
                         <!-- PAGE: INTRO -->
                         <!-- ═══════════════════════════════════════════ -->
                         <StackPanel Name="pageIntro" Visibility="Visible">
-                            <TextBlock Text="Nimbus Engine'ga Xush Kelibsiz! 🎉" FontSize="36" FontWeight="Bold" Foreground="#C9D1D9" TextWrapping="Wrap"/>
+                            <TextBlock Text="Uvel Engine'ga Xush Kelibsiz! 🎉" FontSize="36" FontWeight="Bold" Foreground="#C9D1D9" TextWrapping="Wrap"/>
                             <TextBlock Text="XML asosida WPF dasturlar yarating" FontSize="18" Foreground="#8B949E" Margin="0,10,0,30"/>
                             
                             <!-- Features Grid -->
@@ -135,12 +135,12 @@
                                 <StackPanel>
                                     <TextBlock Text="1. XML fayl yarating:" FontSize="14" Foreground="#8B949E" Margin="0,0,0,10"/>
                                     <Border Background="#0D1117" CornerRadius="6" Padding="15">
-                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;NimbusApp Name=&quot;Hello&quot; Width=&quot;400&quot; Height=&quot;300&quot;&gt;&#x0A;    &lt;UI&gt;&#x0A;        &lt;StackPanel Background=&quot;#1E1E1E&quot;&gt;&#x0A;            &lt;TextBlock Text=&quot;Salom Dunyo!&quot; FontSize=&quot;32&quot; Foreground=&quot;White&quot;/&gt;&#x0A;            &lt;Button Name=&quot;btn&quot; Content=&quot;Bos!&quot; onClick=&quot;SayHello&quot;/&gt;&#x0A;        &lt;/StackPanel&gt;&#x0A;    &lt;/UI&gt;&#x0A;    &lt;Logic&gt;&#x0A;        &lt;Handler Name=&quot;SayHello&quot;&gt;&#x0A;            &lt;Alert Message=&quot;Salom!&quot;/&gt;&#x0A;        &lt;/Handler&gt;&#x0A;    &lt;/Logic&gt;&#x0A;&lt;/NimbusApp&gt;"/>
+                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;UvelApp Name=&quot;Hello&quot; Width=&quot;400&quot; Height=&quot;300&quot;&gt;&#x0A;    &lt;UI&gt;&#x0A;        &lt;StackPanel Background=&quot;#1E1E1E&quot;&gt;&#x0A;            &lt;TextBlock Text=&quot;Salom Dunyo!&quot; FontSize=&quot;32&quot; Foreground=&quot;White&quot;/&gt;&#x0A;            &lt;Button Name=&quot;btn&quot; Content=&quot;Bos!&quot; onClick=&quot;SayHello&quot;/&gt;&#x0A;        &lt;/StackPanel&gt;&#x0A;    &lt;/UI&gt;&#x0A;    &lt;Logic&gt;&#x0A;        &lt;Handler Name=&quot;SayHello&quot;&gt;&#x0A;            &lt;Alert Message=&quot;Salom!&quot;/&gt;&#x0A;        &lt;/Handler&gt;&#x0A;    &lt;/Logic&gt;&#x0A;&lt;/UvelApp&gt;"/>
                                     </Border>
                                     
                                     <TextBlock Text="2. Ishga tushiring:" FontSize="14" Foreground="#8B949E" Margin="0,20,0,10"/>
                                     <Border Background="#0D1117" CornerRadius="6" Padding="15">
-                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#FFA657" BorderThickness="0" FontFamily="Consolas" FontSize="13" Text="bin\Nimbus.exe hello.xml"/>
+                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#FFA657" BorderThickness="0" FontFamily="Consolas" FontSize="13" Text="bin\Uvel.exe hello.xml"/>
                                     </Border>
                                 </StackPanel>
                             </Border>
@@ -151,7 +151,7 @@
                         <!-- ═══════════════════════════════════════════ -->
                         <StackPanel Name="pageInstall" Visibility="Collapsed">
                             <TextBlock Text="📦 O'rnatish" FontSize="36" FontWeight="Bold" Foreground="#C9D1D9"/>
-                            <TextBlock Text="Nimbus Engine'ni o'rnatish va sozlash" FontSize="18" Foreground="#8B949E" Margin="0,10,0,30"/>
+                            <TextBlock Text="Uvel Engine'ni o'rnatish va sozlash" FontSize="18" Foreground="#8B949E" Margin="0,10,0,30"/>
                             
                             <TextBlock Text="Talablar" FontSize="20" FontWeight="Bold" Foreground="#C9D1D9" Margin="0,20,0,10"/>
                             <Border Background="#161B22" CornerRadius="8" Padding="20">
@@ -164,7 +164,7 @@
                             
                             <TextBlock Text="Build qilish" FontSize="20" FontWeight="Bold" Foreground="#C9D1D9" Margin="0,30,0,10"/>
                             <Border Background="#0D1117" CornerRadius="6" Padding="15">
-                                <TextBox IsReadOnly="True" Background="Transparent" Foreground="#FFA657" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text=":: build.bat ni ishga tushiring&#x0A;build.bat&#x0A;&#x0A;:: Yoki qo'lda:&#x0A;csc /target:winexe /out:Nimbus.exe ^&#x0A;    /r:PresentationCore.dll ^&#x0A;    /r:PresentationFramework.dll ^&#x0A;    /r:WindowsBase.dll ^&#x0A;    src\*.cs"/>
+                                <TextBox IsReadOnly="True" Background="Transparent" Foreground="#FFA657" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text=":: build.bat ni ishga tushiring&#x0A;build.bat&#x0A;&#x0A;:: Yoki qo'lda:&#x0A;csc /target:winexe /out:Uvel.exe ^&#x0A;    /r:PresentationCore.dll ^&#x0A;    /r:PresentationFramework.dll ^&#x0A;    /r:WindowsBase.dll ^&#x0A;    src\*.cs"/>
                             </Border>
                         </StackPanel>
                         
@@ -178,14 +178,14 @@
                             <TextBlock Text="XML Strukturasi" FontSize="20" FontWeight="Bold" Foreground="#C9D1D9" Margin="0,20,0,10"/>
                             <Border Background="#161B22" CornerRadius="8" Padding="20">
                                 <StackPanel>
-                                    <TextBlock Foreground="#8B949E" FontSize="14" TextWrapping="Wrap" Text="Har bir Nimbus dasturi quyidagi strukturaga ega:"/>
+                                    <TextBlock Foreground="#8B949E" FontSize="14" TextWrapping="Wrap" Text="Har bir Uvel dasturi quyidagi strukturaga ega:"/>
                                     <Border Background="#0D1117" CornerRadius="6" Padding="15" Margin="0,15,0,0">
-                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;NimbusApp Name=&quot;...&quot; Width=&quot;...&quot; Height=&quot;...&quot;&gt;&#x0A;    &lt;UI&gt;&#x0A;        &lt;!-- UI elementlar --&gt;&#x0A;    &lt;/UI&gt;&#x0A;    &lt;Logic&gt;&#x0A;        &lt;!-- Event handler'lar --&gt;&#x0A;    &lt;/Logic&gt;&#x0A;    &lt;Shortcuts&gt;&#x0A;        &lt;!-- Klaviatura shortcut'lar --&gt;&#x0A;    &lt;/Shortcuts&gt;&#x0A;    &lt;ManualC&gt;&#x0A;        &lt;!-- C# kodi --&gt;&#x0A;    &lt;/ManualC&gt;&#x0A;&lt;/NimbusApp&gt;"/>
+                                        <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;UvelApp Name=&quot;...&quot; Width=&quot;...&quot; Height=&quot;...&quot;&gt;&#x0A;    &lt;UI&gt;&#x0A;        &lt;!-- UI elementlar --&gt;&#x0A;    &lt;/UI&gt;&#x0A;    &lt;Logic&gt;&#x0A;        &lt;!-- Event handler'lar --&gt;&#x0A;    &lt;/Logic&gt;&#x0A;    &lt;Shortcuts&gt;&#x0A;        &lt;!-- Klaviatura shortcut'lar --&gt;&#x0A;    &lt;/Shortcuts&gt;&#x0A;    &lt;ManualC&gt;&#x0A;        &lt;!-- C# kodi --&gt;&#x0A;    &lt;/ManualC&gt;&#x0A;&lt;/UvelApp&gt;"/>
                                     </Border>
                                 </StackPanel>
                             </Border>
                             
-                            <TextBlock Text="NimbusApp Atributlari" FontSize="20" FontWeight="Bold" Foreground="#C9D1D9" Margin="0,30,0,10"/>
+                            <TextBlock Text="UvelApp Atributlari" FontSize="20" FontWeight="Bold" Foreground="#C9D1D9" Margin="0,30,0,10"/>
                             <Border Background="#161B22" CornerRadius="8" Padding="20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>150, *</Grid.ColumnDefinitions>
@@ -472,9 +472,9 @@
                         
                         <StackPanel Name="pageWindow" Visibility="Collapsed">
                             <TextBlock Text="🪟 Window" FontSize="36" FontWeight="Bold" Foreground="#C9D1D9"/>
-                            <TextBlock Text="NimbusApp root elementi" FontSize="18" Foreground="#8B949E" Margin="0,10,0,30"/>
+                            <TextBlock Text="UvelApp root elementi" FontSize="18" Foreground="#8B949E" Margin="0,10,0,30"/>
                             <Border Background="#0D1117" CornerRadius="6" Padding="15">
-                                <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;NimbusApp Name=&quot;My App&quot; Width=&quot;800&quot; Height=&quot;600&quot; Theme=&quot;Dark&quot;&gt;"/>
+                                <TextBox IsReadOnly="True" Background="Transparent" Foreground="#7EE787" BorderThickness="0" FontFamily="Consolas" FontSize="13" TextWrapping="Wrap" Text="&lt;UvelApp Name=&quot;My App&quot; Width=&quot;800&quot; Height=&quot;600&quot; Theme=&quot;Dark&quot;&gt;"/>
                             </Border>
                         </StackPanel>
                         
@@ -743,4 +743,4 @@
         <KeyBinding Key="Escape" Handler="ShowIntro"/>
     </Shortcuts>
     
-</NimbusApp>
+</UvelApp>

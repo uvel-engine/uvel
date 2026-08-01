@@ -4,15 +4,15 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using Nimbus.WPF;
+using Uvel.WPF;
 
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
-    /// Nimbus CLI - Command Line Interface
+    /// Uvel CLI - Command Line Interface
     /// Commands: run, dev, build, new, help
     /// </summary>
-    public class NimbusCLI
+    public class UvelCLI
     {
         public static void Main(string[] args)
         {
@@ -118,7 +118,7 @@ namespace Nimbus
             }
             
             // Build
-            NimbusBuildSystem builder = new NimbusBuildSystem();
+            UvelBuildSystem builder = new UvelBuildSystem();
             builder.XmlPath = xmlPath;
             builder.OutputDirectory = outputDir;
             builder.AppName = appName;
@@ -131,7 +131,7 @@ namespace Nimbus
         
         private static void NewCommand(string[] args)
         {
-            string projectName = "MyNimbusApp";
+            string projectName = "MyUvelApp";
             if (args.Length > 1)
             {
                 projectName = args[1];
@@ -139,7 +139,7 @@ namespace Nimbus
             
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  Creating new Nimbus project: " + projectName);
+            Console.WriteLine("  Creating new Uvel project: " + projectName);
             Console.ResetColor();
             Console.WriteLine();
             
@@ -167,7 +167,7 @@ namespace Nimbus
             Console.WriteLine();
             Console.WriteLine("  Next steps:");
             Console.WriteLine("    cd " + projectName);
-            Console.WriteLine("    nimbus dev App.xml");
+            Console.WriteLine("    uvel dev App.xml");
             Console.WriteLine();
         }
         
@@ -229,7 +229,7 @@ namespace Nimbus
                 // Log to file
                 try
                 {
-                    File.WriteAllText("nimbus_error.log", 
+                    File.WriteAllText("uvel_error.log", 
                         DateTime.Now.ToString() + "\n" + ex.Message + "\n" + ex.StackTrace);
                 }
                 catch { }
@@ -286,10 +286,10 @@ namespace Nimbus
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("  Nimbus Framework v2.0");
+            Console.WriteLine("  Uvel Framework v2.0");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("  Usage: nimbus <command> [options]");
+            Console.WriteLine("  Usage: uvel <command> [options]");
             Console.WriteLine();
             Console.WriteLine("  Commands:");
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -322,9 +322,9 @@ namespace Nimbus
             Console.WriteLine();
             Console.WriteLine("  Examples:");
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("    nimbus dev App.xml");
-            Console.WriteLine("    nimbus build App.xml -o ./dist -i icon.ico -n MyApp");
-            Console.WriteLine("    nimbus new MyProject");
+            Console.WriteLine("    uvel dev App.xml");
+            Console.WriteLine("    uvel build App.xml -o ./dist -i icon.ico -n MyApp");
+            Console.WriteLine("    uvel new MyProject");
             Console.ResetColor();
             Console.WriteLine();
         }
@@ -347,7 +347,7 @@ namespace Nimbus
             <!-- Content -->
             <StackPanel Row=""1"" VerticalAlignment=""Center"" HorizontalAlignment=""Center"">
                 
-                <TextBlock Text=""Welcome to Nimbus!"" FontSize=""32"" FontWeight=""Bold"" 
+                <TextBlock Text=""Welcome to Uvel!"" FontSize=""32"" FontWeight=""Bold"" 
                            Foreground=""White"" HorizontalAlignment=""Center""/>
                 
                 <TextBlock Text=""Edit App.xml to get started"" FontSize=""16"" 
@@ -388,9 +388,9 @@ namespace Nimbus
     }
     
     /// <summary>
-    /// Nimbus Build System
+    /// Uvel Build System
     /// </summary>
-    public class NimbusBuildSystem
+    public class UvelBuildSystem
     {
         public string XmlPath { get; set; }
         public string OutputDirectory { get; set; }
@@ -404,7 +404,7 @@ namespace Nimbus
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("  ╔═══════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ║              ���� NIMBUS BUILD SYSTEM                       ║");
+            Console.WriteLine("  ║              ���� UVEL BUILD SYSTEM                       ║");
             Console.WriteLine("  ╚═══════════════════════════════════════════════════════════╝");
             Console.ResetColor();
             Console.WriteLine();
@@ -519,7 +519,7 @@ namespace Nimbus
                 .Replace("\n", "\\n");
             
             StringBuilder code = new StringBuilder();
-            code.AppendLine("// Generated by Nimbus Build System");
+            code.AppendLine("// Generated by Uvel Build System");
             code.AppendLine("using System;");
             code.AppendLine("using System.IO;");
             code.AppendLine("using System.Windows;");
@@ -534,7 +534,7 @@ namespace Nimbus
             code.AppendLine("                    string xml = \"" + escapedXml + "\";");
             code.AppendLine("                    File.WriteAllText(xmlPath, xml);");
             code.AppendLine("                }");
-            code.AppendLine("                Nimbus.WPF.WpfEngine engine = new Nimbus.WPF.WpfEngine();");
+            code.AppendLine("                Uvel.WPF.WpfEngine engine = new Uvel.WPF.WpfEngine();");
             code.AppendLine("                engine.Run(xmlPath);");
             code.AppendLine("            } catch (Exception ex) {");
             code.AppendLine("                MessageBox.Show(ex.Message, \"Error\", MessageBoxButton.OK, MessageBoxImage.Error);");

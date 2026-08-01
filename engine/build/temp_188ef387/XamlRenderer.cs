@@ -4,10 +4,10 @@ using System.Text;
 using System.Xml;
 using System.Collections.Generic;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
-    /// XAML Renderer - Converts Nimbus XML to standard XAML
+    /// XAML Renderer - Converts Uvel XML to standard XAML
     /// Fully integrated with ComponentSystem for resolving resources and styles
     /// </summary>
     public class XamlRenderer
@@ -20,7 +20,7 @@ namespace Nimbus.WPF
         }
         
         /// <summary>
-        /// Convert Nimbus XML to XAML
+        /// Convert Uvel XML to XAML
         /// </summary>
         public string ConvertToXaml(XmlDocument xmlDoc)
         {
@@ -28,7 +28,7 @@ namespace Nimbus.WPF
             StringBuilder xaml = new StringBuilder();
             
             // Resolve App level properties
-            string title = ResolveValue(GetAttribute(root, "Name", "Nimbus App"));
+            string title = ResolveValue(GetAttribute(root, "Name", "Uvel App"));
             string width = ResolveValue(GetAttribute(root, "Width", "800"));
             string height = ResolveValue(GetAttribute(root, "Height", "600"));
             string bg = ResolveValue(GetAttribute(root, "Background", "#1E1E1E"));
@@ -160,7 +160,7 @@ namespace Nimbus.WPF
         }
         
         /// <summary>
-        /// Convert attribute names from Nimbus to XAML
+        /// Convert attribute names from Uvel to XAML
         /// </summary>
         private string ConvertAttributeName(string name)
         {

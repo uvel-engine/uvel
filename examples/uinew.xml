@@ -145,7 +145,7 @@
                                                 VerticalAlignment="Center">
                                         <Grid>
                                             <Grid.ColumnDefinitions>*,Auto</Grid.ColumnDefinitions>
-                                            <TextBlock Text="Nimbus Framework" FontSize="15" 
+                                            <TextBlock Text="Uvel Framework" FontSize="15" 
                                                        FontWeight="SemiBold" Foreground="#FFFFFF"/>
                                             <TextBlock Grid.Column="1" Text="12:45" FontSize="12"
                                                        Foreground="#6C7883"/>
@@ -374,7 +374,7 @@
                         <StackPanel Grid.Column="1" Margin="12,0,0,0" 
                                     VerticalAlignment="Center"
                                     Cursor="Hand" Name="headerInfo" onClick="OnProfileClick">
-                            <TextBlock Name="headerName" Text="Nimbus Framework" 
+                            <TextBlock Name="headerName" Text="Uvel Framework" 
                                        FontSize="15" FontWeight="SemiBold" Foreground="#FFFFFF"/>
                             <TextBlock Name="headerStatus" Text="online" FontSize="13" 
                                        Foreground="#6FB1E4"/>
@@ -440,7 +440,7 @@
                         <Border HorizontalAlignment="Left" MaxWidth="420" Margin="0,0,0,3">
                             <Border Background="#182533" CornerRadius="12,12,12,4" Padding="10,8">
                                 <StackPanel>
-                                    <TextBlock Text="Hey! Welcome to Nimbus Framework 🎉" 
+                                    <TextBlock Text="Hey! Welcome to Uvel Framework 🎉" 
                                                FontSize="15" Foreground="#FFFFFF"
                                                TextWrapping="Wrap"/>
                                     <TextBlock Text="12:30" FontSize="11" Foreground="#6C7883"
@@ -654,7 +654,7 @@
         <Var Name="currentChat" Value="1" Type="int"/>
         <Var Name="currentTab" Value="all" Type="string"/>
         <Var Name="messageText" Value="" Type="string"/>
-        <Var Name="chatName" Value="Nimbus Framework" Type="string"/>
+        <Var Name="chatName" Value="Uvel Framework" Type="string"/>
         <Var Name="chatAvatar" Value="N" Type="string"/>
         <Var Name="chatColor" Value="#8774E1" Type="string"/>
 
@@ -711,7 +711,7 @@
             <Call Handler="ResetChatBg"/>
             <Set Target="chat1" Property="Background" Value="#2B5278"/>
             <Set Var="currentChat" Value="1"/>
-            <Set Target="headerName" Property="Text" Value="Nimbus Framework"/>
+            <Set Target="headerName" Property="Text" Value="Uvel Framework"/>
             <Set Target="headerAvatarText" Property="Text" Value="N"/>
             <Set Target="headerAvatar" Property="Background" Value="#8774E1"/>
             <Set Target="headerStatus" Property="Text" Value="online"/>
@@ -860,7 +860,7 @@
         </Handler>
 
         <Handler Name="OnProfileClick">
-            <Alert Message="👤 Profile Info\n\nName: {headerName.Text}\nStatus: {headerStatus.Text}\n\n📱 +1 234 567 8900\n@nimbus_user" 
+            <Alert Message="👤 Profile Info\n\nName: {headerName.Text}\nStatus: {headerStatus.Text}\n\n📱 +1 234 567 8900\n@uvel_user" 
                    Title="Profile"/>
         </Handler>
 

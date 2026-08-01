@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="NimbusGPT"
+<App Name="UvelGPT"
      Width="1200"
      Height="800"
      Theme="Dark"
@@ -31,7 +31,7 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="NimbusGPT" FontSize="18"
+                                <TextBlock Text="UvelGPT" FontSize="18"
                                            FontWeight="SemiBold" Foreground="#ECECEC"
                                            VerticalAlignment="Center" Margin="12,0,0,0"/>
                             </StackPanel>
@@ -390,7 +390,7 @@
                                              AcceptsReturn="True"
                                              TextWrapping="Wrap"
                                              MaxHeight="200"
-                                             Placeholder="Message NimbusGPT..."
+                                             Placeholder="Message UvelGPT..."
                                              CaretBrush="#10A37F"
                                              onEnter="SendMessage"/>
                                 </Border>
@@ -443,7 +443,7 @@
                         </Border>
 
                         <!-- Disclaimer -->
-                        <TextBlock Text="NimbusGPT can make mistakes. Check important info."
+                        <TextBlock Text="UvelGPT can make mistakes. Check important info."
                                    FontSize="11" Foreground="#666666"
                                    TextAlignment="Center" Margin="0,12,0,0"/>
                     </StackPanel>
@@ -462,7 +462,7 @@
                                     Background="#10A37F" Margin="0,0,4,0" Opacity="0.7"/>
                             <Border Width="8" Height="8" CornerRadius="4"
                                     Background="#10A37F" Opacity="0.4"/>
-                            <TextBlock Text=" NimbusGPT is thinking..."
+                            <TextBlock Text=" UvelGPT is thinking..."
                                        FontSize="13" Foreground="#888888"
                                        Margin="8,0,0,0"/>
                         </StackPanel>
@@ -601,7 +601,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
-namespace Nimbus.Chat
+namespace Uvel.Chat
 {
     public class Message
     {
@@ -650,10 +650,10 @@ namespace Nimbus.Chat
             string msg = userMsg.ToLower();
 
             if (msg.Contains("hello") || msg.Contains("hi") || msg.Contains("salom"))
-                return "Hello! I'm NimbusGPT, your AI assistant. How can I help you today? 😊";
+                return "Hello! I'm UvelGPT, your AI assistant. How can I help you today? 😊";
 
             if (msg.Contains("python"))
-                return "Python is a versatile programming language! Here are some tips:\n\n**Getting Started:**\n• Install Python from python.org\n• Use pip for package management\n• Try VS Code or PyCharm as IDE\n\n**Key Concepts:**\n```python\n# Variables\nname = \"NimbusGPT\"\ncount = 42\n\n# Functions\ndef greet(name):\n    return f\"Hello, {name}!\"\n\n# Lists\nitems = [1, 2, 3, 4, 5]\n```\n\nWould you like me to explain any specific topic?";
+                return "Python is a versatile programming language! Here are some tips:\n\n**Getting Started:**\n• Install Python from python.org\n• Use pip for package management\n• Try VS Code or PyCharm as IDE\n\n**Key Concepts:**\n```python\n# Variables\nname = \"UvelGPT\"\ncount = 42\n\n# Functions\ndef greet(name):\n    return f\"Hello, {name}!\"\n\n# Lists\nitems = [1, 2, 3, 4, 5]\n```\n\nWould you like me to explain any specific topic?";
 
             if (msg.Contains("code") || msg.Contains("debug"))
                 return "I'd be happy to help with your code! 🔧\n\n**Common debugging tips:**\n1. Check for syntax errors\n2. Use print statements to trace flow\n3. Verify variable types\n4. Check edge cases\n\nPlease share your code and I'll help identify the issue!";
@@ -667,7 +667,7 @@ namespace Nimbus.Chat
             if (msg.Contains("project") || msg.Contains("plan") || msg.Contains("roadmap"))
                 return "Let me help you create a project roadmap! 🎯\n\n**Project Planning Framework:**\n\n**Phase 1: Discovery (Week 1-2)**\n- Define goals and requirements\n- Research and analysis\n- Stakeholder interviews\n\n**Phase 2: Design (Week 3-4)**\n- Create wireframes\n- Design system setup\n- Technical architecture\n\n**Phase 3: Development (Week 5-8)**\n- Sprint planning\n- Core feature development\n- Testing and QA\n\n**Phase 4: Launch (Week 9-10)**\n- Beta testing\n- Final polish\n- Deployment\n\nWould you like a more detailed breakdown?";
 
-            return "I understand you're asking about: \"" + userMsg + "\"\n\nI'm a demo version of NimbusGPT. In a full implementation, I would:\n\n• Connect to OpenAI's API\n• Process your query with GPT-4\n• Provide intelligent responses\n\nFor now, try asking about:\n- Python programming\n- Code debugging\n- Email writing\n- Quantum computing\n- Project planning\n\nWhat would you like to explore? 🚀";
+            return "I understand you're asking about: \"" + userMsg + "\"\n\nI'm a demo version of UvelGPT. In a full implementation, I would:\n\n• Connect to OpenAI's API\n• Process your query with GPT-4\n• Provide intelligent responses\n\nFor now, try asking about:\n- Python programming\n- Code debugging\n- Email writing\n- Quantum computing\n- Project planning\n\nWhat would you like to explore? 🚀";
         }
 
         public static int GetMessageCount()
@@ -836,7 +836,7 @@ namespace Nimbus.Chat
 
         <Handler Name="OnAppLoad">
             <CallManualC id="ChatEngine" Method="Init"/>
-            <Toast Message="⚡ NimbusGPT Ready" Type="Success" Position="BottomRight" Duration="2000"/>
+            <Toast Message="⚡ UvelGPT Ready" Type="Success" Position="BottomRight" Duration="2000"/>
         </Handler>
 
         <Handler Name="NewChat">

@@ -1,9 +1,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using Nimbus.UI.Styles;
+using Uvel.UI.Styles;
 
-namespace Nimbus.UI.Effects
+namespace Uvel.UI.Effects
 {
     /// <summary>
     /// Shadow renderer for UI elements

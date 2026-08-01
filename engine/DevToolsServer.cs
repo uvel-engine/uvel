@@ -5,12 +5,12 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using Nimbus.WPF;
+using Uvel.WPF;
 
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
-    /// DevTools HTTP Server for Nimbus Framework
+    /// DevTools HTTP Server for Uvel Framework
     /// Provides REST API + simple WebSocket-like polling for dev tools
     /// Compatible with .NET Framework 4.0+ (no async/await, no $"")
     /// </summary>
@@ -59,7 +59,7 @@ namespace Nimbus
 
             _serverThread = new Thread(RunServer);
             _serverThread.IsBackground = true;
-            _serverThread.Name = "NimbusDevToolsServer";
+            _serverThread.Name = "UvelDevToolsServer";
             _serverThread.Start();
         }
 
@@ -346,7 +346,7 @@ namespace Nimbus
             StringBuilder sb = new StringBuilder();
             sb.Append("{");
             sb.Append("\"status\":\"running\",");
-            sb.Append("\"engine\":\"Nimbus Engine v" + _engine.EngineVersion + "\",");
+            sb.Append("\"engine\":\"Uvel Engine v" + _engine.EngineVersion + "\",");
             sb.Append("\"devMode\":" + (_engine.IsDevMode ? "true" : "false") + ",");
             sb.Append("\"os\":\"" + EscapeJson(_engine.SystemInfo.Name) + "\",");
             sb.Append("\"pid\":" + System.Diagnostics.Process.GetCurrentProcess().Id.ToString() + ",");
@@ -867,7 +867,7 @@ namespace Nimbus
             html.AppendLine("<head>");
             html.AppendLine("<meta charset=\"UTF-8\">");
             html.AppendLine("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-            html.AppendLine("<title>Nimbus DevTools</title>");
+            html.AppendLine("<title>Uvel DevTools</title>");
             html.AppendLine("<style>");
             html.AppendLine("* { margin: 0; padding: 0; box-sizing: border-box; }");
             html.AppendLine("body { background: #1e1e1e; color: #d4d4d4; font-family: 'Segoe UI', Consolas, monospace; }");
@@ -910,7 +910,7 @@ namespace Nimbus
 
             // Header
             html.AppendLine("<div class=\"header\">");
-            html.AppendLine("  <h1>Nimbus DevTools</h1>");
+            html.AppendLine("  <h1>Uvel DevTools</h1>");
             html.AppendLine("  <span class=\"status\" id=\"statusText\">Connecting...</span>");
             html.AppendLine("</div>");
 

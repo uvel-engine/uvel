@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<App Name="Hello Nimbus" 
+<App Name="Hello Uvel" 
      Width="600" Height="400" 
      Theme="Dark" 
      DarkMode="true"
@@ -11,14 +11,14 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 
                 <TextBlock Name="lblTitle" 
-                           Text="Hello, Nimbus!" 
+                           Text="Hello, Uvel!" 
                            FontSize="42" 
                            FontWeight="Bold" 
                            Foreground="#00D4FF" 
                            HorizontalAlignment="Center"/>
 
                 <TextBlock Name="lblSubtitle" 
-                           Text="Your first Nimbus app" 
+                           Text="Your first Uvel app" 
                            FontSize="16" 
                            Foreground="#888888" 
                            HorizontalAlignment="Center" 
@@ -62,7 +62,7 @@
             </If>
 
             <If Condition="{count} == 10">
-                <Alert Message="You clicked 10 times!" Title="Hello Nimbus"/>
+                <Alert Message="You clicked 10 times!" Title="Hello Uvel"/>
                 <Set Var="count" Value="0"/>
                 <Set Target="lblCount" Property="Text" Value="Clicks: 0"/>
                 <Set Target="lblMessage" Property="Text" Value="Reset! Try again"/>

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows;
-using Nimbus.WPF;
+using Uvel.WPF;
 
 namespace calculator {
     public class Program {

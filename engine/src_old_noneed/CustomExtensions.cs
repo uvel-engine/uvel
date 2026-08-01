@@ -6,24 +6,24 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
     /// Custom Extensions System
-    /// Allows developers to create custom "engines" on top of Nimbus
+    /// Allows developers to create custom "engines" on top of Uvel
     /// Similar to Next.js for React or Nuxt for Vue
     /// </summary>
-    public class NimbusExtensionManager
+    public class UvelExtensionManager
     {
         private WpfEngine _engine;
-        private Dictionary<string, INimbusExtension> _extensions;
+        private Dictionary<string, IUvelExtension> _extensions;
         private Dictionary<string, Func<XmlNode, FrameworkElement>> _customControls;
         private Dictionary<string, Action<XmlNode, object>> _customCommands;
         
-        public NimbusExtensionManager(WpfEngine engine)
+        public UvelExtensionManager(WpfEngine engine)
         {
             _engine = engine;
-            _extensions = new Dictionary<string, INimbusExtension>();
+            _extensions = new Dictionary<string, IUvelExtension>();
             _customControls = new Dictionary<string, Func<XmlNode, FrameworkElement>>();
             _customCommands = new Dictionary<string, Action<XmlNode, object>>();
         }
@@ -33,7 +33,7 @@ namespace Nimbus.WPF
         /// <summary>
         /// Register a custom extension
         /// </summary>
-        public void RegisterExtension(INimbusExtension extension)
+        public void RegisterExtension(IUvelExtension extension)
         {
             string name = extension.Name;
             _extensions[name] = extension;
@@ -70,9 +70,9 @@ namespace Nimbus.WPF
             
             foreach (Type type in assembly.GetTypes())
             {
-                if (typeof(INimbusExtension).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                if (typeof(IUvelExtension).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
                 {
-                    INimbusExtension extension = (INimbusExtension)Activator.CreateInstance(type);
+                    IUvelExtension extension = (IUvelExtension)Activator.CreateInstance(type);
                     RegisterExtension(extension);
                 }
             }
@@ -718,10 +718,10 @@ namespace Nimbus.WPF
     #region Extension Interface
     
     /// <summary>
-    /// Interface for Nimbus extensions
-    /// Implement this to create custom "engines" on top of Nimbus
+    /// Interface for Uvel extensions
+    /// Implement this to create custom "engines" on top of Uvel
     /// </summary>
-    public interface INimbusExtension
+    public interface IUvelExtension
     {
         /// <summary>
         /// Extension name
@@ -761,7 +761,7 @@ namespace Nimbus.WPF
     /// <summary>
     /// Example extension - shows how to create custom extensions
     /// </summary>
-    public class ExampleExtension : INimbusExtension
+    public class ExampleExtension : IUvelExtension
     {
         private WpfEngine _engine;
         

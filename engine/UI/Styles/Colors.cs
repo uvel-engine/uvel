@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace Nimbus.UI.Styles
+namespace Uvel.UI.Styles
 {
     /// <summary>
     /// Color utilities and palettes

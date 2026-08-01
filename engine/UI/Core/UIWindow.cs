@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace Nimbus.UI.Core
+namespace Uvel.UI.Core
 {
     /// <summary>
     /// Custom window with modern styling

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<NimbusApp 
+<UvelApp 
     Name="Dynamic Effects Demo" 
     Version="2.0.0"
-    Publisher="Nimbus Framework"
+    Publisher="Uvel Framework"
     Description="Showcase of blur, shadows, and effects"
     Copyright="© 2024"
     Theme="Dark" 
@@ -228,7 +228,7 @@
                     <!-- Footer with App Info -->
                     <Border Margin="0,30,0,0" CornerRadius="10" Background="#1A1A24" Padding="15">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="Nimbus Framework v2.0" FontSize="12" Foreground="#666"/>
+                            <TextBlock Text="Uvel Framework v2.0" FontSize="12" Foreground="#666"/>
                             <TextBlock Text=" • " FontSize="12" Foreground="#444"/>
                             <TextBlock Name="footerOS" Text="Windows" FontSize="12" Foreground="#666"/>
                             <TextBlock Text=" • " FontSize="12" Foreground="#444"/>
@@ -394,7 +394,7 @@
         </Handler>
         
         <Handler Name="ShowAbout">
-            <Alert Message="Nimbus Framework v2.0&#10;&#10;Features:&#10;• Blur/Acrylic/Mica Effects&#10;• Drop Shadows &amp; Glow&#10;• OS Detection (Win 7/8/10/11)&#10;• Custom ScrollBars&#10;• Context Menus&#10;• Rich Animations" Title="About Nimbus"/>
+            <Alert Message="Uvel Framework v2.0&#10;&#10;Features:&#10;• Blur/Acrylic/Mica Effects&#10;• Drop Shadows &amp; Glow&#10;• OS Detection (Win 7/8/10/11)&#10;• Custom ScrollBars&#10;• Context Menus&#10;• Rich Animations" Title="About Uvel"/>
         </Handler>
     </Logic>
     
@@ -404,4 +404,4 @@
         <KeyBinding Key="Escape" Handler="ResetAll"/>
     </Shortcuts>
     
-</NimbusApp>
+</UvelApp>

@@ -10,7 +10,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Xml;
 
-namespace Nimbus.WPF
+namespace Uvel.WPF
 {
     /// <summary>
     /// Advanced Logic Runner with Python-like syntax support

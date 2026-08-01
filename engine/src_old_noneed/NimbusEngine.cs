@@ -4,14 +4,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace Nimbus
+namespace Uvel
 {
     /// <summary>
-    /// Nimbus Engine - Core Engine Class (WinForms version)
+    /// Uvel Engine - Core Engine Class (WinForms version)
     /// Manages windows, state, and application lifecycle
     /// Compatible with .NET Framework 4.0+
     /// </summary>
-    public class NimbusEngine
+    public class UvelEngine
     {
         #region Properties
         
@@ -39,7 +39,7 @@ namespace Nimbus
         
         #region Constructor
         
-        public NimbusEngine()
+        public UvelEngine()
         {
             Windows = new Dictionary<string, Form>();
             Controls = new Dictionary<string, Control>();
@@ -232,7 +232,7 @@ namespace Nimbus
             _fileWatcher.EnableRaisingEvents = true;
             
             Console.WriteLine("╔════════════════════════════════════════════╗");
-            Console.WriteLine("║       🚀 Nimbus Dev Server Running         ║");
+            Console.WriteLine("║       🚀 Uvel Dev Server Running         ║");
             Console.WriteLine("╠════════════════════════════════════════════╣");
             Console.WriteLine("║  Auto-refresh: ENABLED                     ║");
             Console.WriteLine("║  File: " + fileName.PadRight(35) + "║");
@@ -296,7 +296,7 @@ namespace Nimbus
         
         private void ParseAppMetadata(XmlNode root)
         {
-            string appName = _xmlParser.GetAttribute(root, "name", "Nimbus App");
+            string appName = _xmlParser.GetAttribute(root, "name", "Uvel App");
             State["_appName"] = appName;
             
             string theme = _xmlParser.GetAttribute(root, "theme", "dark");
@@ -467,9 +467,9 @@ namespace Nimbus
     
     public class XmlParser
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         
-        public XmlParser(NimbusEngine engine)
+        public XmlParser(UvelEngine engine)
         {
             _engine = engine;
         }
@@ -501,9 +501,9 @@ namespace Nimbus
     
     public class FormRenderer
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         
-        public FormRenderer(NimbusEngine engine)
+        public FormRenderer(UvelEngine engine)
         {
             _engine = engine;
         }
@@ -525,9 +525,9 @@ namespace Nimbus
     
     public class LogicRunner
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         
-        public LogicRunner(NimbusEngine engine)
+        public LogicRunner(UvelEngine engine)
         {
             _engine = engine;
         }
@@ -539,9 +539,9 @@ namespace Nimbus
     
     public class CSharpCompiler
     {
-        private NimbusEngine _engine;
+        private UvelEngine _engine;
         
-        public CSharpCompiler(NimbusEngine engine)
+        public CSharpCompiler(UvelEngine engine)
         {
             _engine = engine;
         }
