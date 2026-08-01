@@ -48,6 +48,12 @@ namespace Uvel
                 case "build":
                     BuildCommand(args);
                     break;
+                case "bridge":
+                    BridgeCommand(args);
+                    break;
+                case "install-protocol":
+                    InstallProtocolCommand();
+                    break;
                 case "new":
                     NewCommand(args);
                     break;
@@ -179,6 +185,61 @@ namespace Uvel
             }
             Console.WriteLine();
             PrintInfo("Session ended.");
+        }
+
+
+        private static void BridgeCommand(string[] args)
+        {
+            int port = 9327;
+            for (int i = 1; i < args.Length; i++)
+            {
+                string arg = args[i].ToLower();
+                if ((arg == "-p" || arg == "--port") && i + 1 < args.Length)
+                {
+                    int.TryParse(args[++i], out port);
+                }
+            }
+
+            Console.Clear();
+            PrintMiniHeader();
+            PrintInfo("Starting Uvel Bridge...");
+            PrintInfo("Local WebSocket: ws://127.0.0.1:" + port + "/workspace");
+            PrintInfo("Press Ctrl+C to stop.");
+            Console.WriteLine();
+
+            UvelBridgeServer bridge = new UvelBridgeServer(port);
+            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs e)
+            {
+                e.Cancel = true;
+                bridge.Stop();
+                Environment.Exit(0);
+            };
+            bridge.Start();
+        }
+
+        private static void InstallProtocolCommand()
+        {
+            try
+            {
+                string exe = Process.GetCurrentProcess().MainModule.FileName;
+                string command = "\"" + exe + "\" bridge";
+                Microsoft.Win32.RegistryKey root = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Classes\\uvel");
+                root.SetValue("", "URL:Uvel Workspace Protocol");
+                root.SetValue("URL Protocol", "");
+                Microsoft.Win32.RegistryKey icon = root.CreateSubKey("DefaultIcon");
+                icon.SetValue("", exe + ",1");
+                Microsoft.Win32.RegistryKey cmd = root.CreateSubKey("shell\\open\\command");
+                cmd.SetValue("", command);
+                cmd.Close();
+                icon.Close();
+                root.Close();
+                PrintInfo("Installed uvel:// protocol for Uvel Workspace.");
+                PrintInfo("Command: " + command);
+            }
+            catch (Exception ex)
+            {
+                PrintError("Protocol install failed: " + ex.Message);
+            }
         }
 
         private static void BuildCommand(string[] args)
@@ -1192,6 +1253,8 @@ namespace Uvel
             Console.WriteLine("    run   <file.xml>      Run application");
             Console.WriteLine("    dev   <file.xml>      Run with DevTools + hot reload");
             Console.WriteLine("    build <file.xml>      Build standalone EXE");
+            Console.WriteLine("    bridge                Start local Workspace bridge");
+            Console.WriteLine("    install-protocol      Register uvel:// workspace protocol");
             Console.WriteLine("    new   <name>          Create new project");
             Console.WriteLine();
             Console.WriteLine("  DEV OPTIONS:");
@@ -1209,6 +1272,8 @@ namespace Uvel
             Console.WriteLine("    uvel dev App.xml");
             Console.WriteLine("    uvel dev App.xml --port 8080");
             Console.WriteLine("    uvel build App.xml -o ./dist -n MyApp");
+            Console.WriteLine("    uvel bridge --port 9327");
+            Console.WriteLine("    uvel install-protocol");
             Console.WriteLine("    uvel new MyProject");
             Console.ResetColor();
             Console.WriteLine();

@@ -90,3 +90,33 @@ The built binary is `engine/bin/uvel.exe`.
 MIT — see [LICENSE](LICENSE).
 
 <p align="center">Made with UFlow · https://uflow.uz/uvel</p>
+
+## Uvel Workspace Bridge
+
+`uflow.uz/uvel` includes a browser-based Uvel Workspace editor. Browsers cannot launch `.exe` files directly, so Uvel provides a local Windows bridge.
+
+```bash
+uvel install-protocol
+uvel bridge --port 9327
+```
+
+Then open:
+
+```text
+https://uflow.uz/uvel#workspace
+```
+
+The Workspace connects to:
+
+```text
+ws://127.0.0.1:9327/workspace
+```
+
+Supported realtime actions:
+
+- **Run XML** — saves the XML to the local workspace and launches Uvel in dev mode.
+- **Hot reload** — rewriting the XML file triggers Uvel's file watcher and updates the running window.
+- **Hot restart** — stops the running Uvel process and starts it again with the latest XML.
+- **Realtime logs** — bridge logs and app stdout/stderr stream back to the browser.
+
+The bridge listens only on localhost and runs only after the user explicitly starts it.

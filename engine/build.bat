@@ -74,6 +74,7 @@ LogicRunner.cs ^
 CSharpCompiler.cs ^
 XmlParser.cs ^
 DevToolsServer.cs ^
+UvelBridgeServer.cs ^
 Program.cs ^
 ComponentSystem.cs ^
 !PLUGIN_LIST!
