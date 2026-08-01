@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
@@ -11,20 +10,16 @@ using System.Xml;
 namespace Uvel.Native2D
 {
     /// <summary>
-    /// Native Uvel runtime: XML -> Uvel element tree -> Win32 window -> GDI/GDI+ drawing.
-    /// No WPF/XAML, no NuGet, no external DLL. Windows 8+ friendly.
+    /// Uvel Native UI runtime.
+    /// XML -> Uvel element tree -> Win32 window -> custom GDI/GDI+ renderer.
+    /// No XAML and no NuGet. Windows APIs are accessed through .NET + P/Invoke.
     ///
-    /// The file intentionally contains P/Invoke declarations for the Windows
-    /// rendering stack Uvel will grow into: user32, gdi32, d2d1, dwrite,
-    /// dwmapi and dcomp. The current stable drawing path uses GDI/GDI+ because
-    /// it is available through .NET Framework 4.0 and requires no COM wrapper.
-    /// Direct2D/DirectWrite/DirectComposition hooks are present for the next
-    /// renderer stage without introducing dependencies.
+    /// WPF runtime is still available through `uvel run/dev`. The bridge chooses
+    /// this native runtime only when the app imports Uvel globally:
+    ///   <Import Package="uvel" As="global" />
     /// </summary>
     public class UvelNativeRuntime
     {
-        private NativeWindowHost _window;
-
         public void Run(string xmlPath)
         {
             if (string.IsNullOrEmpty(xmlPath) || !File.Exists(xmlPath))
@@ -32,35 +27,44 @@ namespace Uvel.Native2D
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            _window = new NativeWindowHost(xmlPath);
-            _window.Show();
-            Application.Run(_window);
+            Application.Run(new UvelNativeWindow(xmlPath));
         }
     }
 
-    internal class NativeWindowHost : Form
+    internal class UvelNativeWindow : Form
     {
-        private string _xmlPath;
+        private readonly string _xmlPath;
         private UvelDocument _doc;
         private FileSystemWatcher _watcher;
         private DateTime _lastReload = DateTime.MinValue;
-        private Font _font;
-        private Font _fontBold;
-        private UvelBackendRegistry _backend = new UvelBackendRegistry();
+        private readonly UvelBackendRegistry _backend;
+        private readonly Dictionary<string, Rectangle> _lastBounds = new Dictionary<string, Rectangle>();
+        private readonly Timer _animationTimer;
+        private float _pulse;
 
-        public NativeWindowHost(string xmlPath)
+        private readonly Font _font = new Font("Segoe UI", 10f, FontStyle.Regular, GraphicsUnit.Point);
+        private readonly Font _fontSmall = new Font("Segoe UI", 8.5f, FontStyle.Regular, GraphicsUnit.Point);
+        private readonly Font _fontBold = new Font("Segoe UI", 12f, FontStyle.Bold, GraphicsUnit.Point);
+        private readonly Font _fontTitle = new Font("Segoe UI", 21f, FontStyle.Bold, GraphicsUnit.Point);
+        private readonly Font _fontMono = new Font("Consolas", 9.5f, FontStyle.Regular, GraphicsUnit.Point);
+
+        public UvelNativeWindow(string xmlPath)
         {
             _xmlPath = Path.GetFullPath(xmlPath);
-            _font = new Font("Segoe UI", 10f, FontStyle.Regular, GraphicsUnit.Point);
-            _fontBold = new Font("Segoe UI", 18f, FontStyle.Bold, GraphicsUnit.Point);
+            _backend = new UvelBackendRegistry();
             this.DoubleBuffered = true;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.MinimumSize = new Size(360, 240);
+            this.MinimumSize = new Size(420, 280);
             this.BackColor = Color.FromArgb(11, 15, 25);
             LoadXml();
             SetupWatcher();
             NativeApi.EnableImmersiveDarkMode(this.Handle);
             NativeApi.EnableDwmComposition(this.Handle);
+
+            _animationTimer = new Timer();
+            _animationTimer.Interval = 16;
+            _animationTimer.Tick += delegate { _pulse += 0.04f; Invalidate(); };
+            _animationTimer.Start();
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -74,8 +78,7 @@ namespace Uvel.Native2D
         {
             try
             {
-                string dir = Path.GetDirectoryName(_xmlPath);
-                _watcher = new FileSystemWatcher(dir, "*.xml");
+                _watcher = new FileSystemWatcher(Path.GetDirectoryName(_xmlPath), "*.xml");
                 _watcher.IncludeSubdirectories = true;
                 _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime;
                 _watcher.Changed += delegate { HotReload(); };
@@ -89,16 +92,12 @@ namespace Uvel.Native2D
         {
             if ((DateTime.Now - _lastReload).TotalMilliseconds < 350) return;
             _lastReload = DateTime.Now;
-            Thread.Sleep(80);
+            Thread.Sleep(90);
             try
             {
-                if (this.IsHandleCreated)
+                if (IsHandleCreated)
                 {
-                    this.BeginInvoke(new Action(delegate
-                    {
-                        LoadXml();
-                        Invalidate();
-                    }));
+                    BeginInvoke(new Action(delegate { LoadXml(); Invalidate(); }));
                 }
             }
             catch { }
@@ -107,20 +106,45 @@ namespace Uvel.Native2D
         private void LoadXml()
         {
             _doc = UvelDocument.Load(_xmlPath);
-            this.Text = _doc.Title;
-            this.ClientSize = new Size(Math.Max(320, _doc.Width), Math.Max(220, _doc.Height));
+            Text = _doc.Title;
+            ClientSize = new Size(Math.Max(420, _doc.Width), Math.Max(280, _doc.Height));
+            _lastBounds.Clear();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            using (SolidBrush bg = new SolidBrush(_doc.Background)) e.Graphics.FillRectangle(bg, ClientRectangle);
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            using (SolidBrush bg = new SolidBrush(_doc.Background)) g.FillRectangle(bg, ClientRectangle);
+            DrawAmbient(g);
             if (_doc.Root != null)
             {
                 Layout(_doc.Root, ClientRectangle);
-                DrawElement(e.Graphics, _doc.Root);
+                DrawElement(g, _doc.Root);
+            }
+        }
+
+        private void DrawAmbient(Graphics g)
+        {
+            DrawGlow(g, new PointF(ClientSize.Width * .18f, ClientSize.Height * .12f), 260, Color.FromArgb(28, 52, 199, 89));
+            DrawGlow(g, new PointF(ClientSize.Width * .88f, ClientSize.Height * .10f), 290, Color.FromArgb(24, 37, 99, 235));
+            DrawGlow(g, new PointF(ClientSize.Width * .60f, ClientSize.Height * .90f), 330, Color.FromArgb(20, 168, 85, 247));
+        }
+
+        private void DrawGlow(Graphics g, PointF center, int radius, Color color)
+        {
+            using (System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath())
+            {
+                RectangleF r = new RectangleF(center.X - radius, center.Y - radius, radius * 2, radius * 2);
+                path.AddEllipse(r);
+                using (System.Drawing.Drawing2D.PathGradientBrush b = new System.Drawing.Drawing2D.PathGradientBrush(path))
+                {
+                    b.CenterColor = color;
+                    b.SurroundColors = new Color[] { Color.FromArgb(0, color) };
+                    g.FillPath(b, path);
+                }
             }
         }
 
@@ -128,11 +152,16 @@ namespace Uvel.Native2D
         {
             base.OnMouseDown(e);
             UvelElement hit = HitTest(_doc.Root, e.Location);
-            if (hit != null && !string.IsNullOrEmpty(hit.OnClick))
+            if (hit == null) return;
+            if (hit.Type == "Input")
             {
-                ExecuteHandler(hit.OnClick);
-                Invalidate();
+                using (UvelPrompt prompt = new UvelPrompt(hit.Text, hit.Placeholder))
+                {
+                    if (prompt.ShowDialog(this) == DialogResult.OK) { hit.Text = prompt.Value; Invalidate(); }
+                }
+                return;
             }
+            if (!string.IsNullOrEmpty(hit.OnClick)) { ExecuteHandler(hit.OnClick); Invalidate(); }
         }
 
         private UvelElement HitTest(UvelElement el, Point p)
@@ -140,10 +169,10 @@ namespace Uvel.Native2D
             if (el == null) return null;
             for (int i = el.Children.Count - 1; i >= 0; i--)
             {
-                UvelElement hit = HitTest(el.Children[i], p);
-                if (hit != null) return hit;
+                UvelElement h = HitTest(el.Children[i], p);
+                if (h != null) return h;
             }
-            if ((el.Type == "Button" || el.Type == "UvelButton") && el.Bounds.Contains(p)) return el;
+            if ((el.Type == "Button" || el.Type == "Input" || el.Type == "ListItem" || el.Type == "Tab") && el.Bounds.Contains(p)) return el;
             return null;
         }
 
@@ -152,38 +181,38 @@ namespace Uvel.Native2D
             UvelNativeContext ctx = new UvelNativeContext(SetText);
             if (_backend.Execute(handler, ctx)) return;
             if (!_doc.Handlers.ContainsKey(handler)) return;
-            List<XmlNode> commands = _doc.Handlers[handler];
-            foreach (XmlNode cmd in commands)
-            {
-                if (cmd.Name == "Set")
-                {
-                    string target = Attr(cmd, "Target", "");
-                    string prop = Attr(cmd, "Property", "Text");
-                    string value = Attr(cmd, "Value", "");
-                    if (prop.ToLower() == "text") SetText(target, value);
-                }
-                else if (cmd.Name == "DbSet" || cmd.Name == "DatabaseSet")
-                {
-                    UvelDatabase.Set(Attr(cmd, "Key", "value"), Attr(cmd, "Value", ""));
-                }
-                else if (cmd.Name == "DbGet" || cmd.Name == "DatabaseGet")
-                {
-                    SetText(Attr(cmd, "Target", "status"), UvelDatabase.Get(Attr(cmd, "Key", "value"), Attr(cmd, "Default", "")));
-                }
-                else if (cmd.Name == "Call")
-                {
-                    ExecuteHandler(Attr(cmd, "Handler", Attr(cmd, "Name", cmd.InnerText.Trim())));
-                }
-                else if (cmd.Name == "Toast")
-                {
-                    SetText("status", Attr(cmd, "Message", "Done"));
-                }
-            }
+            foreach (XmlNode cmd in _doc.Handlers[handler]) ExecuteCommand(cmd, handler);
         }
 
-        private void SetText(string name, string value)
+        private void ExecuteCommand(XmlNode cmd, string currentHandler)
         {
-            UvelElement el = FindByName(_doc.Root, name);
+            string name = cmd.Name;
+            if (name == "Set") SetText(Attr(cmd, "Target", "status"), Attr(cmd, "Value", ""));
+            else if (name == "Call") ExecuteHandler(Attr(cmd, "Handler", Attr(cmd, "Name", cmd.InnerText.Trim())));
+            else if (name == "Toast") SetText("status", Attr(cmd, "Message", "Done"));
+            else if (name == "DbSet" || name == "DatabaseSet") UvelDatabase.Set(Attr(cmd, "Key", "value"), Attr(cmd, "Value", ""));
+            else if (name == "DbGet" || name == "DatabaseGet") SetText(Attr(cmd, "Target", "status"), UvelDatabase.Get(Attr(cmd, "Key", "value"), Attr(cmd, "Default", "")));
+            else if (name == "AddMessage") AddMessage(cmd);
+        }
+
+        private void AddMessage(XmlNode cmd)
+        {
+            string container = Attr(cmd, "Container", "messages");
+            string text = Attr(cmd, "Text", "");
+            string sender = Attr(cmd, "Sender", "me");
+            UvelElement target = FindByName(_doc.Root, container);
+            if (target == null) return;
+            UvelElement item = new UvelElement("ListItem");
+            item.Text = text;
+            item.Align = sender == "me" ? "right" : "left";
+            item.Background = sender == "me" ? Color.FromArgb(52, 52, 199, 89) : Color.FromArgb(22, 255, 255, 255);
+            item.Foreground = Color.White;
+            target.Children.Add(item);
+        }
+
+        private void SetText(string target, string value)
+        {
+            UvelElement el = FindByName(_doc.Root, target);
             if (el != null) el.Text = value;
         }
 
@@ -191,318 +220,159 @@ namespace Uvel.Native2D
         {
             if (el == null || string.IsNullOrEmpty(name)) return null;
             if (el.Name == name) return el;
-            foreach (UvelElement child in el.Children)
-            {
-                UvelElement found = FindByName(child, name);
-                if (found != null) return found;
-            }
+            foreach (UvelElement c in el.Children) { UvelElement f = FindByName(c, name); if (f != null) return f; }
             return null;
         }
 
         private void Layout(UvelElement root, Rectangle area)
         {
-            int cardW = Math.Min(560, Math.Max(260, area.Width - 80));
-            int cardH = Math.Min(230, Math.Max(140, area.Height - 80));
-            root.Bounds = new Rectangle((area.Width - cardW) / 2, (area.Height - cardH) / 2, cardW, cardH);
-            LayoutChildren(root);
+            LayoutElement(root, area, 0);
         }
 
-        private void LayoutChildren(UvelElement parent)
+        private void LayoutElement(UvelElement el, Rectangle area, int depth)
         {
-            int y = parent.Bounds.Top + parent.Padding;
-            int innerW = parent.Bounds.Width - parent.Padding * 2;
-            foreach (UvelElement child in parent.Children)
+            if (el.HasFrame)
             {
-                int h = child.Type == "Button" || child.Type == "UvelButton" ? 46 : child.Type == "TextBlock" ? 38 : 30;
-                child.Bounds = new Rectangle(parent.Bounds.Left + parent.Padding, y, innerW, h);
-                y += h + 12;
-                LayoutChildren(child);
+                int x = Resolve(el.X, area.Width, area.X);
+                int y = Resolve(el.Y, area.Height, area.Y);
+                int w = ResolveSize(el.W, area.Width);
+                int h = ResolveSize(el.H, area.Height);
+                el.Bounds = new Rectangle(x, y, Math.Max(8, w), Math.Max(8, h));
+            }
+            else if (depth == 0)
+            {
+                el.Bounds = area;
+            }
+            else if (el.Bounds.Width <= 0)
+            {
+                el.Bounds = area;
+            }
+
+            if (el.Type == "Text" || el.Type == "TextBlock" || el.Type == "Button" || el.Type == "Input" || el.Type == "Icon" || el.Type == "Divider" || el.Type == "Badge") return;
+
+            int pad = el.Padding;
+            Rectangle inner = new Rectangle(el.Bounds.X + pad, el.Bounds.Y + pad, Math.Max(0, el.Bounds.Width - pad * 2), Math.Max(0, el.Bounds.Height - pad * 2));
+            int ycur = inner.Y;
+            int gap = el.Gap;
+            foreach (UvelElement child in el.Children)
+            {
+                if (child.HasFrame)
+                {
+                    LayoutElement(child, el.Bounds, depth + 1);
+                    continue;
+                }
+                int h = child.Type == "Button" || child.Type == "Input" ? 44 : child.Type == "Text" || child.Type == "TextBlock" ? Math.Max(24, child.FontSize + 12) : child.Type == "Divider" ? 12 : child.Type == "Badge" ? 26 : child.Type == "ListItem" ? 44 : 68;
+                child.Bounds = new Rectangle(inner.X, ycur, inner.Width, h);
+                ycur += h + gap;
+                LayoutElement(child, child.Bounds, depth + 1);
             }
         }
 
+        private int Resolve(int value, int parent, int origin) { return value < 0 ? origin : origin + value; }
+        private int ResolveSize(int value, int parent) { return value <= 0 ? parent : value; }
+
         private void DrawElement(Graphics g, UvelElement el)
         {
-            if (el.Type == "Card" || el.Type == "GlassCard" || el.Type == "UvelCard" || el.Type == "StackPanel")
+            if (el.Type == "Card" || el.Type == "View" || el.Type == "Scroll" || el.Type == "List" || el.Type == "ListView" || el.Type == "Tabs")
             {
-                if (el.Type != "StackPanel")
+                if (el.Type != "View" || el.Background.A > 0)
                 {
                     using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g, b, el.Bounds, el.Radius);
                     using (Pen p = new Pen(el.Border)) DrawRound(g, p, el.Bounds, el.Radius);
                 }
             }
-            else if (el.Type == "View" || el.Type == "Scroll" || el.Type == "List" || el.Type == "ListView" || el.Type == "Tabs" || el.Type == "Tab")
+            else if (el.Type == "Button")
             {
-                using (SolidBrush b = new SolidBrush(Color.FromArgb(12, 255, 255, 255))) FillRound(g, b, el.Bounds, Math.Max(10, el.Radius));
-                using (Pen p = new Pen(Color.FromArgb(24, 255, 255, 255))) DrawRound(g, p, el.Bounds, Math.Max(10, el.Radius));
+                using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g, b, el.Bounds, el.Radius);
+                using (Pen p = new Pen(Blend(el.Background, Color.White, 0.18f))) DrawRound(g, p, el.Bounds, el.Radius);
+                DrawText(g, el.Text, _font, el.Foreground, el.Bounds, "center");
             }
             else if (el.Type == "Input")
             {
-                using (SolidBrush b = new SolidBrush(Color.FromArgb(18, 255, 255, 255))) FillRound(g, b, el.Bounds, 14);
-                using (Pen p = new Pen(Color.FromArgb(42, 255, 255, 255))) DrawRound(g, p, el.Bounds, 14);
-                DrawCenteredText(g, string.IsNullOrEmpty(el.Text) ? "Input" : el.Text, _font, Color.FromArgb(180,255,255,255), el.Bounds);
+                using (SolidBrush b = new SolidBrush(Color.FromArgb(22, 255, 255, 255))) FillRound(g, b, el.Bounds, 14);
+                using (Pen p = new Pen(Color.FromArgb(42,255,255,255))) DrawRound(g, p, el.Bounds, 14);
+                DrawText(g, string.IsNullOrEmpty(el.Text) ? el.Placeholder : el.Text, _font, Color.FromArgb(190,255,255,255), el.Bounds, "left");
             }
-            else if (el.Type == "Icon")
-            {
-                DrawCenteredText(g, UvelIconRegistry.IconText(el.Text), _fontBold, el.Foreground, el.Bounds);
-            }
-            else if (el.Type == "Badge")
-            {
-                using (SolidBrush b = new SolidBrush(Color.FromArgb(34, 52, 199, 89))) FillRound(g, b, el.Bounds, 14);
-                DrawCenteredText(g, el.Text, _font, Color.FromArgb(52,199,89), el.Bounds);
-            }
-            else if (el.Type == "Divider")
-            {
-                using (Pen p = new Pen(Color.FromArgb(32,255,255,255))) g.DrawLine(p, el.Bounds.Left, el.Bounds.Top + el.Bounds.Height/2, el.Bounds.Right, el.Bounds.Top + el.Bounds.Height/2);
-            }
-            else if (el.Type == "Button" || el.Type == "UvelButton")
-            {
-                using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g, b, el.Bounds, el.Radius);
-                using (Pen p = new Pen(el.Border)) DrawRound(g, p, el.Bounds, el.Radius);
-                DrawCenteredText(g, el.Text, _font, el.Foreground, el.Bounds);
-            }
-            else if (el.Type == "TextBlock")
-            {
-                Font f = el.FontSize >= 24 ? _fontBold : _font;
-                DrawCenteredText(g, el.Text, f, el.Foreground, el.Bounds);
-            }
+            else if (el.Type == "Text" || el.Type == "TextBlock") DrawText(g, el.Text, el.FontSize >= 22 ? _fontTitle : _font, el.Foreground, el.Bounds, el.Align);
+            else if (el.Type == "ListItem") { using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g,b,el.Bounds,16); DrawText(g,el.Text,_font,el.Foreground,el.Bounds,el.Align); }
+            else if (el.Type == "Icon") DrawText(g, UvelIconRegistry.IconText(el.Icon), _fontBold, el.Foreground, el.Bounds, "center");
+            else if (el.Type == "Badge") { using (SolidBrush b = new SolidBrush(Color.FromArgb(34,52,199,89))) FillRound(g,b,el.Bounds,13); DrawText(g,el.Text,_fontSmall,Color.FromArgb(52,199,89),el.Bounds,"center"); }
+            else if (el.Type == "Divider") { using (Pen p = new Pen(Color.FromArgb(32,255,255,255))) g.DrawLine(p, el.Bounds.Left, el.Bounds.Top + el.Bounds.Height/2, el.Bounds.Right, el.Bounds.Top + el.Bounds.Height/2); }
 
             foreach (UvelElement child in el.Children) DrawElement(g, child);
         }
 
-        private void DrawCenteredText(Graphics g, string text, Font font, Color color, Rectangle bounds)
+        private Color Blend(Color a, Color b, float t) { return Color.FromArgb(255, (int)(a.R+(b.R-a.R)*t), (int)(a.G+(b.G-a.G)*t), (int)(a.B+(b.B-a.B)*t)); }
+
+        private void DrawText(Graphics g, string text, Font font, Color color, Rectangle bounds, string align)
         {
             using (StringFormat sf = new StringFormat())
             using (SolidBrush b = new SolidBrush(color))
             {
-                sf.Alignment = StringAlignment.Center;
                 sf.LineAlignment = StringAlignment.Center;
-                g.DrawString(text ?? "", font, b, bounds, sf);
+                sf.Alignment = align == "right" ? StringAlignment.Far : align == "left" ? StringAlignment.Near : StringAlignment.Center;
+                Rectangle r = bounds; r.Inflate(-12, 0);
+                g.DrawString(text ?? "", font, b, r, sf);
             }
         }
 
-        private void FillRound(Graphics g, Brush b, Rectangle r, int radius)
-        {
-            using (System.Drawing.Drawing2D.GraphicsPath path = RoundPath(r, radius)) g.FillPath(b, path);
-        }
-
-        private void DrawRound(Graphics g, Pen p, Rectangle r, int radius)
-        {
-            using (System.Drawing.Drawing2D.GraphicsPath path = RoundPath(r, radius)) g.DrawPath(p, path);
-        }
-
+        private void FillRound(Graphics g, Brush b, Rectangle r, int radius) { using (System.Drawing.Drawing2D.GraphicsPath p = RoundPath(r, radius)) g.FillPath(b,p); }
+        private void DrawRound(Graphics g, Pen pen, Rectangle r, int radius) { using (System.Drawing.Drawing2D.GraphicsPath p = RoundPath(r, radius)) g.DrawPath(p,pen); }
         private System.Drawing.Drawing2D.GraphicsPath RoundPath(Rectangle r, int radius)
         {
-            int d = radius * 2;
+            int d = Math.Max(2, radius * 2);
             System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath();
-            p.AddArc(r.X, r.Y, d, d, 180, 90);
-            p.AddArc(r.Right - d, r.Y, d, d, 270, 90);
-            p.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
-            p.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
-            p.CloseFigure();
-            return p;
+            p.AddArc(r.X, r.Y, d, d, 180, 90); p.AddArc(r.Right-d, r.Y, d, d, 270, 90); p.AddArc(r.Right-d, r.Bottom-d, d, d, 0, 90); p.AddArc(r.X, r.Bottom-d, d, d, 90, 90); p.CloseFigure(); return p;
         }
-
-        private string Attr(XmlNode n, string name, string def)
-        {
-            XmlAttribute a = n.Attributes == null ? null : n.Attributes[name];
-            return a == null ? def : a.Value;
-        }
+        private string Attr(XmlNode n, string name, string def) { XmlAttribute a = n == null || n.Attributes == null ? null : n.Attributes[name]; return a == null ? def : a.Value; }
     }
 
     internal class UvelDocument
     {
-        public string Title = "Uvel App";
-        public int Width = 860;
-        public int Height = 540;
-        public Color Background = Color.FromArgb(11, 15, 25);
-        public UvelElement Root;
-        public Dictionary<string, List<XmlNode>> Handlers = new Dictionary<string, List<XmlNode>>();
-
+        public string Title = "Uvel App"; public int Width = 920; public int Height = 620; public Color Background = Color.FromArgb(11,15,25); public UvelElement Root; public Dictionary<string,List<XmlNode>> Handlers = new Dictionary<string,List<XmlNode>>();
         public static UvelDocument Load(string file)
         {
-            XmlDocument xml = new XmlDocument();
-            xml.Load(file);
-            UvelDocument doc = new UvelDocument();
-            XmlElement app = xml.DocumentElement;
-            if (app != null)
-            {
-                doc.Title = Attr(app, "Name", "Uvel App");
-                int.TryParse(Attr(app, "Width", "860"), out doc.Width);
-                int.TryParse(Attr(app, "Height", "540"), out doc.Height);
-            }
-
+            XmlDocument xml = new XmlDocument(); xml.Load(file); UvelDocument doc = new UvelDocument(); XmlElement app = xml.DocumentElement;
+            if (app != null) { doc.Title = Attr(app,"Name","Uvel App"); int.TryParse(Attr(app,"Width","920"), out doc.Width); int.TryParse(Attr(app,"Height","620"), out doc.Height); }
             XmlNode logic = app == null ? null : app.SelectSingleNode("Logic");
-            if (logic != null)
-            {
-                foreach (XmlNode h in logic.ChildNodes)
-                {
-                    if (h.NodeType == XmlNodeType.Element && h.Name == "Handler")
-                    {
-                        string name = Attr(h, "Name", "");
-                        if (!string.IsNullOrEmpty(name))
-                        {
-                            List<XmlNode> list = new List<XmlNode>();
-                            foreach (XmlNode c in h.ChildNodes) if (c.NodeType == XmlNodeType.Element) list.Add(c);
-                            doc.Handlers[name] = list;
-                        }
-                    }
-                }
-            }
-
-            XmlNode ui = app == null ? null : app.SelectSingleNode("UI");
-            XmlNode first = FirstElement(ui);
-            doc.Root = ParseElement(first);
-            if (doc.Root == null) doc.Root = new UvelElement("Card");
-            return doc;
+            if (logic != null) foreach (XmlNode h in logic.ChildNodes) if (h.NodeType == XmlNodeType.Element && h.Name == "Handler") { string n=Attr(h,"Name",""); if(n!="") { List<XmlNode> list=new List<XmlNode>(); foreach(XmlNode c in h.ChildNodes) if(c.NodeType==XmlNodeType.Element) list.Add(c); doc.Handlers[n]=list; } }
+            XmlNode ui = app == null ? null : app.SelectSingleNode("UI"); doc.Root = ParseElement(FirstElement(ui)); if (doc.Root == null) doc.Root = new UvelElement("Card"); return doc;
         }
-
-        private static XmlNode FirstElement(XmlNode node)
-        {
-            if (node == null) return null;
-            foreach (XmlNode c in node.ChildNodes) if (c.NodeType == XmlNodeType.Element) return c;
-            return null;
-        }
-
+        private static XmlNode FirstElement(XmlNode n) { if(n==null)return null; foreach(XmlNode c in n.ChildNodes) if(c.NodeType==XmlNodeType.Element && !c.Name.Contains(".")) return c; return null; }
         private static UvelElement ParseElement(XmlNode node)
         {
-            if (node == null) return null;
-            string type = UvelComponentRegistry.Resolve(Normalize(node.Name));
-            if (type == "Grid")
-            {
-                XmlNode first = FirstUsefulChild(node);
-                return ParseElement(first);
-            }
-            UvelElement el = new UvelElement(type);
-            el.Name = Attr(node, "Name", Attr(node, "x:Name", ""));
-            el.Text = Attr(node, "Text", Attr(node, "Content", node.InnerText.Trim()));
-            el.OnClick = Attr(node, "onClick", "");
-            el.Background = ParseColor(Attr(node, "Background", type == "Button" ? "#34C759" : "#FFFFFF14"));
-            el.Border = ParseColor(Attr(node, "BorderBrush", Attr(node, "BorderColor", "#FFFFFF24")));
-            el.Foreground = ParseColor(Attr(node, "Foreground", "#FFFFFF"));
-            int.TryParse(Attr(node, "CornerRadius", type == "Button" ? "18" : "28"), out el.Radius);
-            int.TryParse(Attr(node, "Padding", "28").Split(',')[0], out el.Padding);
-            if (el.Padding <= 0) el.Padding = 20;
-            int fs;
-            if (int.TryParse(Attr(node, "FontSize", "14"), out fs)) el.FontSize = fs;
-
-            foreach (XmlNode child in node.ChildNodes)
-            {
-                if (child.NodeType != XmlNodeType.Element) continue;
-                if (child.Name == "Import" || child.Name == "Imports" || child.Name == "Logic" || child.Name == "Styles" || child.Name.Contains(".")) continue;
-                UvelElement parsed = ParseElement(child);
-                if (parsed != null) el.Children.Add(parsed);
-            }
+            if(node==null)return null; if(node.Name=="Import"||node.Name=="Imports"||node.Name=="Logic"||node.Name=="Styles"||node.Name.Contains(".")) return null;
+            UvelElement el = new UvelElement(UvelComponentRegistry.Resolve(Normalize(node.Name)));
+            el.Name=Attr(node,"Name",Attr(node,"x:Name","")); el.Text=Attr(node,"Text",Attr(node,"Content",node.InnerText.Trim())); el.Placeholder=Attr(node,"Placeholder",""); el.OnClick=Attr(node,"onClick",""); el.Icon=Attr(node,"Icon",el.Text); el.Align=Attr(node,"Align",Attr(node,"HorizontalAlignment","center")).ToLower();
+            el.Background=ParseColor(Attr(node,"Background",el.Type=="Button"?"#34C759":el.Type=="View"?"#00000000":"#FFFFFF14")); el.Border=ParseColor(Attr(node,"BorderBrush",Attr(node,"BorderColor","#FFFFFF24"))); el.Foreground=ParseColor(Attr(node,"Foreground","#FFFFFF"));
+            int.TryParse(Attr(node,"CornerRadius",el.Type=="Button"?"18":"24"),out el.Radius); int.TryParse(Attr(node,"Padding","20").Split(',')[0],out el.Padding); if(el.Padding<0)el.Padding=0; int.TryParse(Attr(node,"Gap","10"),out el.Gap); int.TryParse(Attr(node,"FontSize","14"),out el.FontSize);
+            int x,y,w,h; bool has=false; if(int.TryParse(Attr(node,"X","-1"),out x)){el.X=x;has=true;} if(int.TryParse(Attr(node,"Y","-1"),out y)){el.Y=y;has=true;} if(int.TryParse(Attr(node,"Width","0"),out w)){el.W=w;if(w>0)has=true;} if(int.TryParse(Attr(node,"Height","0"),out h)){el.H=h;if(h>0)has=true;} el.HasFrame=has;
+            foreach(XmlNode c in node.ChildNodes){ UvelElement ch=ParseElement(c); if(ch!=null) el.Children.Add(ch); }
             return el;
         }
-
-        private static XmlNode FirstUsefulChild(XmlNode node)
-        {
-            foreach (XmlNode c in node.ChildNodes)
-            {
-                if (c.NodeType != XmlNodeType.Element) continue;
-                if (c.Name.Contains(".")) continue;
-                return c;
-            }
-            return null;
-        }
-
-        private static string Normalize(string name)
-        {
-            string n = (name ?? "").ToLower();
-            if (n == "card" || n == "uvelcard" || n == "glasscard" || n == "border") return "Card";
-            if (n == "button" || n == "uvelbutton") return "Button";
-            if (n == "input" || n == "uvelinput" || n == "textbox") return "Input";
-            if (n == "view" || n == "uvelview") return "View";
-            if (n == "scroll" || n == "scrollview" || n == "uvelscroll") return "Scroll";
-            if (n == "list" || n == "uvellist") return "List";
-            if (n == "listview" || n == "uvellistview") return "ListView";
-            if (n == "item" || n == "listitem") return "ListItem";
-            if (n == "tabs" || n == "tabcontrol") return "Tabs";
-            if (n == "tab" || n == "tabitem") return "Tab";
-            if (n == "icon" || n == "uvelicon") return "Icon";
-            if (n == "badge" || n == "uvelbadge") return "Badge";
-            if (n == "divider" || n == "uveldivider") return "Divider";
-            if (n == "stackpanel" || n == "panel") return "StackPanel";
-            if (n == "textblock" || n == "text" || n == "label") return "TextBlock";
-            return name;
-        }
-
-        private static Color ParseColor(string value)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(value)) return Color.White;
-                if (value.StartsWith("#"))
-                {
-                    string h = value.Substring(1);
-                    if (h.Length == 8)
-                    {
-                        int a = Convert.ToInt32(h.Substring(0, 2), 16);
-                        int r = Convert.ToInt32(h.Substring(2, 2), 16);
-                        int g = Convert.ToInt32(h.Substring(4, 2), 16);
-                        int b = Convert.ToInt32(h.Substring(6, 2), 16);
-                        return Color.FromArgb(a, r, g, b);
-                    }
-                    if (h.Length == 6)
-                    {
-                        int r = Convert.ToInt32(h.Substring(0, 2), 16);
-                        int g = Convert.ToInt32(h.Substring(2, 2), 16);
-                        int b = Convert.ToInt32(h.Substring(4, 2), 16);
-                        return Color.FromArgb(r, g, b);
-                    }
-                }
-                return ColorTranslator.FromHtml(value);
-            }
-            catch { return Color.White; }
-        }
-
-        private static string Attr(XmlNode n, string name, string def)
-        {
-            XmlAttribute a = n == null || n.Attributes == null ? null : n.Attributes[name];
-            return a == null ? def : a.Value;
-        }
+        private static string Normalize(string name) { string n=(name??"").ToLower(); if(n=="grid")return"View"; if(n=="border"||n=="card"||n=="uvelcard"||n=="glasscard")return"Card"; if(n=="button"||n=="uvelbutton")return"Button"; if(n=="input"||n=="uvelinput"||n=="textbox")return"Input"; if(n=="textblock"||n=="text"||n=="label")return"Text"; return UvelComponentRegistry.Resolve(name); }
+        private static Color ParseColor(string v) { try { if(string.IsNullOrEmpty(v))return Color.White; if(v.StartsWith("#")){string h=v.Substring(1); if(h.Length==8)return Color.FromArgb(Convert.ToInt32(h.Substring(0,2),16),Convert.ToInt32(h.Substring(2,2),16),Convert.ToInt32(h.Substring(4,2),16),Convert.ToInt32(h.Substring(6,2),16)); if(h.Length==6)return Color.FromArgb(Convert.ToInt32(h.Substring(0,2),16),Convert.ToInt32(h.Substring(2,2),16),Convert.ToInt32(h.Substring(4,2),16));} return ColorTranslator.FromHtml(v);} catch{return Color.White;} }
+        private static string Attr(XmlNode n,string name,string def){XmlAttribute a=n==null||n.Attributes==null?null:n.Attributes[name];return a==null?def:a.Value;}
     }
 
     internal class UvelElement
     {
-        public string Type;
-        public string Name;
-        public string Text;
-        public string OnClick;
-        public Rectangle Bounds;
-        public Color Background = Color.FromArgb(32, 255, 255, 255);
-        public Color Border = Color.FromArgb(42, 255, 255, 255);
-        public Color Foreground = Color.White;
-        public int Radius = 24;
-        public int Padding = 20;
-        public int FontSize = 14;
-        public List<UvelElement> Children = new List<UvelElement>();
-        public UvelElement(string type) { Type = type; }
+        public string Type, Name, Text, Placeholder, OnClick, Icon, Align; public Rectangle Bounds; public int X=-1,Y=-1,W=0,H=0,Radius=24,Padding=20,Gap=10,FontSize=14; public bool HasFrame; public Color Background=Color.FromArgb(32,255,255,255), Border=Color.FromArgb(42,255,255,255), Foreground=Color.White; public List<UvelElement> Children=new List<UvelElement>(); public UvelElement(string t){Type=t; Align="center";}
+    }
+
+    internal class UvelPrompt : Form
+    {
+        private TextBox _box; public string Value { get { return _box.Text; } }
+        public UvelPrompt(string value, string placeholder) { Text="Uvel Input"; Width=420; Height=140; StartPosition=FormStartPosition.CenterParent; _box=new TextBox(); _box.Left=16; _box.Top=16; _box.Width=370; _box.Text=string.IsNullOrEmpty(value)?placeholder:value; Controls.Add(_box); Button ok=new Button(); ok.Text="OK"; ok.Left=310; ok.Top=52; ok.DialogResult=DialogResult.OK; Controls.Add(ok); AcceptButton=ok; }
     }
 
     internal static class NativeApi
     {
-        [DllImport("user32.dll")] public static extern IntPtr GetDC(IntPtr hWnd);
-        [DllImport("user32.dll")] public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-        [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
-        [DllImport("gdi32.dll")] public static extern bool DeleteObject(IntPtr hObject);
-        [DllImport("gdi32.dll")] public static extern IntPtr CreateSolidBrush(int colorRef);
-        [DllImport("dwmapi.dll")] private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
-        [DllImport("dwmapi.dll")] private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
-        [DllImport("d2d1.dll", EntryPoint = "D2D1CreateFactory")] public static extern int D2D1CreateFactory(uint factoryType, ref Guid riid, IntPtr options, out IntPtr factory);
-        [DllImport("dwrite.dll", EntryPoint = "DWriteCreateFactory")] public static extern int DWriteCreateFactory(uint factoryType, ref Guid iid, out IntPtr factory);
-        [DllImport("dcomp.dll", EntryPoint = "DCompositionCreateDevice")] public static extern int DCompositionCreateDevice(IntPtr dxgiDevice, ref Guid iid, out IntPtr dcompDevice);
-
+        [DllImport("user32.dll")] public static extern IntPtr GetDC(IntPtr hWnd); [DllImport("user32.dll")] public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC); [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+        [DllImport("gdi32.dll")] public static extern bool DeleteObject(IntPtr hObject); [DllImport("gdi32.dll")] public static extern IntPtr CreateSolidBrush(int colorRef);
+        [DllImport("dwmapi.dll")] private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize); [DllImport("dwmapi.dll")] private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
+        [DllImport("d2d1.dll", EntryPoint="D2D1CreateFactory")] public static extern int D2D1CreateFactory(uint factoryType, ref Guid riid, IntPtr options, out IntPtr factory); [DllImport("dwrite.dll", EntryPoint="DWriteCreateFactory")] public static extern int DWriteCreateFactory(uint factoryType, ref Guid iid, out IntPtr factory); [DllImport("dcomp.dll", EntryPoint="DCompositionCreateDevice")] public static extern int DCompositionCreateDevice(IntPtr dxgiDevice, ref Guid iid, out IntPtr dcompDevice);
         [StructLayout(LayoutKind.Sequential)] private struct MARGINS { public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight; }
-
-        public static void EnableImmersiveDarkMode(IntPtr handle)
-        {
-            try { int value = 1; DwmSetWindowAttribute(handle, 20, ref value, 4); } catch { }
-        }
-
-        public static void EnableDwmComposition(IntPtr handle)
-        {
-            try { MARGINS m = new MARGINS(); m.cxLeftWidth = 0; m.cxRightWidth = 0; m.cyTopHeight = 0; m.cyBottomHeight = 0; DwmExtendFrameIntoClientArea(handle, ref m); } catch { }
-        }
+        public static void EnableImmersiveDarkMode(IntPtr h){try{int v=1;DwmSetWindowAttribute(h,20,ref v,4);}catch{}} public static void EnableDwmComposition(IntPtr h){try{MARGINS m=new MARGINS();DwmExtendFrameIntoClientArea(h,ref m);}catch{}}
     }
 }
