@@ -200,3 +200,7 @@ This gives Uvel a real built-in library layer rather than only a few aliases.
 ## Native2D roadmap
 
 Uvel now includes an experimental `Uvel.Native2D` source layer under `engine/uvel/native/`. The long-term goal is a pure Uvel UI runtime where XML is parsed into Uvel's own element tree and drawn with Win32/GDI/2D primitives instead of XAML. The stable engine still uses WPF today, but the new native layer is separated so the runtime can move component-by-component without breaking existing apps.
+
+## Native component coverage
+
+The native runtime recognizes the basic Uvel component set: `View`, `Card`, `Button`, `Input`, `Text`, `List`, `ListView`, `ListItem`, `Scroll`, `Tabs`, `Tab`, `ContextMenu`, `Icon`, `Badge`, `Divider`, `Checkbox`, and `Select`. Each component has a component folder with `animation.cs`, `frontend.cs`, `logging.cs`, `protocol.cs`, `backend.cs`, and `plugin.cs` for the growing native implementation.

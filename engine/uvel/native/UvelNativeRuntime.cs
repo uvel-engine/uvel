@@ -46,6 +46,7 @@ namespace Uvel.Native2D
         private DateTime _lastReload = DateTime.MinValue;
         private Font _font;
         private Font _fontBold;
+        private UvelBackendRegistry _backend = new UvelBackendRegistry();
 
         public NativeWindowHost(string xmlPath)
         {
@@ -148,11 +149,8 @@ namespace Uvel.Native2D
 
         private void ExecuteHandler(string handler)
         {
-            if (handler == "uvel.backend.ping")
-            {
-                SetText("status", "Backend ready");
-                return;
-            }
+            UvelNativeContext ctx = new UvelNativeContext(SetText);
+            if (_backend.Execute(handler, ctx)) return;
             if (!_doc.Handlers.ContainsKey(handler)) return;
             List<XmlNode> commands = _doc.Handlers[handler];
             foreach (XmlNode cmd in commands)
@@ -163,6 +161,14 @@ namespace Uvel.Native2D
                     string prop = Attr(cmd, "Property", "Text");
                     string value = Attr(cmd, "Value", "");
                     if (prop.ToLower() == "text") SetText(target, value);
+                }
+                else if (cmd.Name == "DbSet" || cmd.Name == "DatabaseSet")
+                {
+                    UvelDatabase.Set(Attr(cmd, "Key", "value"), Attr(cmd, "Value", ""));
+                }
+                else if (cmd.Name == "DbGet" || cmd.Name == "DatabaseGet")
+                {
+                    SetText(Attr(cmd, "Target", "status"), UvelDatabase.Get(Attr(cmd, "Key", "value"), Attr(cmd, "Default", "")));
                 }
                 else if (cmd.Name == "Call")
                 {
@@ -223,6 +229,30 @@ namespace Uvel.Native2D
                     using (SolidBrush b = new SolidBrush(el.Background)) FillRound(g, b, el.Bounds, el.Radius);
                     using (Pen p = new Pen(el.Border)) DrawRound(g, p, el.Bounds, el.Radius);
                 }
+            }
+            else if (el.Type == "View" || el.Type == "Scroll" || el.Type == "List" || el.Type == "ListView" || el.Type == "Tabs" || el.Type == "Tab")
+            {
+                using (SolidBrush b = new SolidBrush(Color.FromArgb(12, 255, 255, 255))) FillRound(g, b, el.Bounds, Math.Max(10, el.Radius));
+                using (Pen p = new Pen(Color.FromArgb(24, 255, 255, 255))) DrawRound(g, p, el.Bounds, Math.Max(10, el.Radius));
+            }
+            else if (el.Type == "Input")
+            {
+                using (SolidBrush b = new SolidBrush(Color.FromArgb(18, 255, 255, 255))) FillRound(g, b, el.Bounds, 14);
+                using (Pen p = new Pen(Color.FromArgb(42, 255, 255, 255))) DrawRound(g, p, el.Bounds, 14);
+                DrawCenteredText(g, string.IsNullOrEmpty(el.Text) ? "Input" : el.Text, _font, Color.FromArgb(180,255,255,255), el.Bounds);
+            }
+            else if (el.Type == "Icon")
+            {
+                DrawCenteredText(g, UvelIconRegistry.IconText(el.Text), _fontBold, el.Foreground, el.Bounds);
+            }
+            else if (el.Type == "Badge")
+            {
+                using (SolidBrush b = new SolidBrush(Color.FromArgb(34, 52, 199, 89))) FillRound(g, b, el.Bounds, 14);
+                DrawCenteredText(g, el.Text, _font, Color.FromArgb(52,199,89), el.Bounds);
+            }
+            else if (el.Type == "Divider")
+            {
+                using (Pen p = new Pen(Color.FromArgb(32,255,255,255))) g.DrawLine(p, el.Bounds.Left, el.Bounds.Top + el.Bounds.Height/2, el.Bounds.Right, el.Bounds.Top + el.Bounds.Height/2);
             }
             else if (el.Type == "Button" || el.Type == "UvelButton")
             {
@@ -336,7 +366,7 @@ namespace Uvel.Native2D
         private static UvelElement ParseElement(XmlNode node)
         {
             if (node == null) return null;
-            string type = Normalize(node.Name);
+            string type = UvelComponentRegistry.Resolve(Normalize(node.Name));
             if (type == "Grid")
             {
                 XmlNode first = FirstUsefulChild(node);
@@ -358,7 +388,7 @@ namespace Uvel.Native2D
             foreach (XmlNode child in node.ChildNodes)
             {
                 if (child.NodeType != XmlNodeType.Element) continue;
-                if (child.Name == "Import" || child.Name == "Logic") continue;
+                if (child.Name == "Import" || child.Name == "Imports" || child.Name == "Logic" || child.Name == "Styles" || child.Name.Contains(".")) continue;
                 UvelElement parsed = ParseElement(child);
                 if (parsed != null) el.Children.Add(parsed);
             }
@@ -382,6 +412,16 @@ namespace Uvel.Native2D
             if (n == "card" || n == "uvelcard" || n == "glasscard" || n == "border") return "Card";
             if (n == "button" || n == "uvelbutton") return "Button";
             if (n == "input" || n == "uvelinput" || n == "textbox") return "Input";
+            if (n == "view" || n == "uvelview") return "View";
+            if (n == "scroll" || n == "scrollview" || n == "uvelscroll") return "Scroll";
+            if (n == "list" || n == "uvellist") return "List";
+            if (n == "listview" || n == "uvellistview") return "ListView";
+            if (n == "item" || n == "listitem") return "ListItem";
+            if (n == "tabs" || n == "tabcontrol") return "Tabs";
+            if (n == "tab" || n == "tabitem") return "Tab";
+            if (n == "icon" || n == "uvelicon") return "Icon";
+            if (n == "badge" || n == "uvelbadge") return "Badge";
+            if (n == "divider" || n == "uveldivider") return "Divider";
             if (n == "stackpanel" || n == "panel") return "StackPanel";
             if (n == "textblock" || n == "text" || n == "label") return "TextBlock";
             return name;
