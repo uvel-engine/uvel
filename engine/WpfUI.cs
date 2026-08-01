@@ -1294,8 +1294,7 @@ private void ConvertCustomButton(XmlNode node, StringBuilder xaml, string indent
     string onClickForAutoName = GetAttribute(node, "onClick", "");
     if (string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(onClickForAutoName))
     {
-        _autoNameIndex++;
-        name = "_uvel_button_" + _autoNameIndex;
+        name = StableAutoName(node, "button");
     }
     string width = GetAttribute(node, "Width", "Auto");
     string height = GetAttribute(node, "Height", "Auto");
@@ -2299,6 +2298,42 @@ private void ConvertButtonWithTemplate(XmlNode node, StringBuilder xaml, string 
             }
         }
         
+        private string StableAutoName(XmlNode node, string kind)
+        {
+            string onClick = GetAttribute(node, "onClick", "");
+            string content = GetAttribute(node, "Content", node.InnerText == null ? "" : node.InnerText.Trim());
+            string seed = (kind ?? "control") + "|" + onClick + "|" + content + "|" + GetNodeIndexPath(node);
+            unchecked
+            {
+                int hash = 23;
+                for (int i = 0; i < seed.Length; i++) hash = hash * 31 + seed[i];
+                if (hash < 0) hash = -hash;
+                return "_uvel_" + (kind ?? "control").ToLower().Replace('.', '_') + "_" + hash.ToString("x");
+            }
+        }
+
+        private string GetNodeIndexPath(XmlNode node)
+        {
+            try
+            {
+                List<int> parts = new List<int>();
+                XmlNode cur = node;
+                while (cur != null && cur.ParentNode != null)
+                {
+                    int index = 0;
+                    foreach (XmlNode sibling in cur.ParentNode.ChildNodes)
+                    {
+                        if (sibling.NodeType == XmlNodeType.Element) index++;
+                        if (object.ReferenceEquals(sibling, cur)) break;
+                    }
+                    parts.Insert(0, index);
+                    cur = cur.ParentNode;
+                }
+                return string.Join("_", parts.ToArray());
+            }
+            catch { return "0"; }
+        }
+
         public void WireUpEventHandlers(Window window, XmlNode uiNode)
 {
     // Kichik kutish - controllar to'liq register bo'lishi uchun
@@ -2330,13 +2365,12 @@ private void WireUpEventHandlersRecursive(XmlNode node)
         string onContextMenu = GetAttribute(child, "onContextMenu", "");
         string clickable = GetAttribute(child, "Clickable", "false");
 
-        // Auto-generate name if onClick specified but no name
+        // Auto-generated name must be deterministic and match ConvertCustomButton.
+        // Otherwise buttons rendered without Name cannot be found during event wiring.
         if (!string.IsNullOrEmpty(onClick) && string.IsNullOrEmpty(name))
         {
-            _autoNameCounter++;
-            name = "_auto_" + child.Name.ToLower() + "_" + _autoNameCounter;
-            // Control ni Name bilan register qilish kerak
-            // Lekin control allaqachon yaratilgan, shuning uchun boshqacha yondashish kerak
+            string normalizedForName = NormalizeUvelElementName(child.Name, child).ToLower();
+            name = StableAutoName(child, normalizedForName == "button" ? "button" : normalizedForName);
         }
 
         FrameworkElement control = null;
