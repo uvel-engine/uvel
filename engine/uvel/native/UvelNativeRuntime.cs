@@ -347,7 +347,7 @@ namespace Uvel.Native2D
         }
 
         private void FillRound(Graphics g, Brush b, Rectangle r, int radius) { using (System.Drawing.Drawing2D.GraphicsPath p = RoundPath(r, radius)) g.FillPath(b,p); }
-        private void DrawRound(Graphics g, Pen pen, Rectangle r, int radius) { using (System.Drawing.Drawing2D.GraphicsPath p = RoundPath(r, radius)) g.DrawPath(p,pen); }
+        private void DrawRound(Graphics g, Pen pen, Rectangle r, int radius) { using (System.Drawing.Drawing2D.GraphicsPath p = RoundPath(r, radius)) g.DrawPath(pen,p); }
         private System.Drawing.Drawing2D.GraphicsPath RoundPath(Rectangle r, int radius)
         {
             int d = Math.Max(2, radius * 2);
