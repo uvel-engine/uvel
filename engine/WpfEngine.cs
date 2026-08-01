@@ -1678,12 +1678,12 @@ public void CompileManualCCode(string moduleId, string code)
         private string PackageToSource(string package)
         {
             string p = package.ToLower().Trim();
-            if (p == "uvel" || p == "uvel.all") return "uvel/all.xml";
-            if (p == "uvel.ui") return "uvel/ui.xml";
-            if (p == "uvel.backend") return "uvel/backend.xml";
-            if (p == "uvel.net") return "uvel/net.xml";
-            if (p == "uvel.data") return "uvel/data.xml";
-            if (p == "uvel.icons") return "uvel/icons.xml";
+            if (p == "uvel" || p == "uvel.all") return "uvel_modules/uvel/all.xml";
+            if (p == "uvel.ui") return "uvel_modules/uvel/ui.xml";
+            if (p == "uvel.backend") return "uvel_modules/uvel/backend.xml";
+            if (p == "uvel.net") return "uvel_modules/uvel/net.xml";
+            if (p == "uvel.data") return "uvel_modules/uvel/data.xml";
+            if (p == "uvel.icons") return "uvel_modules/uvel/icons.xml";
             return p.Replace('.', Path.DirectorySeparatorChar) + ".xml";
         }
 
@@ -1697,6 +1697,13 @@ public void CompileManualCCode(string moduleId, string code)
                 string baseDir = Path.GetDirectoryName(CurrentXmlPath);
                 string candidate = Path.Combine(baseDir, normalized);
                 if (File.Exists(candidate)) return candidate;
+
+                if (normalized.StartsWith("uvel_modules" + Path.DirectorySeparatorChar + "uvel" + Path.DirectorySeparatorChar))
+                {
+                    string fallbackRel = normalized.Substring(("uvel_modules" + Path.DirectorySeparatorChar).Length);
+                    string fallbackCandidate = Path.Combine(baseDir, fallbackRel);
+                    if (File.Exists(fallbackCandidate)) return fallbackCandidate;
+                }
             }
 
             string exeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);

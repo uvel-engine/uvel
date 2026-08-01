@@ -1290,6 +1290,13 @@ private void ConvertCustomButton(XmlNode node, StringBuilder xaml, string indent
     string padding = GetAttribute(node, "Padding", "18,10");
     string content = GetAttribute(node, "Content", node.InnerText.Trim());
     string name = GetAttribute(node, "Name", "");
+    if (string.IsNullOrEmpty(name)) name = GetAttribute(node, "x:Name", "");
+    string onClickForAutoName = GetAttribute(node, "onClick", "");
+    if (string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(onClickForAutoName))
+    {
+        _autoNameIndex++;
+        name = "_uvel_button_" + _autoNameIndex;
+    }
     string width = GetAttribute(node, "Width", "Auto");
     string height = GetAttribute(node, "Height", "Auto");
     string margin = GetAttribute(node, "Margin", "0");

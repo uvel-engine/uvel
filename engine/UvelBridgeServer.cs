@@ -85,7 +85,7 @@ namespace Uvel
         {
             try
             {
-                string dir = Path.Combine(_workspaceDir, "uvel");
+                string dir = Path.Combine(_workspaceDir, "uvel_modules", "uvel");
                 Directory.CreateDirectory(dir);
                 WriteAlways(Path.Combine(dir, "ui.xml"), "<UvelLibrary Name=\"uvel.ui\" Version=\"1.0\"><Logic><Handler Name=\"uvel.ui.toast.success\"><Toast Message=\"{message}\" Type=\"success\" /></Handler><Handler Name=\"uvel.ui.toast.info\"><Toast Message=\"{message}\" Type=\"info\" /></Handler><Handler Name=\"uvel.ui.clear.status\"><Set Target=\"status\" Property=\"Text\" Value=\"\" /></Handler></Logic></UvelLibrary>");
                 WriteAlways(Path.Combine(dir, "backend.xml"), "<UvelLibrary Name=\"uvel.backend\" Version=\"1.0\"><Logic><Var Name=\"uvel.backend.ready\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.backend.ping\"><Set Target=\"status\" Property=\"Text\" Value=\"Backend ready\" /></Handler><Handler Name=\"uvel.backend.time\"><Plugin Name=\"DatePlugin\" Method=\"now\" ToState=\"uvel.backend.now\" /><Set Target=\"status\" Property=\"Text\" Value=\"{uvel.backend.now}\" /></Handler></Logic></UvelLibrary>");
@@ -308,8 +308,7 @@ namespace Uvel
         {
             return "<App Name=\"Uvel Workspace App\" Width=\"860\" Height=\"540\" Theme=\"Dark\">\n" +
                    "  <Import Package=\"uvel.ui\" />\n" +
-                   "  <Import Package=\"uvel.backend\" />\n" +
-                   "  <Import Package=\"uvel.icons\" />\n" +
+                   "  <Import Package=\"uvel\" As=\"global\" />\n" +
                    "  <UI>\n" +
                    "    <Grid Background=\"#0B0F19\">\n" +
                    "      <StackPanel VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" Width=\"520\">\n" +
@@ -367,9 +366,15 @@ namespace Uvel
         {
             if (!Directory.Exists(_workspaceDir)) return new string[0];
             string[] files = Directory.GetFiles(_workspaceDir, "*.xml", SearchOption.AllDirectories);
-            Array.Sort(files);
-            for (int i = 0; i < files.Length; i++) files[i] = RelativePath(files[i]);
-            return files;
+            List<string> visible = new List<string>();
+            for (int i = 0; i < files.Length; i++)
+            {
+                string rel = RelativePath(files[i]);
+                if (rel.StartsWith("uvel_modules/", StringComparison.OrdinalIgnoreCase)) continue;
+                visible.Add(rel);
+            }
+            visible.Sort();
+            return visible.ToArray();
         }
 
         private string StatusJson(string message)
