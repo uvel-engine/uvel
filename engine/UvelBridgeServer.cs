@@ -401,6 +401,18 @@ namespace Uvel
             return "{\"type\":\"file\",\"fileName\":\"" + Escape(fileName) + "\",\"code\":\"" + Escape(content) + "\"}";
         }
 
+        private bool ShouldUseNativeRuntime(string xmlPath)
+        {
+            try
+            {
+                string xml = File.ReadAllText(xmlPath, Encoding.UTF8).ToLower();
+                return xml.Contains("<import") &&
+                       xml.Contains("package=\"uvel") &&
+                       xml.Contains("as=\"global\"");
+            }
+            catch { return false; }
+        }
+
         private void StartChild()
         {
             lock (_processLock)
@@ -409,7 +421,8 @@ namespace Uvel
                 string exe = Process.GetCurrentProcess().MainModule.FileName;
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = exe;
-                psi.Arguments = ShouldUseNativeRuntime(_currentXmlPath)
+                bool useNative = ShouldUseNativeRuntime(_currentXmlPath);
+                psi.Arguments = useNative
                     ? "native \"" + _currentXmlPath + "\""
                     : "dev \"" + _currentXmlPath + "\" --port " + _devtoolsPort + " --no-debug";
                 psi.WorkingDirectory = _workspaceDir;
@@ -439,7 +452,7 @@ namespace Uvel
                 _child.BeginOutputReadLine();
                 _child.BeginErrorReadLine();
                 Log("APP", "Started: " + psi.FileName + " " + psi.Arguments);
-                Broadcast(Json("status", "Uvel native app running", "renderer", "native2d"));
+                Broadcast(Json("status", useNative ? "Uvel native app running" : "Uvel WPF app running", "renderer", useNative ? "native2d" : "wpf"));
             }
         }
 
