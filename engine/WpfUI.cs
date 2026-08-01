@@ -485,6 +485,12 @@ private bool IsCustomComponent(string name)
 {
     switch (name)
     {
+        case "Card":
+        case "UvelCard":
+        case "UvelGlass":
+        case "UvelGlassCard":
+        case "TopBar":
+        case "UvelTopBar":
         case "GlassCard":
         case "GlassButton":
         case "StatCard":
@@ -540,6 +546,12 @@ private void ConvertCustomComponent(XmlNode node, StringBuilder xaml, int indent
 
     switch (componentName)
     {
+        case "Card":
+        case "UvelCard":
+        case "UvelGlass":
+        case "UvelGlassCard":
+        case "TopBar":
+        case "UvelTopBar":
         case "GlassCard":
             GenerateGlassCard(xaml, p, node, indent);
             break;
