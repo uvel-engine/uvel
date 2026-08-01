@@ -409,7 +409,7 @@ namespace Uvel
                 string exe = Process.GetCurrentProcess().MainModule.FileName;
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = exe;
-                psi.Arguments = "dev \"" + _currentXmlPath + "\" --port " + _devtoolsPort + " --no-debug";
+                psi.Arguments = "native \"" + _currentXmlPath + "\"";
                 psi.WorkingDirectory = _workspaceDir;
                 psi.UseShellExecute = false;
                 psi.RedirectStandardOutput = true;
@@ -437,7 +437,7 @@ namespace Uvel
                 _child.BeginOutputReadLine();
                 _child.BeginErrorReadLine();
                 Log("APP", "Started: " + psi.FileName + " " + psi.Arguments);
-                Broadcast(Json("status", "Uvel app running", "devtools", "http://127.0.0.1:" + _devtoolsPort + "/"));
+                Broadcast(Json("status", "Uvel native app running", "renderer", "native2d"));
             }
         }
 

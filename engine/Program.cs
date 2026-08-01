@@ -51,6 +51,9 @@ namespace Uvel
                 case "bridge":
                     BridgeCommand(args);
                     break;
+                case "native":
+                    NativeCommand(args);
+                    break;
                 case "install-protocol":
                     InstallProtocolCommand();
                     break;
@@ -187,6 +190,14 @@ namespace Uvel
             PrintInfo("Session ended.");
         }
 
+
+        private static void NativeCommand(string[] args)
+        {
+            string xmlPath = GetXmlPath(args, 1);
+            if (string.IsNullOrEmpty(xmlPath)) return;
+            Uvel.Native2D.UvelNativeRuntime runtime = new Uvel.Native2D.UvelNativeRuntime();
+            runtime.Run(xmlPath);
+        }
 
         private static void BridgeCommand(string[] args)
         {
@@ -1261,6 +1272,7 @@ namespace Uvel
             Console.WriteLine("    dev   <file.xml>      Run with DevTools + hot reload");
             Console.WriteLine("    build <file.xml>      Build standalone EXE");
             Console.WriteLine("    bridge                Start local Workspace bridge");
+            Console.WriteLine("    native <file.xml>    Run with native Win32/GDI renderer");
             Console.WriteLine("    install-protocol      Register uvel:// workspace protocol");
             Console.WriteLine("    new   <name>          Create new project");
             Console.WriteLine();

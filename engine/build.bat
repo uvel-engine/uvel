@@ -71,6 +71,7 @@ if exist "plugins" (
 /r:System.Xaml.dll ^
 /r:System.Net.dll ^
 /r:System.Drawing.dll ^
+/r:System.Windows.Forms.dll ^
 /r:Microsoft.CSharp.dll ^
 /r:"%WPF%\WindowsBase.dll" ^
 /r:"%WPF%\PresentationCore.dll" ^
