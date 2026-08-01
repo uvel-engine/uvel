@@ -522,7 +522,7 @@ private string ResolveValue(string value)
 }
 private void ConvertCustomComponent(XmlNode node, StringBuilder xaml, int indent)
 {
-    string componentName = node.Name;
+    string componentName = NormalizeUvelElementName(node.Name, node);
     string indentStr = new string(' ', indent * 4);
 
     // Collect parameters
