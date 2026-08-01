@@ -388,7 +388,31 @@ namespace Uvel.Native2D
             return el;
         }
         private static string Normalize(string name) { string n=(name??"").ToLower(); if(n=="grid")return"View"; if(n=="border"||n=="card"||n=="uvelcard"||n=="glasscard")return"Card"; if(n=="button"||n=="uvelbutton")return"Button"; if(n=="input"||n=="uvelinput"||n=="textbox")return"Input"; if(n=="textblock"||n=="text"||n=="label")return"Text"; return UvelComponentRegistry.Resolve(name); }
-        private static Color ParseColor(string v) { try { if(string.IsNullOrEmpty(v))return Color.White; if(v.StartsWith("#")){string h=v.Substring(1); if(h.Length==8)return Color.FromArgb(Convert.ToInt32(h.Substring(0,2),16),Convert.ToInt32(h.Substring(2,2),16),Convert.ToInt32(h.Substring(4,2),16),Convert.ToInt32(h.Substring(6,2),16)); if(h.Length==6)return Color.FromArgb(Convert.ToInt32(h.Substring(0,2),16),Convert.ToInt32(h.Substring(2,2),16),Convert.ToInt32(h.Substring(4,2),16));} return ColorTranslator.FromHtml(v);} catch{return Color.White;} }
+        private static Color ParseColor(string v)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(v)) return Color.White;
+                if (v.StartsWith("#"))
+                {
+                    string h = v.Substring(1);
+                    if (h.Length == 8)
+                    {
+                        // Uvel XML uses CSS notation: #RRGGBBAA.
+                        // Example: #FFFFFF14 = white with low alpha.
+                        int r = Convert.ToInt32(h.Substring(0, 2), 16);
+                        int g = Convert.ToInt32(h.Substring(2, 2), 16);
+                        int b = Convert.ToInt32(h.Substring(4, 2), 16);
+                        int a = Convert.ToInt32(h.Substring(6, 2), 16);
+                        return Color.FromArgb(a, r, g, b);
+                    }
+                    if (h.Length == 6)
+                        return Color.FromArgb(Convert.ToInt32(h.Substring(0, 2), 16), Convert.ToInt32(h.Substring(2, 2), 16), Convert.ToInt32(h.Substring(4, 2), 16));
+                }
+                return ColorTranslator.FromHtml(v);
+            }
+            catch { return Color.White; }
+        }
         private static string Attr(XmlNode n,string name,string def){XmlAttribute a=n==null||n.Attributes==null?null:n.Attributes[name];return a==null?def:a.Value;}
     }
 
