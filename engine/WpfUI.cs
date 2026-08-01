@@ -437,6 +437,50 @@ private void ConvertElement(XmlNode node, StringBuilder xaml, int indent)
 // ═══════════════════════════════════════════════════════════
 // WpfUI.cs da IsCustomComponent metodini yangilang:
 
+private string NormalizeUvelElementName(string name, XmlNode node)
+{
+    if (string.IsNullOrEmpty(name)) return name;
+    string lower = name.ToLower();
+
+    if (lower == "uvelinput") return "TextBox";
+    if (lower == "uvelbutton") return "Button";
+    if (lower == "uvelcard" || lower == "uvelglass" || lower == "uvelglasscard") return "GlassCard";
+    if (lower == "uveltopbar") return "GlassCard";
+    if (lower == "uvelbadge") return "Badge";
+    if (lower == "uveldivider") return "Divider";
+    if (lower == "uvelicon") return "TextBlock";
+
+    if (HasGlobalUvelImport(node))
+    {
+        if (lower == "input") return "TextBox";
+        if (lower == "card" || lower == "glass" || lower == "glasscard") return "GlassCard";
+        if (lower == "topbar") return "GlassCard";
+        if (lower == "badge") return "Badge";
+        if (lower == "divider") return "Divider";
+        if (lower == "icon") return "TextBlock";
+    }
+
+    return name;
+}
+
+private bool HasGlobalUvelImport(XmlNode node)
+{
+    try
+    {
+        XmlDocument doc = node.OwnerDocument;
+        if (doc == null || doc.DocumentElement == null) return false;
+        XmlNodeList imports = doc.DocumentElement.SelectNodes("Import|Imports/Import");
+        foreach (XmlNode im in imports)
+        {
+            string pkg = GetAttribute(im, "Package", "").ToLower();
+            string alias = GetAttribute(im, "As", "").ToLower();
+            if ((pkg == "uvel" || pkg == "uvel.all") && alias == "global") return true;
+        }
+    }
+    catch { }
+    return false;
+}
+
 private bool IsCustomComponent(string name)
 {
     switch (name)
