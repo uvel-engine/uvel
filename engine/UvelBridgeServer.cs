@@ -87,11 +87,11 @@ namespace Uvel
             {
                 string dir = Path.Combine(_workspaceDir, "uvel");
                 Directory.CreateDirectory(dir);
-                WriteIfMissing(Path.Combine(dir, "ui.xml"), "<UvelLibrary Name=\"uvel.ui\" Version=\"1.0\"><Logic><Handler Name=\"uvel.ui.toast.success\"><Toast Message=\"{message}\" Type=\"success\" /></Handler><Handler Name=\"uvel.ui.toast.info\"><Toast Message=\"{message}\" Type=\"info\" /></Handler><Handler Name=\"uvel.ui.clear.status\"><Set Target=\"status\" Property=\"Text\" Value=\"\" /></Handler></Logic></UvelLibrary>");
-                WriteIfMissing(Path.Combine(dir, "backend.xml"), "<UvelLibrary Name=\"uvel.backend\" Version=\"1.0\"><Logic><Var Name=\"uvel.backend.ready\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.backend.ping\"><Set Target=\"status\" Property=\"Text\" Value=\"Backend ready\" /></Handler><Handler Name=\"uvel.backend.time\"><Plugin Name=\"DatePlugin\" Method=\"now\" ToState=\"uvel.backend.now\" /><Set Target=\"status\" Property=\"Text\" Value=\"{uvel.backend.now}\" /></Handler></Logic></UvelLibrary>");
-                WriteIfMissing(Path.Combine(dir, "net.xml"), "<UvelLibrary Name=\"uvel.net\" Version=\"1.0\"><Logic><Handler Name=\"uvel.net.online\"><Set Target=\"status\" Property=\"Text\" Value=\"Network module loaded\" /></Handler></Logic></UvelLibrary>");
-                WriteIfMissing(Path.Combine(dir, "data.xml"), "<UvelLibrary Name=\"uvel.data\" Version=\"1.0\"><Logic><Var Name=\"uvel.data.loaded\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.data.ready\"><Set Target=\"status\" Property=\"Text\" Value=\"Data module loaded\" /></Handler></Logic></UvelLibrary>");
-                WriteIfMissing(Path.Combine(dir, "all.xml"), "<UvelLibrary Name=\"uvel.all\" Version=\"1.0\"><Import Package=\"uvel.ui\" /><Import Package=\"uvel.backend\" /><Import Package=\"uvel.net\" /><Import Package=\"uvel.data\" /></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "ui.xml"), "<UvelLibrary Name=\"uvel.ui\" Version=\"1.0\"><Logic><Handler Name=\"uvel.ui.toast.success\"><Toast Message=\"{message}\" Type=\"success\" /></Handler><Handler Name=\"uvel.ui.toast.info\"><Toast Message=\"{message}\" Type=\"info\" /></Handler><Handler Name=\"uvel.ui.clear.status\"><Set Target=\"status\" Property=\"Text\" Value=\"\" /></Handler></Logic></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "backend.xml"), "<UvelLibrary Name=\"uvel.backend\" Version=\"1.0\"><Logic><Var Name=\"uvel.backend.ready\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.backend.ping\"><Set Target=\"status\" Property=\"Text\" Value=\"Backend ready\" /></Handler><Handler Name=\"uvel.backend.time\"><Plugin Name=\"DatePlugin\" Method=\"now\" ToState=\"uvel.backend.now\" /><Set Target=\"status\" Property=\"Text\" Value=\"{uvel.backend.now}\" /></Handler></Logic></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "net.xml"), "<UvelLibrary Name=\"uvel.net\" Version=\"1.0\"><Logic><Handler Name=\"uvel.net.online\"><Set Target=\"status\" Property=\"Text\" Value=\"Network module loaded\" /></Handler></Logic></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "data.xml"), "<UvelLibrary Name=\"uvel.data\" Version=\"1.0\"><Logic><Var Name=\"uvel.data.loaded\" Value=\"true\" Type=\"string\" /><Handler Name=\"uvel.data.ready\"><Set Target=\"status\" Property=\"Text\" Value=\"Data module loaded\" /></Handler></Logic></UvelLibrary>");
+                WriteAlways(Path.Combine(dir, "all.xml"), "<UvelLibrary Name=\"uvel.all\" Version=\"1.0\"><Import Package=\"uvel.ui\" /><Import Package=\"uvel.backend\" /><Import Package=\"uvel.net\" /><Import Package=\"uvel.data\" /></UvelLibrary>");
             }
             catch (Exception ex)
             {
@@ -102,6 +102,12 @@ namespace Uvel
         private void WriteIfMissing(string path, string content)
         {
             if (!File.Exists(path)) File.WriteAllText(path, content, new UTF8Encoding(false));
+        }
+
+        private void WriteAlways(string path, string content)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            File.WriteAllText(path, content, new UTF8Encoding(false));
         }
 
         public void Stop()
@@ -178,9 +184,46 @@ namespace Uvel
         private void OnMessage(WebSocketClient ws, string message)
         {
             string type = ExtractJsonString(message, "type").ToLower();
-            if (type == "ping")
+            if (type == "ping" || type == "status" || type == "verify")
             {
-                ws.Send(Json("pong", "ok"));
+                ws.Send(StatusJson("ready"));
+                return;
+            }
+            if (type == "openfolder" || type == "open-folder" || type == "open_folder")
+            {
+                OpenWorkspaceFolder();
+                ws.Send(StatusJson("Workspace folder opened"));
+                return;
+            }
+            if (type == "createproject" || type == "create-project" || type == "create_project")
+            {
+                CreateDefaultProject();
+                ws.Send(StatusJson("Uvel project files created"));
+                ws.Send(FilesJson());
+                return;
+            }
+            if (type == "list" || type == "listfiles" || type == "list-files")
+            {
+                ws.Send(FilesJson());
+                return;
+            }
+            if (type == "read" || type == "readfile" || type == "read-file")
+            {
+                string fileName = ExtractJsonString(message, "fileName");
+                string path = ResolveWorkspacePath(fileName);
+                if (!File.Exists(path)) { ws.Send(Json("error", "File not found: " + fileName)); return; }
+                ws.Send(FileJson(RelativePath(path), File.ReadAllText(path, Encoding.UTF8)));
+                return;
+            }
+            if (type == "write" || type == "writefile" || type == "write-file")
+            {
+                string fileName = ExtractJsonString(message, "fileName");
+                string code = ExtractJsonString(message, "code");
+                string path = ResolveWorkspacePath(fileName);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(path, code, new UTF8Encoding(false));
+                Log("WORKSPACE", "Saved " + path);
+                ws.Send(StatusJson("Saved " + RelativePath(path)));
                 return;
             }
             if (type == "stop")
@@ -195,16 +238,21 @@ namespace Uvel
                 string code = ExtractJsonString(message, "code");
                 string fileName = ExtractJsonString(message, "fileName");
                 if (string.IsNullOrEmpty(fileName)) fileName = "App.xml";
-                if (string.IsNullOrEmpty(code))
+                string path = ResolveWorkspacePath(fileName);
+
+                if (!string.IsNullOrEmpty(code))
                 {
-                    ws.Send(Json("error", "No XML code received"));
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    File.WriteAllText(path, code, new UTF8Encoding(false));
+                    Log("WORKSPACE", "Saved " + path);
+                }
+                else if (!File.Exists(path))
+                {
+                    ws.Send(Json("error", "No XML code received and file does not exist: " + fileName));
                     return;
                 }
 
-                string safeFile = SafeFileName(fileName);
-                _currentXmlPath = Path.Combine(_workspaceDir, safeFile);
-                File.WriteAllText(_currentXmlPath, code, new UTF8Encoding(false));
-                Log("WORKSPACE", "Saved " + _currentXmlPath);
+                _currentXmlPath = path;
 
                 if (type == "restart")
                 {
@@ -219,14 +267,129 @@ namespace Uvel
                 }
                 else
                 {
-                    // In dev mode Uvel watches the file. Rewriting App.xml is
-                    // the hot reload signal; no restart is necessary.
                     Broadcast(Json("status", "Hot reload file updated"));
                 }
                 return;
             }
 
             ws.Send(Json("error", "Unknown command: " + type));
+        }
+
+        private void OpenWorkspaceFolder()
+        {
+            try
+            {
+                Directory.CreateDirectory(_workspaceDir);
+                Process.Start("explorer.exe", _workspaceDir);
+                Log("WORKSPACE", "Opened folder " + _workspaceDir);
+            }
+            catch (Exception ex)
+            {
+                Log("ERROR", "Open folder failed: " + ex.Message);
+            }
+        }
+
+        private void CreateDefaultProject()
+        {
+            Directory.CreateDirectory(_workspaceDir);
+            Directory.CreateDirectory(Path.Combine(_workspaceDir, "components"));
+            EnsureWorkspaceLibraries();
+
+            WriteAlways(Path.Combine(_workspaceDir, "App.xml"), DefaultAppXml());
+            WriteAlways(Path.Combine(_workspaceDir, "components", "README.xml"), "<UvelLibrary Name=\"components\"><Logic><Handler Name=\"components.ready\"><Set Target=\"status\" Property=\"Text\" Value=\"Components folder is ready\" /></Handler></Logic></UvelLibrary>");
+            _currentXmlPath = Path.Combine(_workspaceDir, "App.xml");
+            Log("WORKSPACE", "Default project created");
+        }
+
+        private string DefaultAppXml()
+        {
+            return "<App Name=\"Uvel Workspace App\" Width=\"860\" Height=\"540\" Theme=\"Dark\">\n" +
+                   "  <Import Package=\"uvel.ui\" />\n" +
+                   "  <Import Package=\"uvel.backend\" />\n" +
+                   "  <UI>\n" +
+                   "    <Grid Background=\"#0B0F19\">\n" +
+                   "      <StackPanel VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" Width=\"520\">\n" +
+                   "        <Border Background=\"#FFFFFF14\" BorderBrush=\"#FFFFFF24\" BorderThickness=\"1\" CornerRadius=\"28\" Padding=\"28\">\n" +
+                   "          <StackPanel>\n" +
+                   "            <TextBlock Text=\"Uvel Workspace\" FontSize=\"34\" Foreground=\"White\" FontWeight=\"Bold\" HorizontalAlignment=\"Center\"/>\n" +
+                   "            <TextBlock Name=\"status\" Text=\"Ready. Click the button.\" FontSize=\"14\" Foreground=\"#94A3B8\" Margin=\"0,12,0,22\" HorizontalAlignment=\"Center\"/>\n" +
+                   "            <Button Content=\"Call uvel.backend.ping\" onClick=\"uvel.backend.ping\" Background=\"#34C759\" Foreground=\"White\" CornerRadius=\"18\" Padding=\"18,10\"/>\n" +
+                   "          </StackPanel>\n" +
+                   "        </Border>\n" +
+                   "      </StackPanel>\n" +
+                   "    </Grid>\n" +
+                   "  </UI>\n" +
+                   "</App>\n";
+        }
+
+        private string ResolveWorkspacePath(string fileName)
+        {
+            string rel = SafeRelativePath(fileName);
+            string full = Path.GetFullPath(Path.Combine(_workspaceDir, rel));
+            string root = Path.GetFullPath(_workspaceDir);
+            if (!full.StartsWith(root, StringComparison.OrdinalIgnoreCase))
+                throw new Exception("Invalid workspace path");
+            return full;
+        }
+
+        private string SafeRelativePath(string name)
+        {
+            if (string.IsNullOrEmpty(name)) name = "App.xml";
+            name = name.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+            string[] parts = name.Split(new char[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> safe = new List<string>();
+            foreach (string part in parts)
+            {
+                if (part == "." || part == "..") continue;
+                string p = part;
+                foreach (char c in Path.GetInvalidFileNameChars()) p = p.Replace(c, '_');
+                if (!string.IsNullOrEmpty(p)) safe.Add(p);
+            }
+            if (safe.Count == 0) safe.Add("App.xml");
+            string rel = Path.Combine(safe.ToArray());
+            if (!rel.ToLower().EndsWith(".xml")) rel += ".xml";
+            return rel;
+        }
+
+        private string RelativePath(string full)
+        {
+            string root = Path.GetFullPath(_workspaceDir).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            string f = Path.GetFullPath(full);
+            if (f.StartsWith(root, StringComparison.OrdinalIgnoreCase)) return f.Substring(root.Length).Replace(Path.DirectorySeparatorChar, '/');
+            return Path.GetFileName(full);
+        }
+
+        private string[] XmlFiles()
+        {
+            if (!Directory.Exists(_workspaceDir)) return new string[0];
+            string[] files = Directory.GetFiles(_workspaceDir, "*.xml", SearchOption.AllDirectories);
+            Array.Sort(files);
+            for (int i = 0; i < files.Length; i++) files[i] = RelativePath(files[i]);
+            return files;
+        }
+
+        private string StatusJson(string message)
+        {
+            return "{\"type\":\"status\",\"message\":\"" + Escape(message) + "\",\"version\":\"3.0.0\",\"workspace\":\"" + Escape(_workspaceDir) + "\",\"running\":" + (IsChildRunning() ? "true" : "false") + ",\"currentFile\":\"" + Escape(RelativePath(_currentXmlPath)) + "\"}";
+        }
+
+        private string FilesJson()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"type\":\"files\",\"files\":[");
+            string[] files = XmlFiles();
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (i > 0) sb.Append(',');
+                sb.Append("\"").Append(Escape(files[i])).Append("\"");
+            }
+            sb.Append("]}");
+            return sb.ToString();
+        }
+
+        private string FileJson(string fileName, string content)
+        {
+            return "{\"type\":\"file\",\"fileName\":\"" + Escape(fileName) + "\",\"code\":\"" + Escape(content) + "\"}";
         }
 
         private void StartChild()
