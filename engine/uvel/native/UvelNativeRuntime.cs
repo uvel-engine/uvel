@@ -187,27 +187,57 @@ namespace Uvel.Native2D
         private void ExecuteCommand(XmlNode cmd, string currentHandler)
         {
             string name = cmd.Name;
-            if (name == "Set") SetText(Attr(cmd, "Target", "status"), Attr(cmd, "Value", ""));
+            if (name == "Set") SetText(Attr(cmd, "Target", "status"), ResolveValue(Attr(cmd, "Value", "")));
             else if (name == "Call") ExecuteHandler(Attr(cmd, "Handler", Attr(cmd, "Name", cmd.InnerText.Trim())));
-            else if (name == "Toast") SetText("status", Attr(cmd, "Message", "Done"));
+            else if (name == "Toast") SetText("status", ResolveValue(Attr(cmd, "Message", "Done")));
             else if (name == "DbSet" || name == "DatabaseSet") UvelDatabase.Set(Attr(cmd, "Key", "value"), Attr(cmd, "Value", ""));
             else if (name == "DbGet" || name == "DatabaseGet") SetText(Attr(cmd, "Target", "status"), UvelDatabase.Get(Attr(cmd, "Key", "value"), Attr(cmd, "Default", "")));
             else if (name == "AddMessage") AddMessage(cmd);
+            else if (name == "ClearText") SetText(Attr(cmd, "Control", Attr(cmd, "Target", "")), "");
         }
 
         private void AddMessage(XmlNode cmd)
         {
             string container = Attr(cmd, "Container", "messages");
-            string text = Attr(cmd, "Text", "");
+            string text = ResolveValue(Attr(cmd, "Text", ""));
             string sender = Attr(cmd, "Sender", "me");
             UvelElement target = FindByName(_doc.Root, container);
-            if (target == null) return;
+            if (target == null || string.IsNullOrWhiteSpace(text)) return;
             UvelElement item = new UvelElement("ListItem");
             item.Text = text;
             item.Align = sender == "me" ? "right" : "left";
             item.Background = sender == "me" ? Color.FromArgb(52, 52, 199, 89) : Color.FromArgb(22, 255, 255, 255);
             item.Foreground = Color.White;
             target.Children.Add(item);
+        }
+
+
+        private string ResolveValue(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            string result = value;
+            int guard = 0;
+            while (result.Contains("{") && result.Contains("}") && guard++ < 30)
+            {
+                int a = result.IndexOf('{');
+                int b = result.IndexOf('}', a + 1);
+                if (a < 0 || b <= a) break;
+                string token = result.Substring(a + 1, b - a - 1);
+                string replacement = "";
+                if (token.EndsWith(".Text"))
+                {
+                    string name = token.Substring(0, token.Length - 5);
+                    UvelElement el = FindByName(_doc.Root, name);
+                    replacement = el == null ? "" : (el.Text ?? "");
+                }
+                else
+                {
+                    UvelElement el = FindByName(_doc.Root, token);
+                    replacement = el == null ? UvelDatabase.Get(token, "") : (el.Text ?? "");
+                }
+                result = result.Substring(0, a) + replacement + result.Substring(b + 1);
+            }
+            return result;
         }
 
         private void SetText(string target, string value)

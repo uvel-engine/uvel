@@ -1,0 +1,51 @@
+<App Name="Uvelgram — Native Uvel UI" Width="1180" Height="760" Theme="Dark">
+  <Import Package="uvel" As="global" />
+
+  <UI>
+    <View Background="#0B0F19">
+      <!-- Left sidebar -->
+      <Card Name="sidebar" X="20" Y="20" Width="320" Height="720" Background="#FFFFFF10" BorderColor="#FFFFFF22" CornerRadius="30" Padding="18" Gap="12">
+        <Text Text="Uvelgram" FontSize="30" Foreground="#FFFFFF" Align="left" />
+        <Text Text="Native custom Uvel UI demo" FontSize="13" Foreground="#94A3B8" Align="left" />
+        <Input Name="search" Text="Search chats" Placeholder="Search chats" />
+        <Divider />
+        <List Name="chats" Gap="8">
+          <ListItem Text="Diyorbek  ·  Online" />
+          <ListItem Text="UFlow Team  ·  Design update" />
+          <ListItem Text="Uvel Engine  ·  Native runtime" />
+          <ListItem Text="Workspace  ·  Hot reload ready" />
+          <ListItem Text="Cloud  ·  API status" />
+        </List>
+      </Card>
+
+      <!-- Chat body -->
+      <Card Name="chatPanel" X="360" Y="20" Width="800" Height="720" Background="#FFFFFF0D" BorderColor="#FFFFFF20" CornerRadius="30" Padding="20" Gap="12">
+        <Card Name="topbar" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="16" Gap="4">
+          <Text Text="Diyorbek" FontSize="22" Foreground="#FFFFFF" Align="left" />
+          <Text Name="status" Text="Online · Uvel native UI is ready" FontSize="13" Foreground="#34C759" Align="left" />
+        </Card>
+
+        <Scroll Name="messages" Background="#00000000" BorderColor="#00000000" CornerRadius="18" Padding="8" Gap="10">
+          <ListItem Text="Hello! This is a Telegram-like Uvel native UI demo." />
+          <ListItem Text="It is drawn by Uvel custom native renderer, not XAML." />
+          <ListItem Text="Use the input below and press Send." />
+        </Scroll>
+
+        <Card Name="composer" Background="#FFFFFF14" BorderColor="#FFFFFF24" CornerRadius="24" Padding="12" Gap="10">
+          <Input Name="messageInput" Text="Assalomu alaykum, Uvel!" Placeholder="Write a message..." />
+          <Button Content="Send message" onClick="SendMessage" />
+          <Button Content="Save DB" onClick="uvel.database.save" />
+          <Button Content="Load DB" onClick="uvel.database.load" />
+        </Card>
+      </Card>
+    </View>
+  </UI>
+
+  <Logic>
+    <Handler Name="SendMessage">
+      <AddMessage Container="messages" Text="{messageInput.Text}" Sender="me" />
+      <ClearText Control="messageInput" />
+      <Set Target="status" Property="Text" Value="Message sent through Uvel native UI" />
+    </Handler>
+  </Logic>
+</App>
